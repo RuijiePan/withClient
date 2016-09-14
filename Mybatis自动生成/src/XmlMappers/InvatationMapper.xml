@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="auto.newsky.coding.mapper.InvatationMapper" >
+  <resultMap id="BaseResultMap" type="auto.newsky.coding.po.Invatation" >
+    <id column="invit_id" property="invitId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="invit_publication_time" property="invitPublicationTime" jdbcType="DATE" />
+    <result column="invit_activity_time" property="invitActivityTime" jdbcType="DATE" />
+    <result column="invit_place" property="invitPlace" jdbcType="VARCHAR" />
+    <result column="invit_number_max" property="invitNumberMax" jdbcType="INTEGER" />
+    <result column="invit_number_curr" property="invitNumberCurr" jdbcType="INTEGER" />
+    <result column="invit_sex_require" property="invitSexRequire" jdbcType="INTEGER" />
+    <result column="invit_title" property="invitTitle" jdbcType="VARCHAR" />
+    <result column="invit_content" property="invitContent" jdbcType="VARCHAR" />
+    <result column="invit_class" property="invitClass" jdbcType="INTEGER" />
+    <result column="invit_type" property="invitType" jdbcType="INTEGER" />
+    <result column="invit_hidden" property="invitHidden" jdbcType="BIT" />
+    <result column="invit_is_delete" property="invitIsDelete" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    invit_id, user_id, invit_publication_time, invit_activity_time, invit_place, invit_number_max, 
+    invit_number_curr, invit_sex_require, invit_title, invit_content, invit_class, invit_type, 
+    invit_hidden, invit_is_delete
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from with_invitation
+    where invit_id = #{invitId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from with_invitation
+    where invit_id = #{invitId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="auto.newsky.coding.po.Invatation" >
+    insert into with_invitation (invit_id, user_id, invit_publication_time, 
+      invit_activity_time, invit_place, invit_number_max, 
+      invit_number_curr, invit_sex_require, invit_title, 
+      invit_content, invit_class, invit_type, 
+      invit_hidden, invit_is_delete)
+    values (#{invitId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{invitPublicationTime,jdbcType=DATE}, 
+      #{invitActivityTime,jdbcType=DATE}, #{invitPlace,jdbcType=VARCHAR}, #{invitNumberMax,jdbcType=INTEGER}, 
+      #{invitNumberCurr,jdbcType=INTEGER}, #{invitSexRequire,jdbcType=INTEGER}, #{invitTitle,jdbcType=VARCHAR}, 
+      #{invitContent,jdbcType=VARCHAR}, #{invitClass,jdbcType=INTEGER}, #{invitType,jdbcType=INTEGER}, 
+      #{invitHidden,jdbcType=BIT}, #{invitIsDelete,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="auto.newsky.coding.po.Invatation" >
+    insert into with_invitation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="invitId != null" >
+        invit_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="invitPublicationTime != null" >
+        invit_publication_time,
+      </if>
+      <if test="invitActivityTime != null" >
+        invit_activity_time,
+      </if>
+      <if test="invitPlace != null" >
+        invit_place,
+      </if>
+      <if test="invitNumberMax != null" >
+        invit_number_max,
+      </if>
+      <if test="invitNumberCurr != null" >
+        invit_number_curr,
+      </if>
+      <if test="invitSexRequire != null" >
+        invit_sex_require,
+      </if>
+      <if test="invitTitle != null" >
+        invit_title,
+      </if>
+      <if test="invitContent != null" >
+        invit_content,
+      </if>
+      <if test="invitClass != null" >
+        invit_class,
+      </if>
+      <if test="invitType != null" >
+        invit_type,
+      </if>
+      <if test="invitHidden != null" >
+        invit_hidden,
+      </if>
+      <if test="invitIsDelete != null" >
+        invit_is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="invitId != null" >
+        #{invitId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="invitPublicationTime != null" >
+        #{invitPublicationTime,jdbcType=DATE},
+      </if>
+      <if test="invitActivityTime != null" >
+        #{invitActivityTime,jdbcType=DATE},
+      </if>
+      <if test="invitPlace != null" >
+        #{invitPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="invitNumberMax != null" >
+        #{invitNumberMax,jdbcType=INTEGER},
+      </if>
+      <if test="invitNumberCurr != null" >
+        #{invitNumberCurr,jdbcType=INTEGER},
+      </if>
+      <if test="invitSexRequire != null" >
+        #{invitSexRequire,jdbcType=INTEGER},
+      </if>
+      <if test="invitTitle != null" >
+        #{invitTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="invitContent != null" >
+        #{invitContent,jdbcType=VARCHAR},
+      </if>
+      <if test="invitClass != null" >
+        #{invitClass,jdbcType=INTEGER},
+      </if>
+      <if test="invitType != null" >
+        #{invitType,jdbcType=INTEGER},
+      </if>
+      <if test="invitHidden != null" >
+        #{invitHidden,jdbcType=BIT},
+      </if>
+      <if test="invitIsDelete != null" >
+        #{invitIsDelete,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="auto.newsky.coding.po.Invatation" >
+    update with_invitation
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="invitPublicationTime != null" >
+        invit_publication_time = #{invitPublicationTime,jdbcType=DATE},
+      </if>
+      <if test="invitActivityTime != null" >
+        invit_activity_time = #{invitActivityTime,jdbcType=DATE},
+      </if>
+      <if test="invitPlace != null" >
+        invit_place = #{invitPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="invitNumberMax != null" >
+        invit_number_max = #{invitNumberMax,jdbcType=INTEGER},
+      </if>
+      <if test="invitNumberCurr != null" >
+        invit_number_curr = #{invitNumberCurr,jdbcType=INTEGER},
+      </if>
+      <if test="invitSexRequire != null" >
+        invit_sex_require = #{invitSexRequire,jdbcType=INTEGER},
+      </if>
+      <if test="invitTitle != null" >
+        invit_title = #{invitTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="invitContent != null" >
+        invit_content = #{invitContent,jdbcType=VARCHAR},
+      </if>
+      <if test="invitClass != null" >
+        invit_class = #{invitClass,jdbcType=INTEGER},
+      </if>
+      <if test="invitType != null" >
+        invit_type = #{invitType,jdbcType=INTEGER},
+      </if>
+      <if test="invitHidden != null" >
+        invit_hidden = #{invitHidden,jdbcType=BIT},
+      </if>
+      <if test="invitIsDelete != null" >
+        invit_is_delete = #{invitIsDelete,jdbcType=BIT},
+      </if>
+    </set>
+    where invit_id = #{invitId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="auto.newsky.coding.po.Invatation" >
+    update with_invitation
+    set user_id = #{userId,jdbcType=INTEGER},
+      invit_publication_time = #{invitPublicationTime,jdbcType=DATE},
+      invit_activity_time = #{invitActivityTime,jdbcType=DATE},
+      invit_place = #{invitPlace,jdbcType=VARCHAR},
+      invit_number_max = #{invitNumberMax,jdbcType=INTEGER},
+      invit_number_curr = #{invitNumberCurr,jdbcType=INTEGER},
+      invit_sex_require = #{invitSexRequire,jdbcType=INTEGER},
+      invit_title = #{invitTitle,jdbcType=VARCHAR},
+      invit_content = #{invitContent,jdbcType=VARCHAR},
+      invit_class = #{invitClass,jdbcType=INTEGER},
+      invit_type = #{invitType,jdbcType=INTEGER},
+      invit_hidden = #{invitHidden,jdbcType=BIT},
+      invit_is_delete = #{invitIsDelete,jdbcType=BIT}
+    where invit_id = #{invitId,jdbcType=INTEGER}
+  </update>
+</mapper>

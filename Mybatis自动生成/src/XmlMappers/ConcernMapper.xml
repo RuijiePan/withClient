@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="auto.newsky.coding.mapper.ConcernMapper" >
+  <resultMap id="BaseResultMap" type="auto.newsky.coding.po.Concern" >
+    <result column="con_from_user_id" property="conFromUserId" jdbcType="INTEGER" />
+    <result column="con_to_user_id" property="conToUserId" jdbcType="INTEGER" />
+    <result column="con_is_concern" property="conIsConcern" jdbcType="BIT" />
+  </resultMap>
+  <insert id="insert" parameterType="auto.newsky.coding.po.Concern" >
+    insert into with_concern (con_from_user_id, con_to_user_id, con_is_concern
+      )
+    values (#{conFromUserId,jdbcType=INTEGER}, #{conToUserId,jdbcType=INTEGER}, #{conIsConcern,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="auto.newsky.coding.po.Concern" >
+    insert into with_concern
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="conFromUserId != null" >
+        con_from_user_id,
+      </if>
+      <if test="conToUserId != null" >
+        con_to_user_id,
+      </if>
+      <if test="conIsConcern != null" >
+        con_is_concern,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="conFromUserId != null" >
+        #{conFromUserId,jdbcType=INTEGER},
+      </if>
+      <if test="conToUserId != null" >
+        #{conToUserId,jdbcType=INTEGER},
+      </if>
+      <if test="conIsConcern != null" >
+        #{conIsConcern,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+</mapper>

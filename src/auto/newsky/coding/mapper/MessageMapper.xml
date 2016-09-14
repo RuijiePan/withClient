@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.blog.Dao.MessageMapper" >
+  <resultMap id="BaseResultMap" type="com.blog.entity.Message" >
+    <id column="msg_id" property="msgId" jdbcType="INTEGER" />
+    <result column="from_user_id" property="fromUserId" jdbcType="INTEGER" />
+    <result column="to_user_id" property="toUserId" jdbcType="INTEGER" />
+    <result column="invit_id" property="invitId" jdbcType="INTEGER" />
+    <result column="msg_type" property="msgType" jdbcType="INTEGER" />
+    <result column="msg_send_time" property="msgSendTime" jdbcType="DATE" />
+    <result column="msg_content" property="msgContent" jdbcType="VARCHAR" />
+    <result column="msg_is_read" property="msgIsRead" jdbcType="BIT" />
+    <result column="msg_is_delete" property="msgIsDelete" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    msg_id, from_user_id, to_user_id, invit_id, msg_type, msg_send_time, msg_content, 
+    msg_is_read, msg_is_delete
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from with_message
+    where msg_id = #{msgId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from with_message
+    where msg_id = #{msgId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.blog.entity.Message" >
+    insert into with_message (msg_id, from_user_id, to_user_id, 
+      invit_id, msg_type, msg_send_time, 
+      msg_content, msg_is_read, msg_is_delete
+      )
+    values (#{msgId,jdbcType=INTEGER}, #{fromUserId,jdbcType=INTEGER}, #{toUserId,jdbcType=INTEGER}, 
+      #{invitId,jdbcType=INTEGER}, #{msgType,jdbcType=INTEGER}, #{msgSendTime,jdbcType=DATE}, 
+      #{msgContent,jdbcType=VARCHAR}, #{msgIsRead,jdbcType=BIT}, #{msgIsDelete,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.blog.entity.Message" >
+    insert into with_message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="msgId != null" >
+        msg_id,
+      </if>
+      <if test="fromUserId != null" >
+        from_user_id,
+      </if>
+      <if test="toUserId != null" >
+        to_user_id,
+      </if>
+      <if test="invitId != null" >
+        invit_id,
+      </if>
+      <if test="msgType != null" >
+        msg_type,
+      </if>
+      <if test="msgSendTime != null" >
+        msg_send_time,
+      </if>
+      <if test="msgContent != null" >
+        msg_content,
+      </if>
+      <if test="msgIsRead != null" >
+        msg_is_read,
+      </if>
+      <if test="msgIsDelete != null" >
+        msg_is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="msgId != null" >
+        #{msgId,jdbcType=INTEGER},
+      </if>
+      <if test="fromUserId != null" >
+        #{fromUserId,jdbcType=INTEGER},
+      </if>
+      <if test="toUserId != null" >
+        #{toUserId,jdbcType=INTEGER},
+      </if>
+      <if test="invitId != null" >
+        #{invitId,jdbcType=INTEGER},
+      </if>
+      <if test="msgType != null" >
+        #{msgType,jdbcType=INTEGER},
+      </if>
+      <if test="msgSendTime != null" >
+        #{msgSendTime,jdbcType=DATE},
+      </if>
+      <if test="msgContent != null" >
+        #{msgContent,jdbcType=VARCHAR},
+      </if>
+      <if test="msgIsRead != null" >
+        #{msgIsRead,jdbcType=BIT},
+      </if>
+      <if test="msgIsDelete != null" >
+        #{msgIsDelete,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.blog.entity.Message" >
+    update with_message
+    <set >
+      <if test="fromUserId != null" >
+        from_user_id = #{fromUserId,jdbcType=INTEGER},
+      </if>
+      <if test="toUserId != null" >
+        to_user_id = #{toUserId,jdbcType=INTEGER},
+      </if>
+      <if test="invitId != null" >
+        invit_id = #{invitId,jdbcType=INTEGER},
+      </if>
+      <if test="msgType != null" >
+        msg_type = #{msgType,jdbcType=INTEGER},
+      </if>
+      <if test="msgSendTime != null" >
+        msg_send_time = #{msgSendTime,jdbcType=DATE},
+      </if>
+      <if test="msgContent != null" >
+        msg_content = #{msgContent,jdbcType=VARCHAR},
+      </if>
+      <if test="msgIsRead != null" >
+        msg_is_read = #{msgIsRead,jdbcType=BIT},
+      </if>
+      <if test="msgIsDelete != null" >
+        msg_is_delete = #{msgIsDelete,jdbcType=BIT},
+      </if>
+    </set>
+    where msg_id = #{msgId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.blog.entity.Message" >
+    update with_message
+    set from_user_id = #{fromUserId,jdbcType=INTEGER},
+      to_user_id = #{toUserId,jdbcType=INTEGER},
+      invit_id = #{invitId,jdbcType=INTEGER},
+      msg_type = #{msgType,jdbcType=INTEGER},
+      msg_send_time = #{msgSendTime,jdbcType=DATE},
+      msg_content = #{msgContent,jdbcType=VARCHAR},
+      msg_is_read = #{msgIsRead,jdbcType=BIT},
+      msg_is_delete = #{msgIsDelete,jdbcType=BIT}
+    where msg_id = #{msgId,jdbcType=INTEGER}
+  </update>
+</mapper>

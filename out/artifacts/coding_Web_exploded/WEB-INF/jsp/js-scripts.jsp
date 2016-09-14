@@ -1,0 +1,9 @@
+<script src="<%=basePath%>resources/lib/adminlte/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="<%=basePath%>resources/lib/adminlte/bootstrap/js/bootstrap.min.js"></script>
+<script src="<%=basePath%>resources/lib/adminlte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="<%=basePath%>resources/lib/adminlte/plugins/fastclick/fastclick.min.js"></script>
+<script src="<%=basePath%>resources/lib/adminlte/plugins/lhgdialog/lhgdialog.min.js?skin=default"></script>
+<script src="<%=basePath%>resources/lib/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="<%=basePath%>resources/lib/adminlte/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script src="<%=basePath%>resources/lib/adminlte/dist/js/app.min.js"></script>
+<script src="<%=basePath%>resources/app/js/app.js"></script>

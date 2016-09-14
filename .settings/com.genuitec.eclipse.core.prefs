@@ -1,0 +1,4 @@
+#Wed Aug 10 17:41:38 CST 2016
+eclipse.preferences.version=1
+validator.Checked=WebRoot/resources,WebRoot/WEB-INF/jsp/js-scripts.jsp,WebRoot/WEB-INF/jsp/left-side.jsp,WebRoot/WEB-INF/jsp/js-scripts-pagination.jsp,WebRoot/WEB-INF/jsp/main-header.jsp,WebRoot/WEB-INF/jsp/header-add-modify.jsp,WebRoot/WEB-INF/jsp/header.jsp,WebRoot/WEB-INF/jsp/js-scripts-add-modify.jsp
+validator.Unchecked=
