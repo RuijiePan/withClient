@@ -3,6 +3,10 @@ package auto.newsky.coding.response;
 /**
  * Created by prj on 2016/9/16.
  */
+
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+@JsonSerialize(include= JsonSerialize.Inclusion.NON_NULL)
 public class Result {
 
     private int code;
@@ -35,6 +39,10 @@ public class Result {
 
     public Result(Object data) {
         this.data = data;
+        this.msg = "";
+        this.code = 200;
+    }
+    public Result() {
         this.msg = "";
         this.code = 200;
     }

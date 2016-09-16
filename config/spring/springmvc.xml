@@ -105,4 +105,5 @@
 			<mvc:interceptor> <mvc:mapping path="/**"/> <bean class="cn.itcast.ssm.interceptor.HandlerInterceptor2"></bean> 
 			</mvc:interceptor> &ndash;&gt;
 	</mvc:interceptors>-->
+
 </beans>

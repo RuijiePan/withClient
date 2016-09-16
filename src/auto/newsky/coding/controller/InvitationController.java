@@ -1,6 +1,7 @@
 package auto.newsky.coding.controller;
 
 import auto.newsky.coding.po.Invatation;
+import auto.newsky.coding.response.Result;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,13 +16,21 @@ public class InvitationController {
     /**
      * 获取邀约列表
      */
+    @ResponseBody
     @RequestMapping("/getInvitations")
     public void getInvitations(){
 
     }
+
     @ResponseBody
     @RequestMapping("/publishInvitation")
-    public Invatation publishInvitation(Invatation invatation) throws Exception{
-        return invatation;
+    public Result publishInvitation(Invatation invatation) throws Exception{
+        return new Result(null);
+    }
+
+    @ResponseBody
+    @RequestMapping("/alterInvitation")
+    public Result alterInvitation(Invatation invatation) throws Exception{
+        return new Result();
     }
 }
