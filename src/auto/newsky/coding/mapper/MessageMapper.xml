@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.blog.Dao.MessageMapper" >
-  <resultMap id="BaseResultMap" type="com.blog.entity.Message" >
+<mapper namespace="auto.newsky.coding.mapper.MessageMapper" >
+  <resultMap id="BaseResultMap" type="auto.newsky.coding.po.Message" >
     <id column="msg_id" property="msgId" jdbcType="INTEGER" />
     <result column="from_user_id" property="fromUserId" jdbcType="INTEGER" />
     <result column="to_user_id" property="toUserId" jdbcType="INTEGER" />
@@ -26,7 +26,7 @@
     delete from with_message
     where msg_id = #{msgId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.blog.entity.Message" >
+  <insert id="insert" parameterType="auto.newsky.coding.po.Message" >
     insert into with_message (msg_id, from_user_id, to_user_id, 
       invit_id, msg_type, msg_send_time, 
       msg_content, msg_is_read, msg_is_delete
@@ -36,7 +36,7 @@
       #{msgContent,jdbcType=VARCHAR}, #{msgIsRead,jdbcType=BIT}, #{msgIsDelete,jdbcType=BIT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.blog.entity.Message" >
+  <insert id="insertSelective" parameterType="auto.newsky.coding.po.Message" >
     insert into with_message
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="msgId != null" >
@@ -97,7 +97,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.blog.entity.Message" >
+  <update id="updateByPrimaryKeySelective" parameterType="auto.newsky.coding.po.Message" >
     update with_message
     <set >
       <if test="fromUserId != null" >
@@ -127,7 +127,7 @@
     </set>
     where msg_id = #{msgId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.blog.entity.Message" >
+  <update id="updateByPrimaryKey" parameterType="auto.newsky.coding.po.Message" >
     update with_message
     set from_user_id = #{fromUserId,jdbcType=INTEGER},
       to_user_id = #{toUserId,jdbcType=INTEGER},

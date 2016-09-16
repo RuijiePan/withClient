@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.blog.Dao.UserMapper" >
-  <resultMap id="BaseResultMap" type="com.blog.entity.User" >
+<mapper namespace="auto.newsky.coding.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="auto.newsky.coding.po.User" >
     <id column="user_id" property="userId" jdbcType="INTEGER" />
     <result column="user_nickname" property="userNickname" jdbcType="VARCHAR" />
     <result column="user_password" property="userPassword" jdbcType="VARCHAR" />
@@ -13,7 +13,7 @@
     <result column="user_token" property="userToken" jdbcType="VARCHAR" />
     <result column="user_is_delete" property="userIsDelete" jdbcType="BIT" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.blog.entity.User" extends="BaseResultMap" >
+  <resultMap id="ResultMapWithBLOBs" type="auto.newsky.coding.po.User" extends="BaseResultMap" >
     <result column="user_headurl" property="userHeadurl" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -35,7 +35,7 @@
     delete from with_user
     where user_id = #{userId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.blog.entity.User" >
+  <insert id="insert" parameterType="auto.newsky.coding.po.User" >
     insert into with_user (user_id, user_nickname, user_password, 
       user_studentnumber, user_realname, user_sex, 
       user_mobilephone, user_qq, user_token, 
@@ -45,7 +45,7 @@
       #{userMobilephone,jdbcType=VARCHAR}, #{userQq,jdbcType=VARCHAR}, #{userToken,jdbcType=VARCHAR}, 
       #{userIsDelete,jdbcType=BIT}, #{userHeadurl,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.blog.entity.User" >
+  <insert id="insertSelective" parameterType="auto.newsky.coding.po.User" >
     insert into with_user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="userId != null" >
@@ -118,7 +118,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.blog.entity.User" >
+  <update id="updateByPrimaryKeySelective" parameterType="auto.newsky.coding.po.User" >
     update with_user
     <set >
       <if test="userNickname != null" >
@@ -154,7 +154,7 @@
     </set>
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.blog.entity.User" >
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="auto.newsky.coding.po.User" >
     update with_user
     set user_nickname = #{userNickname,jdbcType=VARCHAR},
       user_password = #{userPassword,jdbcType=VARCHAR},
@@ -168,7 +168,7 @@
       user_headurl = #{userHeadurl,jdbcType=LONGVARCHAR}
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.blog.entity.User" >
+  <update id="updateByPrimaryKey" parameterType="auto.newsky.coding.po.User" >
     update with_user
     set user_nickname = #{userNickname,jdbcType=VARCHAR},
       user_password = #{userPassword,jdbcType=VARCHAR},

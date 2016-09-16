@@ -1,3 +1,4 @@
+/*
 package auto.newsky.coding.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+*/
 /**
  * 
  * <p>Title: HandlerInterceptor1</p>
@@ -14,7 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
  * <p>Company: www.newsky.auto</p> 
  * @author	徐新宇
  * @version 1.0
- */
+ *//*
+
 public class LoginInterceptor implements HandlerInterceptor {
 
 	
@@ -82,3 +85,4 @@ public class LoginInterceptor implements HandlerInterceptor {
 	}
 
 }
+*/

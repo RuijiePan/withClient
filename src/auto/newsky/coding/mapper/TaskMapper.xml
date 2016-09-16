@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.blog.Dao.TaskMapper" >
-  <resultMap id="BaseResultMap" type="com.blog.entity.Task" >
+<mapper namespace="auto.newsky.coding.mapper.TaskMapper" >
+  <resultMap id="BaseResultMap" type="auto.newsky.coding.po.Task" >
     <id column="task_id" property="taskId" jdbcType="INTEGER" />
     <result column="user_id" property="userId" jdbcType="INTEGER" />
     <result column="task_content" property="taskContent" jdbcType="VARCHAR" />
@@ -22,7 +22,7 @@
     delete from with_task
     where task_id = #{taskId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.blog.entity.Task" >
+  <insert id="insert" parameterType="auto.newsky.coding.po.Task" >
     insert into with_task (task_id, user_id, task_content, 
       task_title, task_is_delete, task_icon_type
       )
@@ -30,7 +30,7 @@
       #{taskTitle,jdbcType=VARCHAR}, #{taskIsDelete,jdbcType=BIT}, #{taskIconType,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.blog.entity.Task" >
+  <insert id="insertSelective" parameterType="auto.newsky.coding.po.Task" >
     insert into with_task
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="taskId != null" >
@@ -73,7 +73,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.blog.entity.Task" >
+  <update id="updateByPrimaryKeySelective" parameterType="auto.newsky.coding.po.Task" >
     update with_task
     <set >
       <if test="userId != null" >
@@ -94,7 +94,7 @@
     </set>
     where task_id = #{taskId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.blog.entity.Task" >
+  <update id="updateByPrimaryKey" parameterType="auto.newsky.coding.po.Task" >
     update with_task
     set user_id = #{userId,jdbcType=INTEGER},
       task_content = #{taskContent,jdbcType=VARCHAR},
