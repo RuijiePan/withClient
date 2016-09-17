@@ -1,15 +1,22 @@
 package auto.newsky.coding.service;
 
 import auto.newsky.coding.po.Task;
+import auto.newsky.coding.po.TaskInfo;
+import auto.newsky.coding.po.TaskList;
+
+import java.util.List;
 
 /**
- * Created by Administrator on 2016/9/16.
+ * Created by prj on 2016/9/16.
  */
 public interface ITask {
 
-    public void add(Task task);
+    void add(Task task);
 
-    public void remove(int taskId);
+    void remove(int taskId);
 
-    //public void
+    List<TaskList> getTask(String token);
+
+    List<TaskInfo> getTaskMessages(String data,String token,int taskId);
+
 }

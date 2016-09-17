@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="auto.newsky.coding.mapper.UserJoinInvatationMapper" >
+  <resultMap id="BaseResultMap" type="auto.newsky.coding.po.UserJoinInvatation" >
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="invit_id" property="invitId" jdbcType="INTEGER" />
+    <result column="relation_is_delete" property="relationIsDelete" jdbcType="INTEGER" />
+  </resultMap>
+  <insert id="insert" parameterType="auto.newsky.coding.po.UserJoinInvatation" >
+    insert into user_join_invitation (user_id, invit_id, relation_is_delete
+      )
+    values (#{userId,jdbcType=INTEGER}, #{invitId,jdbcType=INTEGER}, #{relationIsDelete,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="auto.newsky.coding.po.UserJoinInvatation" >
+    insert into user_join_invitation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="invitId != null" >
+        invit_id,
+      </if>
+      <if test="relationIsDelete != null" >
+        relation_is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="invitId != null" >
+        #{invitId,jdbcType=INTEGER},
+      </if>
+      <if test="relationIsDelete != null" >
+        #{relationIsDelete,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>
