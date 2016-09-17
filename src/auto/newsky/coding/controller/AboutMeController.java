@@ -1,18 +1,13 @@
 package auto.newsky.coding.controller;
 
-import auto.newsky.coding.po.Invatation;
 import auto.newsky.coding.po.User;
 import auto.newsky.coding.response.Result;
-import auto.newsky.coding.serviceImpl.TaskImpl;
 import auto.newsky.coding.serviceImpl.UserImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.annotation.Resource;
 
 /**
  * Created by prj on 2016/9/16.
@@ -20,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("/aboutme/")
 public class AboutMeController {
-    @Autowired
+   @Resource
     private UserImpl userService;
 
     /**
