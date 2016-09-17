@@ -15,8 +15,8 @@ public interface ITask {
 
     void remove(int taskId);
 
-    List<TaskList> getTask(String token);
+    List<TaskList> getTask(int userId);
 
-    List<TaskInfo> getTaskMessages(String data,String token,int taskId);
+    List<TaskInfo> getTaskMessages();
 
 }

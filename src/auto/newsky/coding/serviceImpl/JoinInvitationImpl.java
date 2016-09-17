@@ -1,6 +1,5 @@
 package auto.newsky.coding.serviceImpl;
 
-import auto.newsky.coding.mapper.UserJoinInvatationMapper;
 import auto.newsky.coding.service.IJoinInvitation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

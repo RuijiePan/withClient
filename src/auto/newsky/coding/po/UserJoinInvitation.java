@@ -1,6 +1,6 @@
 package auto.newsky.coding.po;
 
-public class UserJoinInvatation {
+public class UserJoinInvitation {
     private Integer userId;
 
     private Integer invitId;
