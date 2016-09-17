@@ -101,6 +101,4 @@ public class InvitationController {
     public Result concernUser(Invatation invatation) throws Exception{
         return new Result();
     }
-
-
 }
