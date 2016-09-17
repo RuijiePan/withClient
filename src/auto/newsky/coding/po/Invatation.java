@@ -31,6 +31,21 @@ public class Invatation {
 
     private Boolean invitIsDelete;
 
+    public Invatation(Integer userId, Date invitPublicationTime, Date invitActivityTime, String invitPlace, Integer invitNumberMax, Integer invitNumberCurr, Integer invitSexRequire, String invitTitle, String invitContent, Integer invitClass, Integer invitType, Boolean invitHidden) {
+        this.userId = userId;
+        this.invitPublicationTime = invitPublicationTime;
+        this.invitActivityTime = invitActivityTime;
+        this.invitPlace = invitPlace;
+        this.invitNumberMax = invitNumberMax;
+        this.invitNumberCurr = invitNumberCurr;
+        this.invitSexRequire = invitSexRequire;
+        this.invitTitle = invitTitle;
+        this.invitContent = invitContent;
+        this.invitClass = invitClass;
+        this.invitType = invitType;
+        this.invitHidden = invitHidden;
+    }
+
     public Integer getInvitId() {
         return invitId;
     }
