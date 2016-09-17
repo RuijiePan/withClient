@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class JoinInvitationImpl implements IJoinInvitation{
-
     @Autowired
-    private UserJoinInvitationMapper userJoinInvitationMapper;
-
+    private UserJoinInvitationMapper userJoinInvatationMapper;
 }

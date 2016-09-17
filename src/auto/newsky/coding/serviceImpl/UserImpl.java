@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserImpl implements IUser {
-    @Autowired
-    private UserMapper userMapper;
+    /*@Autowired
+    private UserMapper userMapper;*/
 
 }
