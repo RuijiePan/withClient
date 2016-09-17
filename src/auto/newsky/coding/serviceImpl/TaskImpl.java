@@ -1,8 +1,39 @@
 package auto.newsky.coding.serviceImpl;
 
+import auto.newsky.coding.mapper.TaskMapper;
+import auto.newsky.coding.po.Task;
+import auto.newsky.coding.po.TaskInfo;
+import auto.newsky.coding.po.TaskList;
+import auto.newsky.coding.service.ITask;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 /**
  * Created by Administrator on 2016/9/16.
  */
-public interface TaskImpl {
+@Service
+public class TaskImpl implements ITask{
+    @Autowired
+    private TaskMapper taskMapper;
+    @Override
+    public void add(Task task) {
 
+    }
+
+    @Override
+    public void remove(int taskId) {
+
+    }
+
+    @Override
+    public List<TaskList> getTask(String token) {
+        return null;
+    }
+
+    @Override
+    public List<TaskInfo> getTaskMessages(String data, String token, int taskId) {
+        return null;
+    }
 }
