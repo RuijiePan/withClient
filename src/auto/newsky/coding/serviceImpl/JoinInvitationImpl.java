@@ -1,5 +1,6 @@
 package auto.newsky.coding.serviceImpl;
 
+import auto.newsky.coding.mapper.UserJoinInvitationMapper;
 import auto.newsky.coding.service.IJoinInvitation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class JoinInvitationImpl implements IJoinInvitation{
+
     @Autowired
-    private UserJoinInvatationMapper userJoinInvatationMapper;
+    private UserJoinInvitationMapper userJoinInvitationMapper;
+
 }

@@ -15,8 +15,10 @@ import java.util.List;
  */
 @Service
 public class TaskImpl implements ITask{
+
     @Autowired
     private TaskMapper taskMapper;
+
     @Override
     public void add(Task task) {
 
@@ -28,12 +30,8 @@ public class TaskImpl implements ITask{
     }
 
     @Override
-    public List<TaskList> getTask(String token) {
+    public List<TaskList> getTask(int userId) {
         return null;
     }
 
-    @Override
-    public List<TaskInfo> getTaskMessages(String data, String token, int taskId) {
-        return null;
-    }
 }

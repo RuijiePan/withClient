@@ -17,6 +17,5 @@ public interface ITask {
 
     List<TaskList> getTask(int userId);
 
-    List<TaskInfo> getTaskMessages();
 
 }
