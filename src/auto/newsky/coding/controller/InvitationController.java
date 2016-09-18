@@ -1,5 +1,6 @@
 package auto.newsky.coding.controller;
 
+import auto.newsky.coding.controller.converter.CustomDateConverter;
 import auto.newsky.coding.po.Invatation;
 import auto.newsky.coding.response.Result;
 import auto.newsky.coding.serviceImpl.InvitationImpl;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -157,9 +159,10 @@ public class InvitationController {
     @ResponseBody
     @RequestMapping("/test")
     public Result test(@RequestParam(value = "name",required = false) String name
-            ,@RequestParam(value = "name",required = false)Integer id
-            ,@RequestParam(value = "date",required = false)Integer date) throws Exception{
+            ,@RequestParam(value = "id",required = false)Integer id
+            ,@RequestParam(value = "date",required = false)String date) throws Exception{
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        return new Result(date);
+        return new Result(simpleDateFormat.format(simpleDateFormat.parse(date)));
     }
 }
