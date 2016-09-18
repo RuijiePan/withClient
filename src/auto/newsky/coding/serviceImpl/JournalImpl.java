@@ -1,6 +1,7 @@
 package auto.newsky.coding.serviceImpl;
 
 import auto.newsky.coding.mapper.JournalMapper;
+import auto.newsky.coding.po.Journal;
 import auto.newsky.coding.service.IJournal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

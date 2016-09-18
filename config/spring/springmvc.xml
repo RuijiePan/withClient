@@ -44,26 +44,16 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-	<mvc:annotation-driven conversion-service="conversionService"/>
-	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-		<property name="converters">
-			<set>
-				<ref bean="dateConvert"/>
-			</set>
-		</property>
-	</bean>
-	<bean id="dateConvert" class="auto.newsky.coding.controller.converter.CustomDateConverter"/>
+
 	<!-- 自定义参数绑定 -->
-	<!--<bean id="conversionService"
+	<bean id="conversionService"
 		class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-		&lt;!&ndash; 转换器 &ndash;&gt;
 		<property name="converters">
 			<list>
-				&lt;!&ndash; 日期类型转换 &ndash;&gt;
 				<bean class="auto.newsky.coding.controller.converter.CustomDateConverter" />
 			</list>
 		</property>
-	</bean>-->
+	</bean>
 
 	<!-- 校验器 -->
 	<bean id="validator"
