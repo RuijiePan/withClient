@@ -37,11 +37,8 @@ public class InvitationData {
 
         private String sex;
         private int phone;
-        @JsonProperty("userId")
         private String userid;
-        @JsonProperty("realName")
         private String realname;
-        @JsonProperty("headUrl")
         private String headurl;
         public void setSex(String sex) {
             this.sex = sex;

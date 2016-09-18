@@ -1,7 +1,5 @@
 package auto.newsky.coding.mapper;
 
-import auto.newsky.coding.po.Task;
-
 public interface TaskMapper {
     int deleteByPrimaryKey(Integer taskId);
 

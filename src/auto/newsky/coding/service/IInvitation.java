@@ -1,18 +1,21 @@
 package auto.newsky.coding.service;
 
-import auto.newsky.coding.po.InvitationData;
-
-import java.util.List;
+import auto.newsky.coding.po.Invatation;
+import auto.newsky.coding.response.Result;
 
 /**
  * Created by Administrator on 2016/9/16.
  */
 public interface IInvitation {
     boolean isSmallType(int typeId);
-    InvitationData getInvitationsUnType(String token,int lastInvitationId,int limit);
-    InvitationData getInvitationsSmallType(String token,int typeId,int lastInvitationId,int limit);
-    InvitationData getInvitationsBigType(String token,int typeId,int lastInvitationId,int limit);
-    InvitationData getInvitationsSBSend(String token,int userId,int lastInvitationId,int limit);
-    InvitationData getInvitationsMyConcerned(String token,int lastInvitationId,int limit);
+    Result getInvitationsUnType(Integer myUserId,int lastInvitationId,int limit);
+    Result getInvitationsByTypeId(Integer myUserId,int typeId,int lastInvitationId,int limit);
+    Result getInvitationsSBSend(Integer myUserId,int userId,int lastInvitationId,int limit);
+    Result getInvitationsMyConcerned(Integer myUserId,int lastInvitationId,int limit);
 
+    Result concernUser(int userId, String concernedUserId);
+
+    Result getConcernedUsers();
+
+    Result publishInvitation(Invatation invatation);
 }

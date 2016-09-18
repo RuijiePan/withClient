@@ -11,6 +11,10 @@ public interface UserMapper {
 
     User selectByPrimaryKey(Integer userId);
 
+    User selectByToken(String token);
+
+    User selectByStudentID(String studentId);
+
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKeyWithBLOBs(User record);

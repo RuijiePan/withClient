@@ -5,45 +5,59 @@
     <id column="user_id" property="userId" jdbcType="INTEGER" />
     <result column="user_nickname" property="userNickname" jdbcType="VARCHAR" />
     <result column="user_password" property="userPassword" jdbcType="VARCHAR" />
-    <result column="user_studentnumber" property="userStudentnumber" jdbcType="VARCHAR" />
+    <result column="user_studentID" property="userStudentid" jdbcType="VARCHAR" />
     <result column="user_realname" property="userRealname" jdbcType="VARCHAR" />
-    <result column="user_sex" property="userSex" jdbcType="VARCHAR" />
+    <result column="user_sex" property="userSex" jdbcType="INTEGER" />
     <result column="user_mobilephone" property="userMobilephone" jdbcType="VARCHAR" />
+    <result column="user_headurl" property="userHeadurl" jdbcType="VARCHAR" />
     <result column="user_qq" property="userQq" jdbcType="VARCHAR" />
     <result column="user_token" property="userToken" jdbcType="VARCHAR" />
     <result column="user_is_delete" property="userIsDelete" jdbcType="BIT" />
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="auto.newsky.coding.po.User" extends="BaseResultMap" >
-    <result column="user_headurl" property="userHeadurl" jdbcType="LONGVARCHAR" />
+    <result column="user_class" property="userClass" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    user_id, user_nickname, user_password, user_studentnumber, user_realname, user_sex, 
-    user_mobilephone, user_qq, user_token, user_is_delete
+    user_id, user_nickname, user_password, user_studentID, user_realname, user_sex, user_mobilephone, 
+    user_headurl, user_qq, user_token, user_is_delete, user_class
   </sql>
-  <sql id="Blob_Column_List" >
-    user_headurl
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
+    <include refid="Base_Column_List" />
+    from with_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByStudentID" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
     from with_user
-    where user_id = #{userId,jdbcType=INTEGER}
+    where user_studentID = #{userStudentid,jdbcType=VARCHAR}
   </select>
+
+  <select id="selectByToken" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />,
+    <include refid="Blob_Column_List" />
+    from with_user
+    where user_token = #{userToken,jdbcType=VARCHAR}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from with_user
     where user_id = #{userId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="auto.newsky.coding.po.User" >
     insert into with_user (user_id, user_nickname, user_password, 
-      user_studentnumber, user_realname, user_sex, 
-      user_mobilephone, user_qq, user_token, 
-      user_is_delete, user_headurl)
+      user_studentID, user_realname, user_sex, 
+      user_mobilephone, user_headurl, user_qq, 
+      user_token, user_is_delete, user_class
+      )
     values (#{userId,jdbcType=INTEGER}, #{userNickname,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR}, 
-      #{userStudentnumber,jdbcType=VARCHAR}, #{userRealname,jdbcType=VARCHAR}, #{userSex,jdbcType=VARCHAR}, 
-      #{userMobilephone,jdbcType=VARCHAR}, #{userQq,jdbcType=VARCHAR}, #{userToken,jdbcType=VARCHAR}, 
-      #{userIsDelete,jdbcType=BIT}, #{userHeadurl,jdbcType=LONGVARCHAR})
+      #{userStudentid,jdbcType=VARCHAR}, #{userRealname,jdbcType=VARCHAR}, #{userSex,jdbcType=INTEGER}, 
+      #{userMobilephone,jdbcType=VARCHAR}, #{userHeadurl,jdbcType=VARCHAR}, #{userQq,jdbcType=VARCHAR}, 
+      #{userToken,jdbcType=VARCHAR}, #{userIsDelete,jdbcType=BIT}, #{userClass,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="auto.newsky.coding.po.User" >
     insert into with_user
@@ -57,8 +71,8 @@
       <if test="userPassword != null" >
         user_password,
       </if>
-      <if test="userStudentnumber != null" >
-        user_studentnumber,
+      <if test="userStudentid != null" >
+        user_studentID,
       </if>
       <if test="userRealname != null" >
         user_realname,
@@ -69,6 +83,9 @@
       <if test="userMobilephone != null" >
         user_mobilephone,
       </if>
+      <if test="userHeadurl != null" >
+        user_headurl,
+      </if>
       <if test="userQq != null" >
         user_qq,
       </if>
@@ -78,8 +95,8 @@
       <if test="userIsDelete != null" >
         user_is_delete,
       </if>
-      <if test="userHeadurl != null" >
-        user_headurl,
+      <if test="userClass != null" >
+        user_class,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -92,17 +109,20 @@
       <if test="userPassword != null" >
         #{userPassword,jdbcType=VARCHAR},
       </if>
-      <if test="userStudentnumber != null" >
-        #{userStudentnumber,jdbcType=VARCHAR},
+      <if test="userStudentid != null" >
+        #{userStudentid,jdbcType=VARCHAR},
       </if>
       <if test="userRealname != null" >
         #{userRealname,jdbcType=VARCHAR},
       </if>
       <if test="userSex != null" >
-        #{userSex,jdbcType=VARCHAR},
+        #{userSex,jdbcType=INTEGER},
       </if>
       <if test="userMobilephone != null" >
         #{userMobilephone,jdbcType=VARCHAR},
+      </if>
+      <if test="userHeadurl != null" >
+        #{userHeadurl,jdbcType=VARCHAR},
       </if>
       <if test="userQq != null" >
         #{userQq,jdbcType=VARCHAR},
@@ -113,8 +133,8 @@
       <if test="userIsDelete != null" >
         #{userIsDelete,jdbcType=BIT},
       </if>
-      <if test="userHeadurl != null" >
-        #{userHeadurl,jdbcType=LONGVARCHAR},
+      <if test="userClass != null" >
+        #{userClass,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -127,17 +147,20 @@
       <if test="userPassword != null" >
         user_password = #{userPassword,jdbcType=VARCHAR},
       </if>
-      <if test="userStudentnumber != null" >
-        user_studentnumber = #{userStudentnumber,jdbcType=VARCHAR},
+      <if test="userStudentid != null" >
+        user_studentID = #{userStudentid,jdbcType=VARCHAR},
       </if>
       <if test="userRealname != null" >
         user_realname = #{userRealname,jdbcType=VARCHAR},
       </if>
       <if test="userSex != null" >
-        user_sex = #{userSex,jdbcType=VARCHAR},
+        user_sex = #{userSex,jdbcType=INTEGER},
       </if>
       <if test="userMobilephone != null" >
         user_mobilephone = #{userMobilephone,jdbcType=VARCHAR},
+      </if>
+      <if test="userHeadurl != null" >
+        user_headurl = #{userHeadurl,jdbcType=VARCHAR},
       </if>
       <if test="userQq != null" >
         user_qq = #{userQq,jdbcType=VARCHAR},
@@ -148,37 +171,25 @@
       <if test="userIsDelete != null" >
         user_is_delete = #{userIsDelete,jdbcType=BIT},
       </if>
-      <if test="userHeadurl != null" >
-        user_headurl = #{userHeadurl,jdbcType=LONGVARCHAR},
+      <if test="userClass != null" >
+        user_class = #{userClass,jdbcType=VARCHAR},
       </if>
     </set>
-    where user_id = #{userId,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="auto.newsky.coding.po.User" >
-    update with_user
-    set user_nickname = #{userNickname,jdbcType=VARCHAR},
-      user_password = #{userPassword,jdbcType=VARCHAR},
-      user_studentnumber = #{userStudentnumber,jdbcType=VARCHAR},
-      user_realname = #{userRealname,jdbcType=VARCHAR},
-      user_sex = #{userSex,jdbcType=VARCHAR},
-      user_mobilephone = #{userMobilephone,jdbcType=VARCHAR},
-      user_qq = #{userQq,jdbcType=VARCHAR},
-      user_token = #{userToken,jdbcType=VARCHAR},
-      user_is_delete = #{userIsDelete,jdbcType=BIT},
-      user_headurl = #{userHeadurl,jdbcType=LONGVARCHAR}
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="auto.newsky.coding.po.User" >
     update with_user
     set user_nickname = #{userNickname,jdbcType=VARCHAR},
       user_password = #{userPassword,jdbcType=VARCHAR},
-      user_studentnumber = #{userStudentnumber,jdbcType=VARCHAR},
+      user_studentID = #{userStudentid,jdbcType=VARCHAR},
       user_realname = #{userRealname,jdbcType=VARCHAR},
-      user_sex = #{userSex,jdbcType=VARCHAR},
+      user_sex = #{userSex,jdbcType=INTEGER},
       user_mobilephone = #{userMobilephone,jdbcType=VARCHAR},
+      user_headurl = #{userHeadurl,jdbcType=VARCHAR},
       user_qq = #{userQq,jdbcType=VARCHAR},
       user_token = #{userToken,jdbcType=VARCHAR},
-      user_is_delete = #{userIsDelete,jdbcType=BIT}
+      user_is_delete = #{userIsDelete,jdbcType=BIT},
+      user_class = #{userClass,jdbcType=VARCHAR}
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
 </mapper>

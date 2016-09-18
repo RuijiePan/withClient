@@ -1,7 +1,5 @@
 package auto.newsky.coding.mapper;
 
-import auto.newsky.coding.po.User;
-
 public interface UserMapper {
     int deleteByPrimaryKey(Integer userId);
 

@@ -1,5 +1,6 @@
 package auto.newsky.coding.mapper;
 
+
 import auto.newsky.coding.po.Invatation;
 
 public interface InvatationMapper {

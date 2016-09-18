@@ -1,7 +1,5 @@
 package auto.newsky.coding.mapper;
 
-import auto.newsky.coding.po.Journal;
-
 public interface JournalMapper {
     int deleteByPrimaryKey(Integer jourId);
 

@@ -1,7 +1,8 @@
 package auto.newsky.coding.serviceImpl;
 
+import auto.newsky.coding.po.Invatation;
 import auto.newsky.coding.mapper.InvatationMapper;
-import auto.newsky.coding.po.InvitationData;
+import auto.newsky.coding.response.Result;
 import auto.newsky.coding.service.IInvitation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,27 +21,37 @@ public class InvitationImpl implements IInvitation{
     }
 
     @Override
-    public InvitationData getInvitationsUnType(String token, int lastInvitationId, int limit) {
+    public Result getInvitationsUnType(Integer myUserId, int lastInvitationId, int limit) {
         return null;
     }
 
     @Override
-    public InvitationData getInvitationsSmallType(String token, int typeId, int lastInvitationId, int limit) {
+    public Result getInvitationsByTypeId(Integer myUserId, int typeId, int lastInvitationId, int limit) {
         return null;
     }
 
     @Override
-    public InvitationData getInvitationsBigType(String token, int typeId, int lastInvitationId, int limit) {
+    public Result getInvitationsSBSend(Integer myUserId, int userId, int lastInvitationId, int limit) {
         return null;
     }
 
     @Override
-    public InvitationData getInvitationsSBSend(String token, int userId, int lastInvitationId, int limit) {
+    public Result getInvitationsMyConcerned(Integer myUserId,  int lastInvitationId, int limit) {
         return null;
     }
 
     @Override
-    public InvitationData getInvitationsMyConcerned(String token,  int lastInvitationId, int limit) {
+    public Result concernUser(int userId, String concernedUserId) {
+        return new Result();
+    }
+
+    @Override
+    public Result getConcernedUsers() {
+        return new Result();
+    }
+
+    @Override
+    public Result publishInvitation(Invatation invatation) {
         return null;
     }
 }

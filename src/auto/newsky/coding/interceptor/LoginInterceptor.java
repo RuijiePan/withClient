@@ -1,14 +1,15 @@
-/*
+
 package auto.newsky.coding.interceptor;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import auto.newsky.coding.serviceImpl.UserImpl;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-*/
+
 /**
  * 
  * <p>Title: HandlerInterceptor1</p>
@@ -16,50 +17,64 @@ import org.springframework.web.servlet.ModelAndView;
  * <p>Company: www.newsky.auto</p> 
  * @author	徐新宇
  * @version 1.0
- *//*
+ */
 
 public class LoginInterceptor implements HandlerInterceptor {
 
-	
+    @Resource
+    private UserImpl userService;
 	//进入 Handler方法之前执行
 	//用于身份认证、身份授权
 	//比如身份认证，如果认证通过表示当前用户没有登陆，需要此方法拦截不再向下执行
+	//return false表示拦截，不向下执行
+	//return true表示放行
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
-		
+
 		//获取请求的url
 		String url = request.getRequestURI();
 		//判断url是否是公开 地址（实际使用时将公开 地址配置配置文件中）
 		//这里公开地址是登陆提交的地址
-		if(url.indexOf("login.action")>=0){
-			//如果进行登陆提交，放行
-			return true;
-		}else if(url.indexOf("logined.action")>=0){
-			//如果进行登陆提交，放行
-			return true;
-		}
-		
-		//判断session
-		HttpSession session  = request.getSession();
-		//从session中取出用户身份信息
-		User user = (User) session.getAttribute("User");
-		
-		if(user != null){
-			//身份存在，放行
+
+
+		User user = null;
+		user = new User();
+		user.setUserId(1);
+		//User user = userService.getUserByToken(request.getParameter("token"));
+		if (user == null){//token 不匹配，没登录
+			request.setAttribute("myUserId",-1);
+		}else{//登录了的直接进入
+			request.setAttribute("myUserId",user.getUserId());
 			return true;
 		}
-		
-		String path = request.getContextPath();
-		String basePath = request.getScheme() + "://"
-				+ request.getServerName() + ":" + request.getServerPort()
-				+ path + "/login.action";
-		request.setAttribute("forward", basePath);
-		//执行这里表示用户身份需要认证，跳转登陆页面
-		request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
-		
-		//return false表示拦截，不向下执行
-		//return true表示放行
+
+          //不管有没有登录都可以访问的公开接口
+		if(url.indexOf("invitation/getInvitations")>=0){
+			//如果获取邀约列表，放行
+			return true;
+		}else if(url.indexOf("user/login")>=0){
+			//如果进行登陆，放行
+			return true;
+		}else if(url.indexOf("user/registerVertification")>=0){
+			//如果注册验证，放行
+			return true;
+		}else if(url.indexOf("user/getVertificationCode")>=0){
+			//如果获取验证码，放行
+			return true;
+		}else if(url.indexOf("user/register")>=0){
+			//如果注册，放行
+			return true;
+		}else if(url.indexOf("user/findBackPassWord")>=0){
+			//如果找回密码，放行
+			return true;
+		}
+
+		//既没登录，访问的也不是公开接口，不许访问
+		response.setCharacterEncoding("utf-8");
+		response.setContentType("application/json;charset=utf-8");
+		String errorJson = "{\"code\":401,\"msg\":\"用户未登录\"}";
+		response.getWriter().write(errorJson);//new Gson().toJson(new )
 		return false;
 	}
 
@@ -70,7 +85,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 			HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 		
-		System.out.println("HandlerInterceptor1...postHandle");
+		//System.out.println("LoginInterceptor...postHandle");
 		
 	}
 
@@ -81,8 +96,8 @@ public class LoginInterceptor implements HandlerInterceptor {
 			HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
 		
-		System.out.println("HandlerInterceptor1...afterCompletion");
+		//System.out.println("LoginInterceptor...afterCompletion");
 	}
 
 }
-*/
+

@@ -5,7 +5,7 @@ public class UserJoinInvitation {
 
     private Integer invitId;
 
-    private Integer relationIsDelete;
+    private Boolean relationIsDelete;
 
     public Integer getUserId() {
         return userId;
@@ -23,11 +23,11 @@ public class UserJoinInvitation {
         this.invitId = invitId;
     }
 
-    public Integer getRelationIsDelete() {
+    public Boolean getRelationIsDelete() {
         return relationIsDelete;
     }
 
-    public void setRelationIsDelete(Integer relationIsDelete) {
+    public void setRelationIsDelete(Boolean relationIsDelete) {
         this.relationIsDelete = relationIsDelete;
     }
 }

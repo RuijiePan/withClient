@@ -1,7 +1,5 @@
 package auto.newsky.coding.mapper;
 
-import auto.newsky.coding.po.Message;
-
 public interface MessageMapper {
     int deleteByPrimaryKey(Integer msgId);
 

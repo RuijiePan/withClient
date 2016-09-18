@@ -27,7 +27,6 @@ public class CustomDateConverter implements Converter<String,Date>{
 			//转成直接返回
 			return simpleDateFormat.parse(source);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		//如果参数绑定失败返回null

@@ -2,10 +2,12 @@ package auto.newsky.coding.po;
 
 import java.util.Date;
 
-public class Invatation {
+public class Invitation {
     private Integer invitId;
 
     private Integer userId;
+
+    private Integer typeId;
 
     private Date invitPublicationTime;
 
@@ -23,43 +25,9 @@ public class Invatation {
 
     private String invitContent;
 
-    private Integer invitType;
-
     private Boolean invitHidden;
 
     private Boolean invitIsDelete;
-
-    public Invatation(Integer userId, Date invitPublicationTime, Date invitActivityTime, String invitPlace, Integer invitNumberMax, Integer invitNumberCurr, Integer invitSexRequire, String invitTitle, String invitContent, Integer invitType, Boolean invitHidden, Boolean invitIsDelete) {
-
-        this.userId = userId;
-        this.invitPublicationTime = invitPublicationTime;
-        this.invitActivityTime = invitActivityTime;
-        this.invitPlace = invitPlace;
-        this.invitNumberMax = invitNumberMax;
-        this.invitNumberCurr = invitNumberCurr;
-        this.invitSexRequire = invitSexRequire;
-        this.invitTitle = invitTitle;
-        this.invitContent = invitContent;
-        this.invitType = invitType;
-        this.invitHidden = invitHidden;
-        this.invitIsDelete = invitIsDelete;
-    }
-
-    public Invatation(Integer userId,Integer invitId, Date invitActivityTime, String invitPlace, Integer invitNumberMax, Integer invitSexRequire, String invitContent, Boolean invitHidden) {
-        this.invitId = invitId;
-        this.userId = userId;
-        this.invitPublicationTime = invitPublicationTime;
-        this.invitActivityTime = invitActivityTime;
-        this.invitPlace = invitPlace;
-        this.invitNumberMax = invitNumberMax;
-        this.invitNumberCurr = invitNumberCurr;
-        this.invitSexRequire = invitSexRequire;
-        this.invitTitle = invitTitle;
-        this.invitContent = invitContent;
-        this.invitType = invitType;
-        this.invitHidden = invitHidden;
-        this.invitIsDelete = invitIsDelete;
-    }
 
     public Integer getInvitId() {
         return invitId;
@@ -75,6 +43,14 @@ public class Invatation {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public Integer getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Integer typeId) {
+        this.typeId = typeId;
     }
 
     public Date getInvitPublicationTime() {
@@ -139,16 +115,6 @@ public class Invatation {
 
     public void setInvitContent(String invitContent) {
         this.invitContent = invitContent == null ? null : invitContent.trim();
-    }
-
-
-
-    public Integer getInvitType() {
-        return invitType;
-    }
-
-    public void setInvitType(Integer invitType) {
-        this.invitType = invitType;
     }
 
     public Boolean getInvitHidden() {

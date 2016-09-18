@@ -7,13 +7,15 @@ public class User {
 
     private String userPassword;
 
-    private String userStudentnumber;
+    private String userStudentid;
 
     private String userRealname;
 
-    private String userSex;
+    private Integer userSex;
 
     private String userMobilephone;
+
+    private String userHeadurl;
 
     private String userQq;
 
@@ -21,7 +23,7 @@ public class User {
 
     private Boolean userIsDelete;
 
-    private String userHeadurl;
+    private String userClass;
 
     public Integer getUserId() {
         return userId;
@@ -47,12 +49,12 @@ public class User {
         this.userPassword = userPassword == null ? null : userPassword.trim();
     }
 
-    public String getUserStudentnumber() {
-        return userStudentnumber;
+    public String getUserStudentid() {
+        return userStudentid;
     }
 
-    public void setUserStudentnumber(String userStudentnumber) {
-        this.userStudentnumber = userStudentnumber == null ? null : userStudentnumber.trim();
+    public void setUserStudentid(String userStudentid) {
+        this.userStudentid = userStudentid == null ? null : userStudentid.trim();
     }
 
     public String getUserRealname() {
@@ -63,12 +65,12 @@ public class User {
         this.userRealname = userRealname == null ? null : userRealname.trim();
     }
 
-    public String getUserSex() {
+    public Integer getUserSex() {
         return userSex;
     }
 
-    public void setUserSex(String userSex) {
-        this.userSex = userSex == null ? null : userSex.trim();
+    public void setUserSex(Integer userSex) {
+        this.userSex = userSex;
     }
 
     public String getUserMobilephone() {
@@ -77,6 +79,14 @@ public class User {
 
     public void setUserMobilephone(String userMobilephone) {
         this.userMobilephone = userMobilephone == null ? null : userMobilephone.trim();
+    }
+
+    public String getUserHeadurl() {
+        return userHeadurl;
+    }
+
+    public void setUserHeadurl(String userHeadurl) {
+        this.userHeadurl = userHeadurl == null ? null : userHeadurl.trim();
     }
 
     public String getUserQq() {
@@ -103,11 +113,11 @@ public class User {
         this.userIsDelete = userIsDelete;
     }
 
-    public String getUserHeadurl() {
-        return userHeadurl;
+    public String getUserClass() {
+        return userClass;
     }
 
-    public void setUserHeadurl(String userHeadurl) {
-        this.userHeadurl = userHeadurl == null ? null : userHeadurl.trim();
+    public void setUserClass(String userClass) {
+        this.userClass = userClass == null ? null : userClass.trim();
     }
 }

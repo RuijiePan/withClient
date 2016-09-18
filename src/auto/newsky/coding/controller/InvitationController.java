@@ -1,8 +1,6 @@
 package auto.newsky.coding.controller;
 
-import auto.newsky.coding.mapper.UserMapper;
 import auto.newsky.coding.po.Invatation;
-import auto.newsky.coding.po.InvitationData;
 import auto.newsky.coding.response.Result;
 import auto.newsky.coding.serviceImpl.InvitationImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
@@ -22,31 +21,32 @@ public class InvitationController {
 
     @Autowired
     private InvitationImpl invitationService;
+
+    @Autowired
+    private HttpServletRequest request;
     /**
      * 获取邀约列表
      */
     //http://localhost:8080/invitation/getInvitations?token=1&typeId=1&userId=1&lastInvitationId=1&limit=1&invitaionId=1
     @ResponseBody
     @RequestMapping("/getInvitations")
-    public Result getInvitations(@RequestParam(value="token", required=false)String token,@RequestParam(value="typeId", required=false) Integer typeId, @RequestParam(value="userId", required=false)Integer userId,@RequestParam(value="lastInvitationId", required=false) Integer lastInvitationId, @RequestParam(value="limit", required=false)Integer limit){
-        Result result = new Result();
-        InvitationData invitationData = null;
-        if (typeId==null && userId==null){//获取未分类的邀约列表
-            invitationData = invitationService.getInvitationsUnType(token,lastInvitationId,limit);
-        }else if(typeId!=null && userId==null){//
-            if (invitationService.isSmallType(typeId)){//获取某大分类的邀约邀约列表
-                invitationData = invitationService.getInvitationsBigType(token,typeId,lastInvitationId,limit);
-            }else{//获取某小分类的邀约列表
-                invitationData = invitationService.getInvitationsSmallType(token,typeId,lastInvitationId,limit);
-            }
-        }else if (typeId==null&&userId!=null){
-            if (userId == -1){//获取我的关注邀约
-                invitationData = invitationService.getInvitationsMyConcerned(token,lastInvitationId,limit);
+    public Result getInvitations(@RequestParam(value="typeId", required=false) Integer typeId,
+                                 @RequestParam(value="userId", required=false)Integer aimUserId,
+                                 @RequestParam(value="lastInvitationId", required=false) Integer lastInvitationId,
+                                 @RequestParam(value="limit", required=false)Integer limit){
+        Integer myUserId = (Integer) request.getAttribute("myUserId");
+        Result result = null;
+        if (typeId==null && aimUserId==null){//获取未分类的邀约列表
+                result = invitationService.getInvitationsUnType(myUserId,lastInvitationId,limit);
+        } else if(typeId!=null && aimUserId==null){
+            result = invitationService.getInvitationsByTypeId(myUserId,typeId,lastInvitationId,limit);//获取某分类的邀约邀约列表
+        }else if (typeId==null&&aimUserId!=null){
+            if (aimUserId == -1){//获取我的关注邀约
+                result = invitationService.getInvitationsMyConcerned(myUserId,lastInvitationId,limit);
             }else{//获取某人发出的邀约
-                invitationData = invitationService.getInvitationsSBSend(token,userId,lastInvitationId,limit);
+                result = invitationService.getInvitationsSBSend(myUserId,aimUserId,lastInvitationId,limit);
             }
         }
-        result.setData(invitationData);
         return result;
     }
 
@@ -57,33 +57,39 @@ public class InvitationController {
      */
     @ResponseBody
     @RequestMapping("/publishInvitation")
-    public Result publishInvitation(@RequestParam(value="token", required=false)String token
-                                    ,@RequestParam(value="invitationTime", required=false)Date invitationTime
-                                    ,@RequestParam(value="place", required=false)String place
-                                    ,@RequestParam(value="totalNumber", required=false)Integer totalNumber
-                                    ,@RequestParam(value="title", required=false)String title
-                                    ,@RequestParam(value="content", required=false)String content
-                                    ,@RequestParam(value="sexRequire", required=false)Integer sexRequire
-                                    ,@RequestParam(value="type", required=false)Integer type
-                                    ,@RequestParam(value="hiden", required=false)boolean hiden) throws Exception{
-        int userId = 1;//userId = getUidFromToken(token);
+    public Result publishInvitation(@RequestParam(value="invitationTime", required=true)Date invitationTime
+                                    ,@RequestParam(value="place", required=true)        String place
+                                    ,@RequestParam(value="totalNumber", required=true)  Integer totalNumber
+                                    ,@RequestParam(value="title", required=true)        String title
+                                    ,@RequestParam(value="content", required=true)      String content
+                                    ,@RequestParam(value="sexRequire", required=true)   Integer sexRequire
+                                    ,@RequestParam(value="type", required=true)         Integer typeId
+                                    ,@RequestParam(value="hiden", required=true)        Boolean hiden) throws Exception{
+        Integer myUserId = (Integer) request.getAttribute("myUserId");
         Date invitPublicationTime = new Date();
-        int invitNumberCurr = 0;
-        Invatation invatation = new Invatation(userId, invitPublicationTime, invitationTime, place, totalNumber, invitNumberCurr, sexRequire, title,content, 1, type, hiden) ;
-
-
-        return new Result();
+        Invatation invatation = new Invatation(myUserId, invitPublicationTime, invitationTime, place,totalNumber, 0, sexRequire,title, content, typeId, hiden, false);
+        Result result = invitationService.publishInvitation(invatation);
+        return result;
     }
 
     /**
      * 维护、修改邀约
-     * @param invatation
      * @return
      * @throws Exception
      */
     @ResponseBody
     @RequestMapping("/alterInvitation")
-    public Result alterInvitation(Invatation invatation) throws Exception{
+    public Result alterInvitation(@RequestParam(value="token", required=true)String token
+            ,@RequestParam(value="invitationId", required=true)Integer invitationId
+            ,@RequestParam(value="invitationTime", required=true)Date invitationTime
+            ,@RequestParam(value="place", required=true)String place
+            ,@RequestParam(value="totalNumber", required=true)Integer totalNumber
+            ,@RequestParam(value="content", required=true)String content
+            ,@RequestParam(value="sexRequire", required=true)Integer sexRequire
+            ,@RequestParam(value="hiden", required=true) Boolean hiden) throws Exception{
+        int userId = 1;//userId = getUidFromToken(token);
+        Invatation invatation = new Invatation(userId,invitationId,invitationTime, place, totalNumber,  sexRequire, content,  hiden) ;
+
         return new Result();
     }
 
@@ -101,14 +107,14 @@ public class InvitationController {
 
     /**
      * 删除指定邀约
-     * @param invatation
      * @return
      * @throws Exception
      */
     @ResponseBody
     @RequestMapping("/deleteInvitation")
-    public Result deleteInvitation(Invatation invatation) throws Exception{
-        return new Result();
+    public Result deleteInvitation() throws Exception{
+
+        return new Result(request.getAttribute("myUserId"));
     }
 
     /**
@@ -117,22 +123,26 @@ public class InvitationController {
      * @return
      * @throws Exception
      */
+
     @ResponseBody
     @RequestMapping("/getConcernedUsers")
     public Result getConcernedUsers(Invatation invatation) throws Exception{
-        return new Result();
+        Result result = invitationService.getConcernedUsers();
+        return result;
     }
 
     /**
      * 关注/取消关注某用户
-     * @param invatation
      * @return
      * @throws Exception
      */
     @ResponseBody
     @RequestMapping("/concernUser")
-    public Result concernUser(Invatation invatation) throws Exception{
-        return new Result();
+    public Result concernUser(@RequestParam(value = "token",required = true) String token
+            ,@RequestParam(value = "concernedUserId",required = true) String concernedUserId) throws Exception{
+        int userId = 1;//userId = getUidFromToken(token);
+        Result result = invitationService.concernUser(userId,concernedUserId);
+        return result;
     }
 
     /**
@@ -146,7 +156,10 @@ public class InvitationController {
      */
     @ResponseBody
     @RequestMapping("/test")
-    public Result test(@RequestParam(value = "name",required = false) String name,@RequestParam(value = "name",required = false)Integer id) throws Exception{
-        return new Result(name);
+    public Result test(@RequestParam(value = "name",required = false) String name
+            ,@RequestParam(value = "name",required = false)Integer id
+            ,@RequestParam(value = "date",required = false)Integer date) throws Exception{
+
+        return new Result(date);
     }
 }

@@ -1,4 +1,4 @@
-/*
+package auto.newsky.coding.mapper;/*
 package auto.newsky.coding.mapper;
 
 import java.util.List;

@@ -44,17 +44,26 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
+	<mvc:annotation-driven conversion-service="conversionService"/>
+	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<property name="converters">
+			<set>
+				<ref bean="dateConvert"/>
+			</set>
+		</property>
+	</bean>
+	<bean id="dateConvert" class="auto.newsky.coding.controller.converter.CustomDateConverter"/>
 	<!-- 自定义参数绑定 -->
-	<bean id="conversionService"
+	<!--<bean id="conversionService"
 		class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-		<!-- 转换器 -->
+		&lt;!&ndash; 转换器 &ndash;&gt;
 		<property name="converters">
 			<list>
-				<!-- 日期类型转换 -->
+				&lt;!&ndash; 日期类型转换 &ndash;&gt;
 				<bean class="auto.newsky.coding.controller.converter.CustomDateConverter" />
 			</list>
 		</property>
-	</bean>
+	</bean>-->
 
 	<!-- 校验器 -->
 	<bean id="validator"
@@ -92,18 +101,23 @@
 			<value>5242880</value>
 		</property>
 	</bean>
-<!--
-	&lt;!&ndash;拦截器 &ndash;&gt;
+
 	<mvc:interceptors>
-		&lt;!&ndash; 多个拦截器,顺序执行 登陆认证拦截器 &ndash;&gt;
+		<!--多个拦截器,顺序执行 登陆认证拦截器-->
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<bean class="auto.newsky.coding.interceptor.LoginInterceptor"></bean>
 		</mvc:interceptor>
-		&lt;!&ndash; <mvc:interceptor> /**表示所有url包括子url路径 <mvc:mapping path="/**"/> <bean
-			class="cn.itcast.ssm.interceptor.HandlerInterceptor1"></bean> </mvc:interceptor> 
-			<mvc:interceptor> <mvc:mapping path="/**"/> <bean class="cn.itcast.ssm.interceptor.HandlerInterceptor2"></bean> 
-			</mvc:interceptor> &ndash;&gt;
-	</mvc:interceptors>-->
+
+<!--		<mvc:interceptor> /**表示所有url包括子url路径 <mvc:mapping path="/**"/>
+			<bean class="cn.itcast.ssm.interceptor.HandlerInterceptor1"></bean>
+		</mvc:interceptor>
+
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="cn.itcast.ssm.interceptor.HandlerInterceptor2"></bean>
+		</mvc:interceptor> -->
+	</mvc:interceptors>
+
 
 </beans>

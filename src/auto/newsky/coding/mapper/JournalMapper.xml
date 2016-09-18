@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="auto.newsky.coding.po.Journal" >
     <id column="jour_id" property="jourId" jdbcType="INTEGER" />
     <result column="task_id" property="taskId" jdbcType="INTEGER" />
-    <result column="jour_date" property="jourDate" jdbcType="DATE" />
+    <result column="jour_date" property="jourDate" jdbcType="TIMESTAMP" />
     <result column="jour_summary" property="jourSummary" jdbcType="VARCHAR" />
     <result column="jour_punch" property="jourPunch" jdbcType="BIT" />
     <result column="jour_is_delete" property="jourIsDelete" jdbcType="BIT" />
@@ -26,7 +26,7 @@
     insert into with_journal (jour_id, task_id, jour_date, 
       jour_summary, jour_punch, jour_is_delete
       )
-    values (#{jourId,jdbcType=INTEGER}, #{taskId,jdbcType=INTEGER}, #{jourDate,jdbcType=DATE}, 
+    values (#{jourId,jdbcType=INTEGER}, #{taskId,jdbcType=INTEGER}, #{jourDate,jdbcType=TIMESTAMP}, 
       #{jourSummary,jdbcType=VARCHAR}, #{jourPunch,jdbcType=BIT}, #{jourIsDelete,jdbcType=BIT}
       )
   </insert>
@@ -60,7 +60,7 @@
         #{taskId,jdbcType=INTEGER},
       </if>
       <if test="jourDate != null" >
-        #{jourDate,jdbcType=DATE},
+        #{jourDate,jdbcType=TIMESTAMP},
       </if>
       <if test="jourSummary != null" >
         #{jourSummary,jdbcType=VARCHAR},
@@ -80,7 +80,7 @@
         task_id = #{taskId,jdbcType=INTEGER},
       </if>
       <if test="jourDate != null" >
-        jour_date = #{jourDate,jdbcType=DATE},
+        jour_date = #{jourDate,jdbcType=TIMESTAMP},
       </if>
       <if test="jourSummary != null" >
         jour_summary = #{jourSummary,jdbcType=VARCHAR},
@@ -97,7 +97,7 @@
   <update id="updateByPrimaryKey" parameterType="auto.newsky.coding.po.Journal" >
     update with_journal
     set task_id = #{taskId,jdbcType=INTEGER},
-      jour_date = #{jourDate,jdbcType=DATE},
+      jour_date = #{jourDate,jdbcType=TIMESTAMP},
       jour_summary = #{jourSummary,jdbcType=VARCHAR},
       jour_punch = #{jourPunch,jdbcType=BIT},
       jour_is_delete = #{jourIsDelete,jdbcType=BIT}

@@ -7,7 +7,7 @@
     <result column="to_user_id" property="toUserId" jdbcType="INTEGER" />
     <result column="invit_id" property="invitId" jdbcType="INTEGER" />
     <result column="msg_type" property="msgType" jdbcType="INTEGER" />
-    <result column="msg_send_time" property="msgSendTime" jdbcType="DATE" />
+    <result column="msg_send_time" property="msgSendTime" jdbcType="TIMESTAMP" />
     <result column="msg_content" property="msgContent" jdbcType="VARCHAR" />
     <result column="msg_is_read" property="msgIsRead" jdbcType="BIT" />
     <result column="msg_is_delete" property="msgIsDelete" jdbcType="BIT" />
@@ -32,7 +32,7 @@
       msg_content, msg_is_read, msg_is_delete
       )
     values (#{msgId,jdbcType=INTEGER}, #{fromUserId,jdbcType=INTEGER}, #{toUserId,jdbcType=INTEGER}, 
-      #{invitId,jdbcType=INTEGER}, #{msgType,jdbcType=INTEGER}, #{msgSendTime,jdbcType=DATE}, 
+      #{invitId,jdbcType=INTEGER}, #{msgType,jdbcType=INTEGER}, #{msgSendTime,jdbcType=TIMESTAMP}, 
       #{msgContent,jdbcType=VARCHAR}, #{msgIsRead,jdbcType=BIT}, #{msgIsDelete,jdbcType=BIT}
       )
   </insert>
@@ -84,7 +84,7 @@
         #{msgType,jdbcType=INTEGER},
       </if>
       <if test="msgSendTime != null" >
-        #{msgSendTime,jdbcType=DATE},
+        #{msgSendTime,jdbcType=TIMESTAMP},
       </if>
       <if test="msgContent != null" >
         #{msgContent,jdbcType=VARCHAR},
@@ -113,7 +113,7 @@
         msg_type = #{msgType,jdbcType=INTEGER},
       </if>
       <if test="msgSendTime != null" >
-        msg_send_time = #{msgSendTime,jdbcType=DATE},
+        msg_send_time = #{msgSendTime,jdbcType=TIMESTAMP},
       </if>
       <if test="msgContent != null" >
         msg_content = #{msgContent,jdbcType=VARCHAR},
@@ -133,7 +133,7 @@
       to_user_id = #{toUserId,jdbcType=INTEGER},
       invit_id = #{invitId,jdbcType=INTEGER},
       msg_type = #{msgType,jdbcType=INTEGER},
-      msg_send_time = #{msgSendTime,jdbcType=DATE},
+      msg_send_time = #{msgSendTime,jdbcType=TIMESTAMP},
       msg_content = #{msgContent,jdbcType=VARCHAR},
       msg_is_read = #{msgIsRead,jdbcType=BIT},
       msg_is_delete = #{msgIsDelete,jdbcType=BIT}

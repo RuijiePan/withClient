@@ -1,10 +1,13 @@
 package auto.newsky.coding.controller;
 
+import auto.newsky.coding.po.LoginData;
 import auto.newsky.coding.po.User;
 import auto.newsky.coding.response.Result;
 import auto.newsky.coding.serviceImpl.UserImpl;
+import auto.newsky.coding.util.UUIDUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -13,30 +16,67 @@ import javax.annotation.Resource;
  * Created by prj on 2016/9/16.
  */
 @Controller
-@RequestMapping("/aboutme/")
+@RequestMapping("/user")
 public class AboutMeController {
-   @Resource
+
+    @Resource
     private UserImpl userService;
 
     /**
+     * http://localhost:8080/with/user/login?token=1&phone=2password=6
      * 登录
-     * @param user
+     * @param token
+     * @param password
+     * @param phone
      * @return
+     * @throws Exception
      */
     @ResponseBody
     @RequestMapping("/login")
-    public Result getInvitations(User user){
-        return new Result(user);
+    public Result getInvitations(@RequestParam(value="token", required=true)String token,
+                                 @RequestParam(value="password", required=true)String password,
+                                 @RequestParam(value="phone", required=true)String phone) throws Exception {
+        Result result = new Result();
+        User user = userService.getUserByToken(token);
+        if (user.getUserMobilephone().equals(phone)&&
+                user.getUserPassword().equals(password)){
+            LoginData.DataBean dataBean = new LoginData.DataBean(user.getUserSex(),user.getUserMobilephone(),
+                    8,user.getUserNickname(),user.getUserToken(),
+                    user.getUserHeadurl(),user.getUserStudentid(),user.getUserId(),
+                    user.getUserClass(),user.getUserRealname(),user.getUserQq());
+            result.setData(new LoginData(dataBean));
+        }else {
+            result.setCode(405);
+            result.setData(null);
+            result.setMsg("账号或密码错误");
+        }
+        return result;
     }
+
     /**
      * 注册验证
-     * @param user
+     * @param token
+     * @param studentNumber
+     * @param realName
+     * @param sex
      * @return
+     * @throws Exception
      */
     @ResponseBody
     @RequestMapping("/registerVertification")
-    public Result registerVertification(User user){
-        return new Result(user);
+    public Result registerVertification(@RequestParam(value="token", required=true)String token,
+                                        @RequestParam(value="studentNumber", required=true)String studentNumber,
+                                        @RequestParam(value="realName", required=true)String realName,
+                                        @RequestParam(value="sex", required=true)Integer sex) throws Exception{
+        Result result = new Result();
+        result.setData(null);
+        User user = userService.getUserByStudentID(studentNumber);
+        if (!(user.getUserRealname().equals(realName)&&
+                user.getUserSex()==sex)){
+            result.setCode(406);
+            result.setMsg("信息不匹配");
+        }
+        return result;
     }
     /**
      * 获取验证码
@@ -48,16 +88,40 @@ public class AboutMeController {
     public Result getVertificationCode(User user){
         return new Result(user);
     }
+
     /**
-     * 注册
-     * @param user
+     * http://localhost:8080/with/user/register?token=1&phone=2&vertificationCode=5&password=6&studentNumber=1
+     * @param token
+     * @param phone
+     * @param vertificationCode
+     * @param password
+     * @param studentNumber
      * @return
+     * @throws Exception
      */
     @ResponseBody
     @RequestMapping("/register")
-    public Result register(User user){
-        return new Result(user);
+    public Result register(@RequestParam(value="token", required=true)String token,
+                           @RequestParam(value="phone", required=true)String phone,
+                           @RequestParam(value="vertificationCode", required=true)String vertificationCode,
+                           @RequestParam(value="password", required=true)String password,
+                           @RequestParam(value="studentNumber", required=true)String studentNumber) throws Exception {
+
+        Result result = new Result();
+        User user = userService.getUserByStudentID(studentNumber);
+        if (user!=null){
+            user.setUserMobilephone(phone);
+            user.setUserPassword(password);
+            user.setUserToken(UUIDUtil.createUUID());
+            userService.modify(user);
+        }else {
+            result.setCode(404);
+            result.setMsg("验证码错误");
+        }
+        result.setData(null);
+        return result;
     }
+
     /**
      * 找回密码
      * @param user
