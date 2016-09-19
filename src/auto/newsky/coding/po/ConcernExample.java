@@ -104,6 +104,66 @@ public class ConcernExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
+        public Criteria andConIdIsNull() {
+            addCriterion("con_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConIdIsNotNull() {
+            addCriterion("con_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConIdEqualTo(Integer value) {
+            addCriterion("con_id =", value, "conId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConIdNotEqualTo(Integer value) {
+            addCriterion("con_id <>", value, "conId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConIdGreaterThan(Integer value) {
+            addCriterion("con_id >", value, "conId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("con_id >=", value, "conId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConIdLessThan(Integer value) {
+            addCriterion("con_id <", value, "conId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConIdLessThanOrEqualTo(Integer value) {
+            addCriterion("con_id <=", value, "conId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConIdIn(List<Integer> values) {
+            addCriterion("con_id in", values, "conId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConIdNotIn(List<Integer> values) {
+            addCriterion("con_id not in", values, "conId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConIdBetween(Integer value1, Integer value2) {
+            addCriterion("con_id between", value1, value2, "conId");
+            return (Criteria) this;
+        }
+
+        public Criteria andConIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("con_id not between", value1, value2, "conId");
+            return (Criteria) this;
+        }
+
         public Criteria andConFromUserIdIsNull() {
             addCriterion("con_from_user_id is null");
             return (Criteria) this;

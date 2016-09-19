@@ -104,6 +104,66 @@ public class JoinInvitationExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
+        public Criteria andRelationIdIsNull() {
+            addCriterion("relation_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelationIdIsNotNull() {
+            addCriterion("relation_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelationIdEqualTo(Integer value) {
+            addCriterion("relation_id =", value, "relationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelationIdNotEqualTo(Integer value) {
+            addCriterion("relation_id <>", value, "relationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelationIdGreaterThan(Integer value) {
+            addCriterion("relation_id >", value, "relationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelationIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("relation_id >=", value, "relationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelationIdLessThan(Integer value) {
+            addCriterion("relation_id <", value, "relationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelationIdLessThanOrEqualTo(Integer value) {
+            addCriterion("relation_id <=", value, "relationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelationIdIn(List<Integer> values) {
+            addCriterion("relation_id in", values, "relationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelationIdNotIn(List<Integer> values) {
+            addCriterion("relation_id not in", values, "relationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelationIdBetween(Integer value1, Integer value2) {
+            addCriterion("relation_id between", value1, value2, "relationId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelationIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("relation_id not between", value1, value2, "relationId");
+            return (Criteria) this;
+        }
+
         public Criteria andUserIdIsNull() {
             addCriterion("user_id is null");
             return (Criteria) this;
