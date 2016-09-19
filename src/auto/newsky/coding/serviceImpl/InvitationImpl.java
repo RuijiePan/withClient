@@ -2,6 +2,7 @@ package auto.newsky.coding.serviceImpl;
 
 import auto.newsky.coding.mapper.InvitationMapper;
 import auto.newsky.coding.po.Invitation;
+import auto.newsky.coding.po.InvitationExample;
 import auto.newsky.coding.response.Result;
 import auto.newsky.coding.service.IInvitation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,15 @@ public class InvitationImpl implements IInvitation{
 
     @Override
     public Result getInvitationsUnType(Integer myUserId, int lastInvitationId, int limit) {
-        return null;
+        Result result = new Result();
+        InvitationExample invitationExample = new InvitationExample();
+        if(invatationMapper.selectByExample(invitationExample).size()>0){
+            return result;
+        }
+
+        result.setCode(407);
+        result.setMsg("数据库插入失败");
+        return result;
     }
 
     @Override
@@ -55,7 +64,13 @@ public class InvitationImpl implements IInvitation{
 
     @Override
     public Result alterInvitation(Invitation invitation) {
-        return null;
+        Result result = new Result();
+        if(invatationMapper.updateByPrimaryKeySelective(invitation)>0){
+            return result;
+        }
+        result.setCode(408);
+        result.setMsg("数据库更新失败");
+        return result;
     }
 
     @Override

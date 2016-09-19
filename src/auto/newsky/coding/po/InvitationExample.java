@@ -285,6 +285,66 @@ public class InvitationExample {
             return (Criteria) this;
         }
 
+        public Criteria andTypeParentIdIsNull() {
+            addCriterion("type_parent_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeParentIdIsNotNull() {
+            addCriterion("type_parent_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeParentIdEqualTo(Integer value) {
+            addCriterion("type_parent_id =", value, "typeParentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeParentIdNotEqualTo(Integer value) {
+            addCriterion("type_parent_id <>", value, "typeParentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeParentIdGreaterThan(Integer value) {
+            addCriterion("type_parent_id >", value, "typeParentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeParentIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("type_parent_id >=", value, "typeParentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeParentIdLessThan(Integer value) {
+            addCriterion("type_parent_id <", value, "typeParentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeParentIdLessThanOrEqualTo(Integer value) {
+            addCriterion("type_parent_id <=", value, "typeParentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeParentIdIn(List<Integer> values) {
+            addCriterion("type_parent_id in", values, "typeParentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeParentIdNotIn(List<Integer> values) {
+            addCriterion("type_parent_id not in", values, "typeParentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeParentIdBetween(Integer value1, Integer value2) {
+            addCriterion("type_parent_id between", value1, value2, "typeParentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeParentIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("type_parent_id not between", value1, value2, "typeParentId");
+            return (Criteria) this;
+        }
+
         public Criteria andInvitPublicationTimeIsNull() {
             addCriterion("invit_publication_time is null");
             return (Criteria) this;

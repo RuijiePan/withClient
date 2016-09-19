@@ -84,12 +84,14 @@ public class InvitationController {
                                     ,@RequestParam(value="hiden", required=true)        Boolean hiden) throws Exception{
         Integer myUserId = (Integer) request.getAttribute("myUserId");
         Date invitPublicationTime = new Date();
+
         Invitation invitation = new Invitation(myUserId, invitPublicationTime, invitationTime, place,totalNumber, 0, sexRequire,title, content, typeId, hiden, false);
         Result result = invitationService.publishInvitation(invitation);
         return result;
     }
 
     /**
+     * http://localhost:8080/invitation/alterInvitation?invitationId=1&invitationTime=2016-1-1%2020:20:20&place=xxplace&totalNumber=1&content=xxcontent&sexRequire=0&hiden=false
      * 维护、修改邀约
      * @param invitationId
      * @param invitationTime

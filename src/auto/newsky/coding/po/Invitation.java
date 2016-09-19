@@ -9,6 +9,16 @@ public class Invitation {
 
     private Integer typeId;
 
+    private Integer typeParentId;
+
+    public Integer getTypeParentId() {
+        return typeParentId;
+    }
+
+    public void setTypeParentId(Integer typeParentId) {
+        this.typeParentId = typeParentId;
+    }
+
     private Date invitPublicationTime;
 
     private Date invitActivityTime;
@@ -29,10 +39,32 @@ public class Invitation {
 
     private Boolean invitIsDelete;
 
-    public Invitation(Integer myUserId, Date invitPublicationTime, Date invitationTime, String place, Integer totalNumber, int i, Integer sexRequire, String title, String content, Integer typeId, Boolean hiden, boolean b) {
+
+
+    public Invitation(Integer myUserId, Date invitPublicationTime, Date invitationTime, String place, Integer totalNumber, int numberCurr, Integer sexRequire, String title, String content, Integer typeId, Boolean hiden, boolean isdelete) {
+        this.userId = myUserId;
+        this.typeId = typeId;
+        this.invitPublicationTime = invitPublicationTime;
+        this.invitActivityTime = invitationTime;
+        this.invitPlace = place;
+        this.invitNumberMax = totalNumber;
+        this.invitNumberCurr = numberCurr;
+        this.invitSexRequire = sexRequire;
+        this.invitTitle = title;
+        this.invitContent = content;
+        this.invitHidden = hiden;
+        this.invitIsDelete = isdelete;
     }
 
     public Invitation(Integer myUserId, Integer invitationId, Date invitationTime, String place, Integer totalNumber, Integer sexRequire, String content, Boolean hiden) {
+        this.userId = myUserId;
+        this.invitId = invitationId;
+        this.invitActivityTime = invitationTime;
+        this.invitPlace = place;
+        this.invitNumberMax = totalNumber;
+        this.invitSexRequire = sexRequire;
+        this.invitContent = content;
+        this.invitHidden = hiden;
     }
 
     public Integer getInvitId() {
