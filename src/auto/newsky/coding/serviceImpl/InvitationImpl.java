@@ -44,7 +44,7 @@ public class InvitationImpl implements IInvitation{
     public Result getInvitationsByTypeId(Integer myUserId, int typeId, int lastInvitationId, int limit) {
         Result result = new Result();
         if (invitationTypeService.isParentType(typeId)){//大类查询
-            invatationMapper.select
+           // invatationMapper.select
         }else{//小类查询
 
         }

@@ -28,6 +28,4 @@ public interface InvitationTypeMapper {
     int updateByPrimaryKeySelective(InvitationType record);
 
     int updateByPrimaryKey(InvitationType record);
-
-
 }
