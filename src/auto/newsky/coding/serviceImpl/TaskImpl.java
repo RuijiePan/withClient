@@ -2,7 +2,7 @@ package auto.newsky.coding.serviceImpl;
 
 import auto.newsky.coding.mapper.TaskMapper;
 import auto.newsky.coding.po.Task;
-import auto.newsky.coding.po.TaskList;
+import auto.newsky.coding.resultdata.TaskList;
 import auto.newsky.coding.service.ITask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

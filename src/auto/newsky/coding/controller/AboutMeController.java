@@ -1,7 +1,8 @@
 package auto.newsky.coding.controller;
 
-import auto.newsky.coding.po.LoginData;
+
 import auto.newsky.coding.po.User;
+import auto.newsky.coding.resultdata.LoginData;
 import auto.newsky.coding.response.Result;
 import auto.newsky.coding.serviceImpl.UserImpl;
 import auto.newsky.coding.util.UUIDUtil;

@@ -1,7 +1,7 @@
 package auto.newsky.coding.controller;
 
-import auto.newsky.coding.controller.converter.CustomDateConverter;
-import auto.newsky.coding.po.Invatation;
+import auto.newsky.coding.po.Invitation;
+import auto.newsky.coding.po.User;
 import auto.newsky.coding.response.Result;
 import auto.newsky.coding.serviceImpl.InvitationImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -26,10 +25,17 @@ public class InvitationController {
 
     @Autowired
     private HttpServletRequest request;
+
     /**
+     * http://localhost:8080/invitation/getInvitations?token=1&typeId=1&userId=1&lastInvitationId=1&limit=1&invitaionId=1
      * 获取邀约列表
+     * @param typeId
+     * @param aimUserId
+     * @param lastInvitationId
+     * @param limit
+     * @return
      */
-    //http://localhost:8080/invitation/getInvitations?token=1&typeId=1&userId=1&lastInvitationId=1&limit=1&invitaionId=1
+
     @ResponseBody
     @RequestMapping("/getInvitations")
     public Result getInvitations(@RequestParam(value="typeId", required=false) Integer typeId,
@@ -53,7 +59,16 @@ public class InvitationController {
     }
 
     /**
+     * http://localhost:8080/invitation/publishInvitation?invitationTime=2016-1-1%2020:20:20&place=xxplace&totalNumber=1&title=xxtitle&content=xxcontent&sexRequire=0&type=1&hiden=false
      * 发起邀约
+     * @param invitationTime
+     * @param place
+     * @param totalNumber
+     * @param title
+     * @param content
+     * @param sexRequire
+     * @param typeId
+     * @param hiden
      * @return
      * @throws Exception
      */
@@ -69,67 +84,93 @@ public class InvitationController {
                                     ,@RequestParam(value="hiden", required=true)        Boolean hiden) throws Exception{
         Integer myUserId = (Integer) request.getAttribute("myUserId");
         Date invitPublicationTime = new Date();
-        Invatation invatation = new Invatation(myUserId, invitPublicationTime, invitationTime, place,totalNumber, 0, sexRequire,title, content, typeId, hiden, false);
-        Result result = invitationService.publishInvitation(invatation);
+        Invitation invitation = new Invitation(myUserId, invitPublicationTime, invitationTime, place,totalNumber, 0, sexRequire,title, content, typeId, hiden, false);
+        Result result = invitationService.publishInvitation(invitation);
         return result;
     }
 
     /**
      * 维护、修改邀约
+     * @param invitationId
+     * @param invitationTime
+     * @param place
+     * @param totalNumber
+     * @param content
+     * @param sexRequire
+     * @param hiden
      * @return
      * @throws Exception
      */
     @ResponseBody
     @RequestMapping("/alterInvitation")
-    public Result alterInvitation(@RequestParam(value="token", required=true)String token
-            ,@RequestParam(value="invitationId", required=true)Integer invitationId
-            ,@RequestParam(value="invitationTime", required=true)Date invitationTime
-            ,@RequestParam(value="place", required=true)String place
-            ,@RequestParam(value="totalNumber", required=true)Integer totalNumber
-            ,@RequestParam(value="content", required=true)String content
-            ,@RequestParam(value="sexRequire", required=true)Integer sexRequire
-            ,@RequestParam(value="hiden", required=true) Boolean hiden) throws Exception{
-        int userId = 1;//userId = getUidFromToken(token);
-        Invatation invatation = new Invatation(userId,invitationId,invitationTime, place, totalNumber,  sexRequire, content,  hiden) ;
-
-        return new Result();
+    public Result alterInvitation(@RequestParam(value="invitationId", required=true)Integer invitationId
+            ,@RequestParam(value="invitationTime", required=false)Date invitationTime
+            ,@RequestParam(value="place", required=false)String place
+            ,@RequestParam(value="totalNumber", required=false)Integer totalNumber
+            ,@RequestParam(value="content", required=false)String content
+            ,@RequestParam(value="sexRequire", required=false)Integer sexRequire
+            ,@RequestParam(value="hiden", required=false) Boolean hiden) throws Exception{
+        Integer myUserId = (Integer) request.getAttribute("myUserId");
+        Invitation invitation = new Invitation(myUserId,invitationId,invitationTime, place, totalNumber,  sexRequire, content,  hiden) ;
+        Result result = invitationService.alterInvitation(invitation);
+        return  result;
     }
 
     /**
      * 参加邀约/申请加入特批/退出邀约
-     * @param invatation
+     * @param invitationId
+     * @param type
      * @return
      * @throws Exception
      */
     @ResponseBody
     @RequestMapping("/participateInvitation")
-    public Result participateInvitation(Invatation invatation) throws Exception{
-        return new Result();
+    public Result participateInvitation(@RequestParam(value="invitaionId", required=true)Integer invitationId
+                                        ,@RequestParam(value="type", required=true)Integer type) throws Exception{
+        Integer myUserId = (Integer) request.getAttribute("myUserId");
+        Result result = null;
+        if (type == 0){
+            result = invitationService.participateInvitation(myUserId,invitationId);
+        }else if (type == 1){
+            result = invitationService.applyInvitation(myUserId,invitationId);
+        }else  if(type == 2){
+            result = invitationService.quitInvitation(myUserId,invitationId);
+        }
+
+        return result;
     }
 
     /**
      * 删除指定邀约
+     * @param invitationId
      * @return
      * @throws Exception
      */
     @ResponseBody
     @RequestMapping("/deleteInvitation")
-    public Result deleteInvitation() throws Exception{
+    public Result deleteInvitation(@RequestParam(value="invitaionId", required=true)Integer invitationId) throws Exception{
+        Integer myUserId = (Integer) request.getAttribute("myUserId");
+        Result result = null;
 
-        return new Result(request.getAttribute("myUserId"));
+        result = invitationService.deleteInvitation(myUserId,invitationId);
+        return result;
     }
 
     /**
      * 获取我关注的用户列表
-     * @param invatation
+     * @param concernedUserId
+     * @param limit
      * @return
      * @throws Exception
      */
 
     @ResponseBody
     @RequestMapping("/getConcernedUsers")
-    public Result getConcernedUsers(Invatation invatation) throws Exception{
-        Result result = invitationService.getConcernedUsers();
+    public Result getConcernedUsers(@RequestParam(value="concernedUserId", required=false)Integer concernedUserId
+                                    ,@RequestParam(value="limit", required=false)Integer limit) throws Exception{
+        Integer myUserId = (Integer) request.getAttribute("myUserId");
+        Result result = null;
+        result = invitationService.getConcernedUsers(myUserId,concernedUserId,limit);
         return result;
     }
 
@@ -141,9 +182,10 @@ public class InvitationController {
     @ResponseBody
     @RequestMapping("/concernUser")
     public Result concernUser(@RequestParam(value = "token",required = true) String token
-            ,@RequestParam(value = "concernedUserId",required = true) String concernedUserId) throws Exception{
-        int userId = 1;//userId = getUidFromToken(token);
-        Result result = invitationService.concernUser(userId,concernedUserId);
+            ,@RequestParam(value = "concernedUserId",required = true) Integer concernedUserId) throws Exception{
+        Integer myUserId = (Integer) request.getAttribute("myUserId");
+        Result result = null;
+        result = invitationService.concernUser(myUserId,concernedUserId);
         return result;
     }
 
@@ -160,9 +202,18 @@ public class InvitationController {
     @RequestMapping("/test")
     public Result test(@RequestParam(value = "name",required = false) String name
             ,@RequestParam(value = "id",required = false)Integer id
-            ,@RequestParam(value = "date",required = false)String date) throws Exception{
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            ,@RequestParam(value = "date",required = false) Date date) throws Exception{
+        //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        return new Result(simpleDateFormat.format(simpleDateFormat.parse(date)));
+        return new Result(date);
+        //return new Result(simpleDateFormat.format(simpleDateFormat.parse(date)));
+    }
+
+
+    @ResponseBody
+    @RequestMapping("/test2")
+    public Result test2(User user) throws Exception{
+        return new Result(user.getUserId());
+        //return new Result(simpleDateFormat.format(simpleDateFormat.parse(date)));
     }
 }

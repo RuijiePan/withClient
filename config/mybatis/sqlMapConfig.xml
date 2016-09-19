@@ -28,6 +28,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<!-- 给予被嵌套的resultMap以字段-属性的映射支持 FULL,PARTIAL -->
 		<setting name="autoMappingBehavior" value="PARTIAL" />
 
+
 		<!-- 对于批量更新操作缓存SQL以提高性能 BATCH,SIMPLE -->
 		<!-- <setting name="defaultExecutorType" value="BATCH" /> -->
 

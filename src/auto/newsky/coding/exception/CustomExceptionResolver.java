@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
+
 /**
  * 
  * <p>Title: CustomExceptionResolver</p>
@@ -30,6 +32,12 @@ public class CustomExceptionResolver implements HandlerExceptionResolver {
 	public ModelAndView resolveException(HttpServletRequest request,
 			HttpServletResponse response, Object handler, Exception ex) {
 		CustomException customException = null;
+		try {
+			ex.printStackTrace();
+			response.getWriter().write(ex.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		if(ex instanceof CustomException){
 			customException = (CustomException)ex;
 		}else{

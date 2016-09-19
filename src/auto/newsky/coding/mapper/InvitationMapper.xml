@@ -16,11 +16,83 @@
     <result column="invit_hidden" property="invitHidden" jdbcType="BIT" />
     <result column="invit_is_delete" property="invitIsDelete" jdbcType="BIT" />
   </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
   <sql id="Base_Column_List" >
     invit_id, user_id, type_id, invit_publication_time, invit_activity_time, invit_place, 
     invit_number_max, invit_number_curr, invit_sex_require, invit_title, invit_content, 
     invit_hidden, invit_is_delete
   </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="auto.newsky.coding.po.InvitationExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from with_invitation
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
@@ -30,6 +102,12 @@
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from with_invitation
     where invit_id = #{invitId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="auto.newsky.coding.po.InvitationExample" >
+    delete from with_invitation
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
   </delete>
   <insert id="insert" parameterType="auto.newsky.coding.po.Invitation" >
     insert into with_invitation (invit_id, user_id, type_id, 
@@ -128,6 +206,78 @@
       </if>
     </trim>
   </insert>
+  <select id="countByExample" parameterType="auto.newsky.coding.po.InvitationExample" resultType="java.lang.Integer" >
+    select count(*) from with_invitation
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update with_invitation
+    <set >
+      <if test="record.invitId != null" >
+        invit_id = #{record.invitId,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.typeId != null" >
+        type_id = #{record.typeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.invitPublicationTime != null" >
+        invit_publication_time = #{record.invitPublicationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.invitActivityTime != null" >
+        invit_activity_time = #{record.invitActivityTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.invitPlace != null" >
+        invit_place = #{record.invitPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="record.invitNumberMax != null" >
+        invit_number_max = #{record.invitNumberMax,jdbcType=INTEGER},
+      </if>
+      <if test="record.invitNumberCurr != null" >
+        invit_number_curr = #{record.invitNumberCurr,jdbcType=INTEGER},
+      </if>
+      <if test="record.invitSexRequire != null" >
+        invit_sex_require = #{record.invitSexRequire,jdbcType=INTEGER},
+      </if>
+      <if test="record.invitTitle != null" >
+        invit_title = #{record.invitTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.invitContent != null" >
+        invit_content = #{record.invitContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.invitHidden != null" >
+        invit_hidden = #{record.invitHidden,jdbcType=BIT},
+      </if>
+      <if test="record.invitIsDelete != null" >
+        invit_is_delete = #{record.invitIsDelete,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update with_invitation
+    set invit_id = #{record.invitId,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      type_id = #{record.typeId,jdbcType=INTEGER},
+      invit_publication_time = #{record.invitPublicationTime,jdbcType=TIMESTAMP},
+      invit_activity_time = #{record.invitActivityTime,jdbcType=TIMESTAMP},
+      invit_place = #{record.invitPlace,jdbcType=VARCHAR},
+      invit_number_max = #{record.invitNumberMax,jdbcType=INTEGER},
+      invit_number_curr = #{record.invitNumberCurr,jdbcType=INTEGER},
+      invit_sex_require = #{record.invitSexRequire,jdbcType=INTEGER},
+      invit_title = #{record.invitTitle,jdbcType=VARCHAR},
+      invit_content = #{record.invitContent,jdbcType=VARCHAR},
+      invit_hidden = #{record.invitHidden,jdbcType=BIT},
+      invit_is_delete = #{record.invitIsDelete,jdbcType=BIT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
   <update id="updateByPrimaryKeySelective" parameterType="auto.newsky.coding.po.Invitation" >
     update with_invitation
     <set >

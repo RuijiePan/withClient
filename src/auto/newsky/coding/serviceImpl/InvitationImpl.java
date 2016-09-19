@@ -1,7 +1,7 @@
 package auto.newsky.coding.serviceImpl;
 
-import auto.newsky.coding.po.Invatation;
-import auto.newsky.coding.mapper.InvatationMapper;
+import auto.newsky.coding.mapper.InvitationMapper;
+import auto.newsky.coding.po.Invitation;
 import auto.newsky.coding.response.Result;
 import auto.newsky.coding.service.IInvitation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class InvitationImpl implements IInvitation{
     @Autowired
-    private InvatationMapper invatationMapper;
+    private InvitationMapper invatationMapper;
 
     @Override
     public boolean isSmallType(int typeId) {
@@ -40,18 +40,53 @@ public class InvitationImpl implements IInvitation{
         return null;
     }
 
+
+
     @Override
-    public Result concernUser(int userId, String concernedUserId) {
-        return new Result();
+    public Result publishInvitation(Invitation invatation) {
+        Result result = new Result();
+        if(invatationMapper.insert(invatation)>0){
+            return result;
+        }
+        result.setCode(407);
+        result.setMsg("数据库插入失败");
+        return result;
     }
 
     @Override
-    public Result getConcernedUsers() {
-        return new Result();
-    }
-
-    @Override
-    public Result publishInvitation(Invatation invatation) {
+    public Result alterInvitation(Invitation invitation) {
         return null;
     }
+
+    @Override
+    public Result participateInvitation(Integer myUserId, Integer invitationId) {
+        return null;
+    }
+
+    @Override
+    public Result applyInvitation(Integer myUserId, Integer invitationId) {
+        return null;
+    }
+
+    @Override
+    public Result quitInvitation(Integer myUserId, Integer invitationId) {
+        return null;
+    }
+
+    @Override
+    public Result deleteInvitation(Integer myUserId, Integer invitationId) {
+        return null;
+    }
+
+    @Override
+    public Result getConcernedUsers(Integer myUserId, Integer concernedUserId, Integer limit) {
+        return null;
+    }
+
+    @Override
+    public Result concernUser(Integer myUserId, Integer concernedUserId) {
+        return null;
+    }
+
+
 }

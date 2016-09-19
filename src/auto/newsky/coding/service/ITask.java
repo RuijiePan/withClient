@@ -1,7 +1,7 @@
 package auto.newsky.coding.service;
 
 import auto.newsky.coding.po.Task;
-import auto.newsky.coding.po.TaskList;
+import auto.newsky.coding.resultdata.TaskList;
 
 import java.util.List;
 

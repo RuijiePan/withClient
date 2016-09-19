@@ -29,6 +29,12 @@ public class Invitation {
 
     private Boolean invitIsDelete;
 
+    public Invitation(Integer myUserId, Date invitPublicationTime, Date invitationTime, String place, Integer totalNumber, int i, Integer sexRequire, String title, String content, Integer typeId, Boolean hiden, boolean b) {
+    }
+
+    public Invitation(Integer myUserId, Integer invitationId, Date invitationTime, String place, Integer totalNumber, Integer sexRequire, String content, Boolean hiden) {
+    }
+
     public Integer getInvitId() {
         return invitId;
     }

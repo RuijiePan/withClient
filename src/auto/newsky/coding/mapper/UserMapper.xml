@@ -15,37 +15,97 @@
     <result column="user_is_delete" property="userIsDelete" jdbcType="BIT" />
     <result column="user_class" property="userClass" jdbcType="VARCHAR" />
   </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
   <sql id="Base_Column_List" >
     user_id, user_nickname, user_password, user_studentID, user_realname, user_sex, user_mobilephone, 
     user_headurl, user_qq, user_token, user_is_delete, user_class
   </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="auto.newsky.coding.po.UserExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from with_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from with_user
     where user_id = #{userId,jdbcType=INTEGER}
   </select>
-
-  <select id="selectByStudentID" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
-    select
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from with_user
-    where user_studentID = #{userStudentid,jdbcType=VARCHAR}
-  </select>
-
-  <select id="selectByToken" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
-    select
-    <include refid="Base_Column_List" />,
-    <include refid="Blob_Column_List" />
-    from with_user
-    where user_token = #{userToken,jdbcType=VARCHAR}
-  </select>
-
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from with_user
     where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="auto.newsky.coding.po.UserExample" >
+    delete from with_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
   </delete>
   <insert id="insert" parameterType="auto.newsky.coding.po.User" >
     insert into with_user (user_id, user_nickname, user_password, 
@@ -138,6 +198,74 @@
       </if>
     </trim>
   </insert>
+  <select id="countByExample" parameterType="auto.newsky.coding.po.UserExample" resultType="java.lang.Integer" >
+    select count(*) from with_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update with_user
+    <set >
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.userNickname != null" >
+        user_nickname = #{record.userNickname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userPassword != null" >
+        user_password = #{record.userPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userStudentid != null" >
+        user_studentID = #{record.userStudentid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userRealname != null" >
+        user_realname = #{record.userRealname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userSex != null" >
+        user_sex = #{record.userSex,jdbcType=INTEGER},
+      </if>
+      <if test="record.userMobilephone != null" >
+        user_mobilephone = #{record.userMobilephone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userHeadurl != null" >
+        user_headurl = #{record.userHeadurl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userQq != null" >
+        user_qq = #{record.userQq,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userToken != null" >
+        user_token = #{record.userToken,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userIsDelete != null" >
+        user_is_delete = #{record.userIsDelete,jdbcType=BIT},
+      </if>
+      <if test="record.userClass != null" >
+        user_class = #{record.userClass,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update with_user
+    set user_id = #{record.userId,jdbcType=INTEGER},
+      user_nickname = #{record.userNickname,jdbcType=VARCHAR},
+      user_password = #{record.userPassword,jdbcType=VARCHAR},
+      user_studentID = #{record.userStudentid,jdbcType=VARCHAR},
+      user_realname = #{record.userRealname,jdbcType=VARCHAR},
+      user_sex = #{record.userSex,jdbcType=INTEGER},
+      user_mobilephone = #{record.userMobilephone,jdbcType=VARCHAR},
+      user_headurl = #{record.userHeadurl,jdbcType=VARCHAR},
+      user_qq = #{record.userQq,jdbcType=VARCHAR},
+      user_token = #{record.userToken,jdbcType=VARCHAR},
+      user_is_delete = #{record.userIsDelete,jdbcType=BIT},
+      user_class = #{record.userClass,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
   <update id="updateByPrimaryKeySelective" parameterType="auto.newsky.coding.po.User" >
     update with_user
     <set >

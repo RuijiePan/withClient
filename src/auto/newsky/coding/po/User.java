@@ -120,4 +120,22 @@ public class User {
     public void setUserClass(String userClass) {
         this.userClass = userClass == null ? null : userClass.trim();
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", userNickname='" + userNickname + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                ", userStudentid='" + userStudentid + '\'' +
+                ", userRealname='" + userRealname + '\'' +
+                ", userSex=" + userSex +
+                ", userMobilephone='" + userMobilephone + '\'' +
+                ", userHeadurl='" + userHeadurl + '\'' +
+                ", userQq='" + userQq + '\'' +
+                ", userToken='" + userToken + '\'' +
+                ", userIsDelete=" + userIsDelete +
+                ", userClass='" + userClass + '\'' +
+                '}';
+    }
 }

@@ -100,12 +100,12 @@
 		</mvc:interceptor>
 
 <!--		<mvc:interceptor> /**表示所有url包括子url路径 <mvc:mapping path="/**"/>
-			<bean class="cn.itcast.ssm.interceptor.HandlerInterceptor1"></bean>
+			<mypo class="cn.itcast.ssm.interceptor.HandlerInterceptor1"></mypo>
 		</mvc:interceptor>
 
 		<mvc:interceptor>
 			<mvc:mapping path="/**"/>
-			<bean class="cn.itcast.ssm.interceptor.HandlerInterceptor2"></bean>
+			<mypo class="cn.itcast.ssm.interceptor.HandlerInterceptor2"></mypo>
 		</mvc:interceptor> -->
 	</mvc:interceptors>
 

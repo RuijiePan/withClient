@@ -1,5 +1,6 @@
 package auto.newsky.coding.service;
 
+
 import auto.newsky.coding.po.Journal;
 
 /**
