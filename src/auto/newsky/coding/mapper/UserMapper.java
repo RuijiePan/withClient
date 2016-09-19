@@ -1,6 +1,7 @@
 package auto.newsky.coding.mapper;
 
 import auto.newsky.coding.po.User;
+import auto.newsky.coding.response.Result;
 import auto.newsky.coding.po.UserExample;
 import org.apache.ibatis.annotations.Param;
 
@@ -28,4 +29,5 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
 }

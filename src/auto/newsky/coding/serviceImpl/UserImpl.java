@@ -4,6 +4,7 @@ package auto.newsky.coding.serviceImpl;
 import auto.newsky.coding.mapper.UserMapper;
 import auto.newsky.coding.po.User;
 import auto.newsky.coding.po.UserExample;
+import auto.newsky.coding.response.Result;
 import auto.newsky.coding.service.IUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,19 @@ public class UserImpl implements IUser{
 
     @Override
     public User getUserByStudentID(String studentId) throws Exception {
+
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andUserStudentidEqualTo(studentId);
+        List<User> list = userMapper.selectByExample(userExample);
+
+        if (list!=null)
+            return list.get(0);
         return null;
+    }
+
+    @Override
+    public User getUserByPrimaryKey(Integer userId) throws Exception {
+        return userMapper.selectByPrimaryKey(userId);
     }
 
 
@@ -46,5 +59,33 @@ public class UserImpl implements IUser{
     @Override
     public void modify(User user) throws Exception {
         userMapper.updateByPrimaryKey(user);
+    }
+
+    @Override
+    public Result modifyPassword(Integer myUserId, String oldPassword, String newPassword) {
+        Result result = new Result();
+        result.setData(null);
+
+        if (oldPassword.equals(newPassword)){
+            result.setCode(409);
+            result.setMsg("新旧密码不能相同");
+            return result;
+        }
+
+        User user = userMapper.selectByPrimaryKey(myUserId);
+        user.setUserPassword(newPassword);
+        if (userMapper.updateByPrimaryKey(user)==0){
+            result.setCode(408);
+            result.setMsg("密码修改失败");
+        }
+        return result;
+    }
+
+    @Override
+    public Result findBackPassword(String newPassword,String phone,String vertificationCode) {
+        Result result = new Result();
+        result.setData(null);
+
+        return null;
     }
 }

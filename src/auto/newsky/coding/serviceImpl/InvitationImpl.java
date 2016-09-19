@@ -2,10 +2,8 @@ package auto.newsky.coding.serviceImpl;
 
 import auto.newsky.coding.mapper.InvitationMapper;
 import auto.newsky.coding.mapper.InvitationTypeMapper;
-import auto.newsky.coding.po.Invitation;
-import auto.newsky.coding.po.InvitationExample;
-import auto.newsky.coding.po.InvitationType;
-import auto.newsky.coding.po.InvitationTypeExample;
+import auto.newsky.coding.mapper.UserMapper;
+import auto.newsky.coding.po.*;
 import auto.newsky.coding.response.Result;
 import auto.newsky.coding.service.IInvitation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +12,12 @@ import org.springframework.stereotype.Service;
 /**
  * Created by Administrator on 2016/9/16.
  */
-@Service
+@Service("invitationService")
 public class InvitationImpl implements IInvitation{
     @Autowired
     private InvitationMapper invatationMapper;
-
+    @Autowired
+    private UserMapper userMapper;
     @Autowired
     private InvitationTypeImpl invitationTypeService;
     @Override
@@ -44,7 +43,7 @@ public class InvitationImpl implements IInvitation{
     public Result getInvitationsByTypeId(Integer myUserId, int typeId, int lastInvitationId, int limit) {
         Result result = new Result();
         if (invitationTypeService.isParentType(typeId)){//大类查询
-           // invatationMapper.select
+            //invatationMapper.select
         }else{//小类查询
 
         }
@@ -98,6 +97,30 @@ public class InvitationImpl implements IInvitation{
     public Result participateInvitation(Integer myUserId, Integer invitationId) {
         return null;
     }
+
+    @Override
+    public Result getInvitationsByUidAndPrimaryKey(Integer aimUserId, Integer invitId) {
+
+        Result result = new Result();
+        Invitation invitation = invatationMapper.selectByUidAndPrimaryKey(aimUserId, invitId);
+
+        if (invitation==null){
+            result.setData(null);
+            result.setCode(407);
+            result.setMsg("查找不到相对应的用户信息");
+        }else {
+            User user = userMapper.selectByPrimaryKey(invitation.getUserId());
+            if (user!=null) {
+                result.setData(user);
+            }else {
+                result.setData(null);
+                result.setCode(407);
+                result.setMsg("查找不到相对应的用户信息");
+            }
+        }
+        return result;
+    }
+
 
     @Override
     public Result applyInvitation(Integer myUserId, Integer invitationId) {

@@ -100,6 +100,12 @@
     from with_invitation
     where invit_id = #{invitId,jdbcType=INTEGER}
   </select>
+  <select id="selectByUidAndPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from with_invitation
+    where invit_id = #{invitId} AND user_id = #{aimUserId}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from with_invitation
     where invit_id = #{invitId,jdbcType=INTEGER}

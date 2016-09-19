@@ -273,4 +273,6 @@
       msg_is_delete = #{msgIsDelete,jdbcType=BIT}
     where msg_id = #{msgId,jdbcType=INTEGER}
   </update>
+
+
 </mapper>

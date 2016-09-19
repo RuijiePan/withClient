@@ -28,4 +28,7 @@ public interface InvitationMapper {
     int updateByPrimaryKeySelective(Invitation record);
 
     int updateByPrimaryKey(Invitation record);
+
+    Invitation selectByUidAndPrimaryKey(@Param("aimUserId")Integer aimUserId,
+                                        @Param("invitId")Integer invitId);
 }
