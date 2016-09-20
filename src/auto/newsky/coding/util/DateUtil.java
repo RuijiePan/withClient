@@ -346,4 +346,22 @@ public final class DateUtil {
 	public static Long currentMilliLong(Calendar cal){
 		return currentDate(cal).getTime();
 	}
+
+	public static Date stringToDate(String date){
+
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			return simpleDateFormat.parse(date);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static Date getCurrentDate(){
+
+		Calendar cal=Calendar.getInstance();
+		String date = currentYear(cal)+"-"+currentMonth(cal)+"-"+currentDayOfMonth(cal);
+		return stringToDate(date);
+	}
 }
