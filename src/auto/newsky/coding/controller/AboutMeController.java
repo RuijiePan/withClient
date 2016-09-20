@@ -14,14 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Date;
 
 /**
@@ -170,13 +168,31 @@ public class AboutMeController {
      */
     @ResponseBody
     @RequestMapping("/uploadHeadPic")
-    public Result uploadHeadPic(@RequestParam("file")CommonsMultipartFile file)throws Exception{
+    public Result uploadHeadPic(@RequestParam("file")MultipartFile file)throws Exception{
 
         Integer myUserId = (Integer) request.getAttribute("myUserId");
         Result result = new Result();
-        User user = userService.getUserByPrimaryKey(myUserId);
 
-        try {
+        if (!file.isEmpty()){
+            try {
+                // 文件保存路径
+                String filePath = request.getSession().getServletContext().getRealPath("/") + "upload/"
+                        + file.getOriginalFilename();
+                // 转存文件
+                file.transferTo(new File(filePath));
+
+                User uploadUser = userService.getUserByPrimaryKey(myUserId);
+                uploadUser.setUserHeadurl(filePath);
+                userService.modify(uploadUser);
+                result.setMsg("上传头像成功");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                result.setCode(420);
+                result.setMsg("上传头像失败");
+            }
+        }
+        /*try {
             //获取输出流
             String fileName = "E:/"+new Date().getTime()+file.getOriginalFilename();
             OutputStream os=new FileOutputStream(fileName);
@@ -201,7 +217,7 @@ public class AboutMeController {
             e.printStackTrace();
             result.setCode(420);
             result.setMsg("上传头像失败");
-        }
+        }*/
         return result;
     }
 
