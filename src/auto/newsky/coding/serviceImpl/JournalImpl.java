@@ -6,6 +6,7 @@ import auto.newsky.coding.po.JournalExample;
 import auto.newsky.coding.response.Result;
 import auto.newsky.coding.service.IJournal;
 import auto.newsky.coding.util.DateUtil;
+import auto.newsky.coding.util.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,14 +27,14 @@ public class JournalImpl implements IJournal{
 
         Result result = new Result();
         Date date = DateUtil.getCurrentDate();
+        System.out.print(DateUtil.getCurrentDate().toString());
 
         JournalExample journalExample = new JournalExample();
         journalExample.createCriteria().andJourDateEqualTo(date)
                 .andTaskIdEqualTo(taskId)
                 .andJourIsDeleteEqualTo(false);
-        Journal oldJournal = journalMapper.selectByExample(journalExample).get(0);
 
-        if (oldJournal==null) {
+        if (journalMapper.selectByExample(journalExample).size()==0) {
             Journal journal = new Journal(taskId, date, "", true, false);
             if (journalMapper.insert(journal) == 0) {
                 result.setCode(416);
@@ -47,23 +48,24 @@ public class JournalImpl implements IJournal{
     }
 
     @Override
-    public Result editTaskMessage(Integer taskId, String date, String remark) {
+    public Result editTaskMessage(Integer taskId, Date date, String remark) {
 
         Result result = new Result();
 
         JournalExample journalExample = new JournalExample();
         journalExample.createCriteria().andTaskIdEqualTo(taskId)
-                .andJourDateEqualTo(DateUtil.stringToDate(date))
+                .andJourDateEqualTo(date)
                 .andJourIsDeleteEqualTo(false);
 
-        Journal journal = journalMapper.selectByExample(journalExample).get(0);
-        if (journal==null){
-            Journal newJournal = new Journal(taskId, DateUtil.stringToDate(date),remark, false, false);
+        //Journal journal = journalMapper.selectByExample(journalExample).get(0);
+        if (journalMapper.selectByExample(journalExample).size()==0){
+            Journal newJournal = new Journal(taskId, date,remark, false, false);
             if (journalMapper.insert(newJournal)==0){
                 result.setCode(418);
                 result.setMsg("打卡编辑失败");
             }
         }else {
+            Journal journal = journalMapper.selectByExample(journalExample).get(0);
             journal.setJourSummary(remark);
             if (journalMapper.updateByPrimaryKey(journal)==0){
                 result.setCode(418);

@@ -28,10 +28,9 @@ public class TaskImpl implements ITask{
 
         TaskExample taskExample = new TaskExample();
         taskExample.createCriteria().andUserIdEqualTo(userId)
-                .andTaskIconTypeEqualTo(iconIndex)
                 .andTaskIsDeleteEqualTo(false);
 
-        if (taskMapper.selectByExample(taskExample).size()<=3){
+        if (taskMapper.selectByExample(taskExample).size()<5){
 
             Task task = new Task(userId, content, title, false, iconIndex);
             if (taskMapper.insert(task) == 0) {
@@ -50,7 +49,6 @@ public class TaskImpl implements ITask{
     public Result deleteTask(Integer userId, Integer taskId) {
 
         Result result = new Result();
-
         if (userId!=-1)
         {
             Task task = taskMapper.selectByPrimaryKey(taskId);

@@ -1,6 +1,7 @@
 package auto.newsky.coding.controller;
 
 import auto.newsky.coding.response.Result;
+import auto.newsky.coding.resultdata.InvitationData;
 import auto.newsky.coding.serviceImpl.InvitationImpl;
 import auto.newsky.coding.serviceImpl.JournalImpl;
 import auto.newsky.coding.serviceImpl.TaskImpl;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 /**
  * Created by prj on 2016/9/16.
@@ -30,6 +32,7 @@ public class KeepController {
     private HttpServletRequest request;
 
     /**
+     * http://localhost:8080/with/keep/createTask?title=%E5%93%88%E5%93%88%E5%93%88&content=%E5%9D%9A%E6%8C%81%E9%94%BB%E7%82%BC&iconIndex=1&token=123456
      * 新建任务
      * @param title
      * @param content
@@ -46,6 +49,7 @@ public class KeepController {
     }
 
     /**
+     * http://localhost:8080/with/keep/deleteTask?taskId=1&token=12345
      * 删除任务
      * @param taskId
      * @return
@@ -58,6 +62,7 @@ public class KeepController {
     }
 
     /**
+     * http://localhost:8080/with/keep/signIn?taskId=1&token=123456
      * 打卡签到
      * @param taskId
      * @return
@@ -69,6 +74,8 @@ public class KeepController {
     }
 
     /**
+     * 指定日期：http://localhost:8080/with/keep/editTaskMessage?token=12345&taskId=1&remark=haha&date=2016-07-08
+     * 默认日期：http://localhost:8080/with/keep/editTaskMessage?token=12345&taskId=1&remark=haha
      * 打卡编辑
      * @param taskId
      * @param date
@@ -80,11 +87,12 @@ public class KeepController {
     public Result editTaskMessage(@RequestParam(value="taskId", required=true)Integer taskId,
                                   @RequestParam(value="date", required=false)String date,
                                   @RequestParam(value="remark", required=true)String remark){
-        Integer myUserId = (Integer) request.getAttribute("myUserId");
         if (date==null)
-            return journalService.editTaskMessage(taskId, DateUtil.getCurrentDate().toString(),remark);
-        else
-            return journalService.editTaskMessage(taskId, date,remark);
+            return journalService.editTaskMessage(taskId, DateUtil.getCurrentDate(),remark);
+        else {
+            Date d = DateUtil.stringToDate(date);
+            return journalService.editTaskMessage(taskId, d, remark);
+        }
     }
 
     /**

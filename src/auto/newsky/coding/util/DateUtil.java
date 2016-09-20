@@ -359,6 +359,9 @@ public final class DateUtil {
 	}
 
 	public static Date getCurrentDate(){
-		return DateUtil.stringToDate(DateUtil.getCurrentTime().toString().split(" ")[0]);
+
+		Calendar cal=Calendar.getInstance();
+		String date = currentYear(cal)+"-"+currentMonth(cal)+"-"+currentDayOfMonth(cal);
+		return stringToDate(date);
 	}
 }
