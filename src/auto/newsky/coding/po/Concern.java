@@ -1,10 +1,18 @@
 package auto.newsky.coding.po;
 
 public class Concern {
-    private Integer conId;
+
     public Concern() {
 
     }
+
+    public Concern(Integer conFromUserId, Integer conToUserId, Boolean conIsConcern) {
+        this.conFromUserId = conFromUserId;
+        this.conToUserId = conToUserId;
+        this.conIsConcern = conIsConcern;
+    }
+    private Integer conId;
+
     private Integer conFromUserId;
 
     private Integer conToUserId;

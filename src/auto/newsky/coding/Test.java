@@ -1,12 +1,10 @@
 package auto.newsky.coding;
 
 import auto.newsky.coding.mapper.InvitationMapper;
+import auto.newsky.coding.mapper.InvitationTypeMapper;
 import auto.newsky.coding.mapper.JoinInvitationMapper;
 import auto.newsky.coding.mapper.UserMapper;
-import auto.newsky.coding.po.JoinInvitation;
-import auto.newsky.coding.po.JoinInvitationExample;
-import auto.newsky.coding.po.User;
-import auto.newsky.coding.po.UserExample;
+import auto.newsky.coding.po.*;
 import auto.newsky.coding.serviceImpl.InvitationImpl;
 import auto.newsky.coding.serviceImpl.JoinInvitationImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,19 +27,27 @@ public class Test {
         for (User user : withUsers){
             System.out.println(user.toString());
         }*/
+        JoinInvitationMapper userJoinInvatationMapper = (JoinInvitationMapper)ac.getBean("joinInvitationMapper");
+        //userJoinInvatationMapper.updateByPrimaryKeySelective(new JoinInvitation(11,null,null,true));
 
-
-
+        JoinInvitationExample joinexample = new JoinInvitationExample();
+        joinexample.or().andInvitIdEqualTo(15).andRelationIsDeleteEqualTo(false);
+        List<JoinInvitation> joinList = userJoinInvatationMapper.selectByExample(joinexample);
+        System.out.println(joinList.toString());
        //InvitationMapper invitationMapper = (InvitationMapper) ac.getBean("invitationMapper");
         //System.out.println(invitationMapper.selectInvitationsUnType(0,10).toString());
         //UserMapper mapper = (UserMapper)ac.getBean("userMapper");
         /*InvitationMapper invitationMapper = (InvitationMapper)ac.getBean("invitationMapper");
         System.out.println("--------------"+ mapper.selectByPrimaryKey(1).toString());*/
         //System.out.println("--------------"+ mapper.selectByPrimaryKey(1));
-        JoinInvitationMapper joinInvitationMapper = (JoinInvitationMapper)ac.getBean("joinInvitationMapper");
+        /*JoinInvitationMapper joinInvitationMapper = (JoinInvitationMapper)ac.getBean("joinInvitationMapper");
         JoinInvitationExample joinInvitationExample = new JoinInvitationExample();
         joinInvitationExample.or().andUserIdEqualTo(1).andInvitIdEqualTo(1);
-        List<JoinInvitation> joinInvitations =  joinInvitationMapper.selectByExample(joinInvitationExample);
+        List<JoinInvitation> joinInvitations =  joinInvitationMapper.selectByExample(joinInvitationExample);*/
+        /*InvitationTypeMapper invitationTypeMapper = (InvitationTypeMapper)ac.getBean("invitationTypeMapper");
+        InvitationType invitationType = invitationTypeMapper.selectByPrimaryKey(1);
+        System.out.print(invitationType.getTypeParent());*/
+
         //joinInvitationMapper.is
         /*JoinInvitationExample joinInvitationExample = new JoinInvitationExample();
         joinInvitationExample.or().andInvitIdEqualTo(1).andRelationIsDeleteEqualTo(false);

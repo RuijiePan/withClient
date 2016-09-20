@@ -1,5 +1,7 @@
 package auto.newsky.coding.resultdata;
 
+import java.util.List;
+
 /**
  * Created by prj on 2016/9/18.
  */
@@ -11,25 +13,50 @@ public class ConcernUserListData {
      * isConcerned : true
      */
 
-    private DataBean data;
+    private List<DataBean> data ;
 
-    public DataBean getData() {
-        return data;
-    }
-
-    public void setData(DataBean data) {
+    public void setData(List<DataBean> data){
         this.data = data;
+    }
+    public List<DataBean> getData(){
+        return this.data;
     }
 
     public static class DataBean {
+
+
+        private int concernedUserId;
+
         private boolean isConcerned;
 
-        public boolean isIsConcerned() {
-            return isConcerned;
-        }
+        private String name;
 
-        public void setIsConcerned(boolean isConcerned) {
+        private String headUrl;
+
+
+        public void setConcernedUserId(int concernedUserId){
+            this.concernedUserId = concernedUserId;
+        }
+        public int getConcernedUserId(){
+            return this.concernedUserId;
+        }
+        public void setIsConcerned(boolean isConcerned){
             this.isConcerned = isConcerned;
+        }
+        public boolean getIsConcerned(){
+            return this.isConcerned;
+        }
+        public void setName(String name){
+            this.name = name;
+        }
+        public String getName(){
+            return this.name;
+        }
+        public void setHeadUrl(String headUrl){
+            this.headUrl = headUrl;
+        }
+        public String getHeadUrl(){
+            return this.headUrl;
         }
     }
 }

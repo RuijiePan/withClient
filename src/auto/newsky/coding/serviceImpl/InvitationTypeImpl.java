@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class InvitationTypeImpl implements IInvitationType {
-
     @Autowired
     private InvitationTypeMapper invitationTypeMapper;
 
@@ -26,5 +25,4 @@ public class InvitationTypeImpl implements IInvitationType {
         InvitationType invitationType = invitationTypeMapper.selectByPrimaryKey(typeId);
         return invitationType.getTypeParent()==-1?true:false;//是-1.说明没有上级，就是父
     }
-
 }

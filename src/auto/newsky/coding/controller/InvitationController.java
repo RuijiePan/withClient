@@ -4,6 +4,7 @@ import auto.newsky.coding.po.Invitation;
 import auto.newsky.coding.po.User;
 import auto.newsky.coding.response.Result;
 import auto.newsky.coding.serviceImpl.InvitationImpl;
+import auto.newsky.coding.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,7 +68,7 @@ public class InvitationController {
     }
 
     /**
-     * http://localhost:8080/invitation/publishInvitation?invitationTime=2016-1-1%2020:20:20&place=xxplace&totalNumber=1&title=xxtitle&content=xxcontent&sexRequire=0&type=1&hiden=false
+     * http://localhost:8080/invitation/publishInvitation?invitationTime=2016-1-1%2020:20:20&place=xxplace&totalNumber=1&title=xxtitle&content=xxcontent&sexRequire=0&type=4&hiden=false
      * 发起邀约
      * @param invitationTime
      * @param place
@@ -91,8 +92,7 @@ public class InvitationController {
                                     ,@RequestParam(value="type", required=true)         Integer typeId
                                     ,@RequestParam(value="hiden", required=true)        Boolean hiden) throws Exception{
         Integer myUserId = (Integer) request.getAttribute("myUserId");
-        Date invitPublicationTime = new Date();
-
+        Date invitPublicationTime = DateUtil.getCurrentTime();
         Invitation invitation = new Invitation(myUserId, invitPublicationTime, invitationTime, place,totalNumber, 0, sexRequire,title, content, typeId, hiden, false);
         Result result = invitationService.publishInvitation(invitation);
         return result;
@@ -139,9 +139,9 @@ public class InvitationController {
                                         ,@RequestParam(value="type", required=true)Integer type) throws Exception{
         Integer myUserId = (Integer) request.getAttribute("myUserId");
         Result result = null;
-        if (type == 0){
+        if (type == 1){
             result = invitationService.participateInvitation(myUserId,invitationId);
-        }else if (type == 1){
+        }else if (type == 0){
             result = invitationService.applyInvitation(myUserId,invitationId);
         }else  if(type == 2){
             result = invitationService.quitInvitation(myUserId,invitationId);
@@ -167,8 +167,8 @@ public class InvitationController {
     }
 
     /**
+     * http://localhost:8080/invitation/getConcernedUsers?token=1&concernedUserId=1&limit=2
      * 获取我关注的用户列表
-     * @param concernedUserId
      * @param limit
      * @return
      * @throws Exception
@@ -176,11 +176,11 @@ public class InvitationController {
 
     @ResponseBody
     @RequestMapping("/getConcernedUsers")
-    public Result getConcernedUsers(@RequestParam(value="concernedUserId", required=false)Integer concernedUserId
+    public Result getConcernedUsers(@RequestParam(value="concernedUserId", required=false)Integer lastConcernedUserId
                                     ,@RequestParam(value="limit", required=false)Integer limit) throws Exception{
         Integer myUserId = (Integer) request.getAttribute("myUserId");
         Result result = null;
-        result = invitationService.getConcernedUsers(myUserId,concernedUserId,limit);
+        result = invitationService.getConcernedUsers(myUserId,lastConcernedUserId,limit);
         return result;
     }
 
@@ -191,8 +191,7 @@ public class InvitationController {
      */
     @ResponseBody
     @RequestMapping("/concernUser")
-    public Result concernUser(@RequestParam(value = "token",required = true) String token
-            ,@RequestParam(value = "concernedUserId",required = true) Integer concernedUserId) throws Exception{
+    public Result concernUser(@RequestParam(value = "concernedUserId",required = true) Integer concernedUserId) throws Exception{
         Integer myUserId = (Integer) request.getAttribute("myUserId");
         Result result = null;
         result = invitationService.concernUser(myUserId,concernedUserId);

@@ -11,6 +11,14 @@ public class JoinInvitation {
 
     }
 
+
+    public JoinInvitation(Integer relationId, Integer userId, Integer invitId, Boolean relationIsDelete) {
+        this.relationId = relationId;
+        this.userId = userId;
+        this.invitId = invitId;
+        this.relationIsDelete = relationIsDelete;
+    }
+
     private Integer relationId;
 
     private Integer userId;

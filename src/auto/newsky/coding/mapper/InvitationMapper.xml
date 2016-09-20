@@ -116,13 +116,14 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="auto.newsky.coding.po.Invitation" >
-    insert into with_invitation (invit_id, user_id, type_id, 
+  <insert id="insert" parameterType="auto.newsky.coding.po.Invitation" useGeneratedKeys="true" keyProperty="invit_id" >
+
+    insert into with_invitation (user_id, type_id,
       type_parent_id, invit_publication_time, invit_activity_time, 
       invit_place, invit_number_max, invit_number_curr, 
       invit_sex_require, invit_title, invit_content, 
       invit_hidden, invit_is_delete)
-    values (#{invitId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{typeId,jdbcType=INTEGER}, 
+    values ( #{userId,jdbcType=INTEGER}, #{typeId,jdbcType=INTEGER},
       #{typeParentId,jdbcType=INTEGER}, #{invitPublicationTime,jdbcType=TIMESTAMP}, #{invitActivityTime,jdbcType=TIMESTAMP}, 
       #{invitPlace,jdbcType=VARCHAR}, #{invitNumberMax,jdbcType=INTEGER}, #{invitNumberCurr,jdbcType=INTEGER}, 
       #{invitSexRequire,jdbcType=INTEGER}, #{invitTitle,jdbcType=VARCHAR}, #{invitContent,jdbcType=VARCHAR}, 
@@ -402,6 +403,15 @@
     )
     and invit_is_delete = false
     order by invit_id  limit #{limit}
+  </select>
+
+  <select id="getUserLastInvitationId"  resultType="java.lang.Integer" parameterType="java.lang.Integer" >
+    select
+    invit_id
+    from with_invitation
+    where user_id = #{myUserId}
+    order by invit_id desc
+    limit 1
   </select>
 
 </mapper>

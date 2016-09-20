@@ -28,8 +28,7 @@ public class Invitation {
 
     private Integer invitId;
 
-    public Invitation() {
-    }
+
 
     private Integer userId;
 

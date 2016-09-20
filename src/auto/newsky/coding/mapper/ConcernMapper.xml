@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="auto.newsky.coding.mapper.ConcernMapper" >
   <resultMap id="BaseResultMap" type="auto.newsky.coding.po.Concern" >
+    <id column="con_id" property="conId" jdbcType="INTEGER" />
     <result column="con_from_user_id" property="conFromUserId" jdbcType="INTEGER" />
     <result column="con_to_user_id" property="conToUserId" jdbcType="INTEGER" />
     <result column="con_is_concern" property="conIsConcern" jdbcType="BIT" />
@@ -65,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    con_from_user_id, con_to_user_id, con_is_concern
+    con_id, con_from_user_id, con_to_user_id, con_is_concern
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="auto.newsky.coding.po.ConcernExample" >
     select
@@ -81,6 +82,16 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from with_concern
+    where con_id = #{conId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from with_concern
+    where con_id = #{conId,jdbcType=INTEGER}
+  </delete>
   <delete id="deleteByExample" parameterType="auto.newsky.coding.po.ConcernExample" >
     delete from with_concern
     <if test="_parameter != null" >
@@ -88,14 +99,17 @@
     </if>
   </delete>
   <insert id="insert" parameterType="auto.newsky.coding.po.Concern" >
-    insert into with_concern (con_from_user_id, con_to_user_id, con_is_concern
-      )
-    values (#{conFromUserId,jdbcType=INTEGER}, #{conToUserId,jdbcType=INTEGER}, #{conIsConcern,jdbcType=BIT}
-      )
+    insert into with_concern (con_id, con_from_user_id, con_to_user_id, 
+      con_is_concern)
+    values (#{conId,jdbcType=INTEGER}, #{conFromUserId,jdbcType=INTEGER}, #{conToUserId,jdbcType=INTEGER}, 
+      #{conIsConcern,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="auto.newsky.coding.po.Concern" >
     insert into with_concern
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="conId != null" >
+        con_id,
+      </if>
       <if test="conFromUserId != null" >
         con_from_user_id,
       </if>
@@ -107,6 +121,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="conId != null" >
+        #{conId,jdbcType=INTEGER},
+      </if>
       <if test="conFromUserId != null" >
         #{conFromUserId,jdbcType=INTEGER},
       </if>
@@ -127,6 +144,9 @@
   <update id="updateByExampleSelective" parameterType="map" >
     update with_concern
     <set >
+      <if test="record.conId != null" >
+        con_id = #{record.conId,jdbcType=INTEGER},
+      </if>
       <if test="record.conFromUserId != null" >
         con_from_user_id = #{record.conFromUserId,jdbcType=INTEGER},
       </if>
@@ -143,11 +163,65 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update with_concern
-    set con_from_user_id = #{record.conFromUserId,jdbcType=INTEGER},
+    set con_id = #{record.conId,jdbcType=INTEGER},
+      con_from_user_id = #{record.conFromUserId,jdbcType=INTEGER},
       con_to_user_id = #{record.conToUserId,jdbcType=INTEGER},
       con_is_concern = #{record.conIsConcern,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
+  <update id="updateByPrimaryKeySelective" parameterType="auto.newsky.coding.po.Concern" >
+    update with_concern
+    <set >
+      <if test="conFromUserId != null" >
+        con_from_user_id = #{conFromUserId,jdbcType=INTEGER},
+      </if>
+      <if test="conToUserId != null" >
+        con_to_user_id = #{conToUserId,jdbcType=INTEGER},
+      </if>
+      <if test="conIsConcern != null" >
+        con_is_concern = #{conIsConcern,jdbcType=BIT},
+      </if>
+    </set>
+    where con_id = #{conId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="auto.newsky.coding.po.Concern" >
+    update with_concern
+    set con_from_user_id = #{conFromUserId,jdbcType=INTEGER},
+      con_to_user_id = #{conToUserId,jdbcType=INTEGER},
+      con_is_concern = #{conIsConcern,jdbcType=BIT}
+    where con_id = #{conId,jdbcType=INTEGER}
+  </update>
+
+
+  <resultMap id="UserBaseResultMap" type="auto.newsky.coding.po.User" >
+    <id column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="user_nickname" property="userNickname" jdbcType="VARCHAR" />
+    <result column="user_password" property="userPassword" jdbcType="VARCHAR" />
+    <result column="user_studentID" property="userStudentid" jdbcType="VARCHAR" />
+    <result column="user_realname" property="userRealname" jdbcType="VARCHAR" />
+    <result column="user_sex" property="userSex" jdbcType="INTEGER" />
+    <result column="user_mobilephone" property="userMobilephone" jdbcType="VARCHAR" />
+    <result column="user_headurl" property="userHeadurl" jdbcType="VARCHAR" />
+    <result column="user_qq" property="userQq" jdbcType="VARCHAR" />
+    <result column="user_token" property="userToken" jdbcType="VARCHAR" />
+    <result column="user_is_delete" property="userIsDelete" jdbcType="BIT" />
+    <result column="user_class" property="userClass" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="getConcernedUsers" resultMap="UserBaseResultMap" parameterType="java.lang.Integer" >
+    select * from with_user where user_id in
+    (SELECT con_to_user_id FROM with_concern where con_from_user_id = #{myUserId})
+    and user_id > #{concernedUserId}
+    limit #{limit}
+  </select>
+  <select id="getConcerneTrue" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM with_concern
+    where con_from_user_id = #{myUserId}
+    and con_to_user_id = #{concernedUserId}
+    and con_is_concern = true
+  </select>
 </mapper>
