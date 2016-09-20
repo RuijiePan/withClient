@@ -60,4 +60,12 @@ public class Task {
     public void setTaskIconType(Integer taskIconType) {
         this.taskIconType = taskIconType;
     }
+
+    public Task(Integer userId, String taskContent, String taskTitle, Boolean taskIsDelete, Integer taskIconType) {
+        this.userId = userId;
+        this.taskContent = taskContent;
+        this.taskTitle = taskTitle;
+        this.taskIsDelete = taskIsDelete;
+        this.taskIconType = taskIconType;
+    }
 }

@@ -2,6 +2,7 @@ package auto.newsky.coding.serviceImpl;
 
 import auto.newsky.coding.mapper.TaskMapper;
 import auto.newsky.coding.po.Task;
+import auto.newsky.coding.response.Result;
 import auto.newsky.coding.resultdata.TaskList;
 import auto.newsky.coding.service.ITask;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,19 +21,42 @@ public class TaskImpl implements ITask{
 
 
     @Override
-    public void add(Task task) {
+    public Result createTask(Integer userId, String title, String content, Integer iconIndex) {
 
+        Result result = new Result();
+
+        if (userId!=-1) {
+            Task task = new Task(userId, content, title, false, iconIndex);
+
+            if (taskMapper.insert(task) == 0) {
+                result.setCode(414);
+                result.setMsg("创建坚持活动失败");
+            }
+        }else {
+            result.setCode(401);
+            result.setMsg("用户未登录");
+        }
+        return result;
     }
 
     @Override
-    public void remove(int taskId) {
+    public Result deleteTask(Integer userId, Integer taskId) {
 
+        Result result = new Result();
+
+        if (userId!=-1)
+        {
+            Task task = taskMapper.selectByPrimaryKey(taskId);
+            task.setTaskIsDelete(true);
+            if (taskMapper.updateByPrimaryKey(task)==0){
+                result.setCode(415);
+                result.setMsg("坚持活动删除失败");
+            }
+        }else {
+            result.setCode(401);
+            result.setMsg("用户未登录");
+        }
+
+        return result;
     }
-
-    @Override
-    public List<TaskList> getTask(int userId) {
-        return null;
-    }
-
-
 }
