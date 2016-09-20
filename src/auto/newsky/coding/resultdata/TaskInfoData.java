@@ -14,22 +14,17 @@ public class TaskInfoData {
      * calendar : [{"remark":"今天头疼，没背","jour_punch":true,"day":1}]
      */
 
-    private DataBean data;
+        public TaskInfoData(TaskBean task, List<CalendarBean> calendar) {
+            this.task = task;
+            this.calendar = calendar;
+        }
 
-    public DataBean getData() {
-        return data;
-    }
-
-    public void setData(DataBean data) {
-        this.data = data;
-    }
-
-    public static class DataBean {
         /**
          * taskId : 1
          * teskContent : 每天早上6点读30分钟
          * teskTitle : 背英语单词
          */
+
 
         private TaskBean task;
         /**
@@ -84,6 +79,12 @@ public class TaskInfoData {
             public void setTeskTitle(String teskTitle) {
                 this.teskTitle = teskTitle;
             }
+
+            public TaskBean(int taskId, String teskContent, String teskTitle) {
+                this.taskId = taskId;
+                this.teskContent = teskContent;
+                this.teskTitle = teskTitle;
+            }
         }
 
         public static class CalendarBean {
@@ -114,6 +115,11 @@ public class TaskInfoData {
             public void setDay(int day) {
                 this.day = day;
             }
+
+            public CalendarBean(String remark, boolean jour_punch, int day) {
+                this.remark = remark;
+                this.jour_punch = jour_punch;
+                this.day = day;
+            }
         }
-    }
 }

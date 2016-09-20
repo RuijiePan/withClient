@@ -4,12 +4,15 @@ import auto.newsky.coding.mapper.JournalMapper;
 import auto.newsky.coding.po.Journal;
 import auto.newsky.coding.po.JournalExample;
 import auto.newsky.coding.response.Result;
+import auto.newsky.coding.resultdata.TaskInfoData;
 import auto.newsky.coding.service.IJournal;
 import auto.newsky.coding.util.DateUtil;
 import auto.newsky.coding.util.TimeUtils;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -73,5 +76,28 @@ public class JournalImpl implements IJournal{
             }
         }
         return result;
+    }
+
+    @Override
+    public List<TaskInfoData.CalendarBean> getCalendarList(Date firstDay, Date lastDay) {
+
+        List<TaskInfoData.CalendarBean> list = new ArrayList<TaskInfoData.CalendarBean>();
+
+        JournalExample journalExample = new JournalExample();
+        journalExample.createCriteria().andJourDateBetween(firstDay, lastDay);
+        List<Journal> journalList = new ArrayList<Journal>();
+
+        if(journalMapper.selectByExample(journalExample).size()!=0){
+            journalList = journalMapper.selectByExample(journalExample);
+        }
+
+        for (int i=0;i<journalList.size();i++){
+            Journal journal = journalList.get(i);
+            TaskInfoData.CalendarBean calendarBean =
+                    new TaskInfoData.CalendarBean(journal.getJourSummary(),journal.getJourPunch(),
+                            DateUtil.getCurrentDay(journal.getJourDate()));
+            list.add(calendarBean);
+        }
+        return list;
     }
 }

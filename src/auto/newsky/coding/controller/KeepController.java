@@ -103,10 +103,11 @@ public class KeepController {
     @RequestMapping("/getTasks")
     public Result getTasks(){
         Integer myUserId = (Integer) request.getAttribute("myUserId");
-        return null;
+        return taskService.getTasks(myUserId);
     }
 
     /**
+     * http://localhost:8080/with/keep/getTaskMessages?token=12345&date=2016-09&taskId=1
      * 获取某任务指定某月份下的所有相关信息
      * @param date
      * @param taskId
@@ -117,7 +118,7 @@ public class KeepController {
     public Result getTaskMessages(@RequestParam(value="date", required=true)String date,
                                   @RequestParam(value="taskId", required=true)Integer taskId){
         Integer myUserId = (Integer) request.getAttribute("myUserId");
-        return null;
+        return taskService.getTaskMessages(myUserId,date,taskId);
     }
 
 }

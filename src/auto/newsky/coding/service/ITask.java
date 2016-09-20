@@ -4,6 +4,7 @@ import auto.newsky.coding.po.Task;
 import auto.newsky.coding.response.Result;
 import auto.newsky.coding.resultdata.TaskList;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,4 +16,7 @@ public interface ITask {
 
     Result deleteTask(Integer userId,Integer taskId);
 
+    Result getTasks(Integer userId);
+
+    Result getTaskMessages(Integer userId,String date,Integer taskId);
 }

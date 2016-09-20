@@ -364,4 +364,27 @@ public final class DateUtil {
 		String date = currentYear(cal)+"-"+currentMonth(cal)+"-"+currentDayOfMonth(cal);
 		return stringToDate(date);
 	}
+
+	public static Date getFirstDay(String date){
+
+		String year = date.substring(0,4);
+		String month = date.substring(5, 7);
+		String day = "01";
+		//System.out.print(year+"-"+month+"-"+day+"!!!!!!!!!!!!!!!!!");
+		return  stringToDate(year+"-"+month+"-"+day);
+	}
+
+	public static Date getLastDay(String date){
+		String year = date.substring(0,4);
+		String month = date.substring(5, 7);
+		String day = "32";
+		//System.out.print(year+"-"+month+"-"+day+"!!!!!!!!!!!!!!!!!");
+		return  stringToDate(year+"-"+month+"-"+day);
+	}
+
+	public static int getCurrentDay(Date date){
+
+		String s = TimeUtils.date2String(date).substring(8,10);
+		return Integer.parseInt(s);
+	}
 }

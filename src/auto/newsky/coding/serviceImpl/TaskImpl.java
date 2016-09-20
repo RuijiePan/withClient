@@ -1,14 +1,20 @@
 package auto.newsky.coding.serviceImpl;
 
+import auto.newsky.coding.mapper.JournalMapper;
 import auto.newsky.coding.mapper.TaskMapper;
 import auto.newsky.coding.po.Task;
 import auto.newsky.coding.po.TaskExample;
 import auto.newsky.coding.response.Result;
+import auto.newsky.coding.resultdata.TaskInfoData;
 import auto.newsky.coding.resultdata.TaskList;
 import auto.newsky.coding.service.ITask;
+import auto.newsky.coding.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,6 +25,8 @@ public class TaskImpl implements ITask{
 
     @Autowired
     private TaskMapper taskMapper;
+    @Resource
+    private JournalImpl journalService;
 
 
     @Override
@@ -62,6 +70,32 @@ public class TaskImpl implements ITask{
             result.setMsg("用户未登录");
         }
 
+        return result;
+    }
+
+    @Override
+    public Result getTasks(Integer userId) {
+        Result result = new Result();
+
+        return null;
+    }
+
+    @Override
+    public Result getTaskMessages(Integer userId, String date, Integer taskId) {
+
+        Result result = new Result();
+
+        Task task = taskMapper.selectByPrimaryKey(taskId);
+
+        TaskInfoData.TaskBean taskBean =
+                new TaskInfoData.TaskBean(taskId,task.getTaskContent(),task.getTaskTitle());
+
+        List<TaskInfoData.CalendarBean> list =
+                journalService.getCalendarList(DateUtil.getFirstDay(date),DateUtil.getLastDay(date));
+
+        TaskInfoData taskInfoData = new TaskInfoData(taskBean,list);
+
+        result.setData(taskInfoData);
         return result;
     }
 }
