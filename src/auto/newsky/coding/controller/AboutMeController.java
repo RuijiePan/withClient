@@ -14,9 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Date;
 
 /**
  * Created by prj on 2016/9/16.
@@ -155,15 +161,48 @@ public class AboutMeController {
         //userService.modifyPassword(myUserId,)
         return result;
     }
+
     /**
      * 上传用户头像
-     * @param user
+     * @param file
      * @return
+     * @throws Exception
      */
     @ResponseBody
-    @RequestMapping(value = "/uploadHeadPic",method = RequestMethod.POST)
-    public Result uploadHeadPic(User user){
-        return new Result(user);
+    @RequestMapping("/uploadHeadPic")
+    public Result uploadHeadPic(@RequestParam("file")CommonsMultipartFile file)throws Exception{
+
+        Integer myUserId = (Integer) request.getAttribute("myUserId");
+        Result result = new Result();
+        User user = userService.getUserByPrimaryKey(myUserId);
+
+        try {
+            //获取输出流
+            String fileName = "E:/"+new Date().getTime()+file.getOriginalFilename();
+            OutputStream os=new FileOutputStream(fileName);
+            //获取输入流 CommonsMultipartFile 中可以直接得到文件的流
+            InputStream is=file.getInputStream();
+            int temp;
+            //一个一个字节的读取并写入
+            while((temp=is.read())!=(-1))
+            {
+                os.write(temp);
+            }
+            os.flush();
+            os.close();
+            is.close();
+
+            User uploadUser = userService.getUserByPrimaryKey(myUserId);
+            uploadUser.setUserHeadurl(fileName);
+            userService.modify(uploadUser);
+
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            result.setCode(420);
+            result.setMsg("上传头像失败");
+        }
+        return result;
     }
 
     /**

@@ -9,8 +9,6 @@ import java.sql.Statement;
 import auto.newsky.coding.exception.CustomException;
 
 public class DatabaseUtil {
-	
-	
 
 	public static boolean testConnection(String url, String driver,
 			String username, String password) throws Exception{
