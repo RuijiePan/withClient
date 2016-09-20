@@ -62,4 +62,12 @@ public class Journal {
     public void setJourIsDelete(Boolean jourIsDelete) {
         this.jourIsDelete = jourIsDelete;
     }
+
+    public Journal(Integer taskId, Date jourDate, String jourSummary, Boolean jourPunch, Boolean jourIsDelete) {
+        this.taskId = taskId;
+        this.jourDate = jourDate;
+        this.jourSummary = jourSummary;
+        this.jourPunch = jourPunch;
+        this.jourIsDelete = jourIsDelete;
+    }
 }

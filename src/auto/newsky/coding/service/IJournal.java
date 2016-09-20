@@ -9,7 +9,7 @@ import auto.newsky.coding.response.Result;
  */
 public interface IJournal {
 
-    Result signIn(Integer userId,Integer taskId);
+    Result signIn(Integer taskId);
 
-    Result editTaskMessage(Integer userId,Integer taskId,String date,String remark);
+    Result editTaskMessage(Integer taskId,String date,String remark);
 }

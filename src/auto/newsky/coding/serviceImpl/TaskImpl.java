@@ -2,6 +2,7 @@ package auto.newsky.coding.serviceImpl;
 
 import auto.newsky.coding.mapper.TaskMapper;
 import auto.newsky.coding.po.Task;
+import auto.newsky.coding.po.TaskExample;
 import auto.newsky.coding.response.Result;
 import auto.newsky.coding.resultdata.TaskList;
 import auto.newsky.coding.service.ITask;
@@ -25,17 +26,23 @@ public class TaskImpl implements ITask{
 
         Result result = new Result();
 
-        if (userId!=-1) {
-            Task task = new Task(userId, content, title, false, iconIndex);
+        TaskExample taskExample = new TaskExample();
+        taskExample.createCriteria().andUserIdEqualTo(userId)
+                .andTaskIconTypeEqualTo(iconIndex)
+                .andTaskIsDeleteEqualTo(false);
 
+        if (taskMapper.selectByExample(taskExample).size()<=3){
+
+            Task task = new Task(userId, content, title, false, iconIndex);
             if (taskMapper.insert(task) == 0) {
                 result.setCode(414);
                 result.setMsg("创建坚持活动失败");
             }
         }else {
-            result.setCode(401);
-            result.setMsg("用户未登录");
+            result.setCode(419);
+            result.setMsg("活动已达上限");
         }
+
         return result;
     }
 

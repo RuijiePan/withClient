@@ -2,7 +2,9 @@ package auto.newsky.coding.controller;
 
 import auto.newsky.coding.response.Result;
 import auto.newsky.coding.serviceImpl.InvitationImpl;
+import auto.newsky.coding.serviceImpl.JournalImpl;
 import auto.newsky.coding.serviceImpl.TaskImpl;
+import auto.newsky.coding.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,8 @@ public class KeepController {
 
     @Autowired
     private TaskImpl taskService;
+    @Autowired
+    private JournalImpl journalService;
 
     @Autowired
     private HttpServletRequest request;
@@ -61,7 +65,7 @@ public class KeepController {
     @ResponseBody
     @RequestMapping("/signIn")
     public Result signIn(@RequestParam(value="taskId", required=true)Integer taskId){
-        Integer myUserId = (Integer) request.getAttribute("myUserId");
+        return journalService.signIn(taskId);
     }
 
     /**
@@ -74,9 +78,13 @@ public class KeepController {
     @ResponseBody
     @RequestMapping("/editTaskMessage")
     public Result editTaskMessage(@RequestParam(value="taskId", required=true)Integer taskId,
-                                  @RequestParam(value="date", required=true)String date,
+                                  @RequestParam(value="date", required=false)String date,
                                   @RequestParam(value="remark", required=true)String remark){
         Integer myUserId = (Integer) request.getAttribute("myUserId");
+        if (date==null)
+            return journalService.editTaskMessage(taskId, DateUtil.getCurrentDate().toString(),remark);
+        else
+            return journalService.editTaskMessage(taskId, date,remark);
     }
 
     /**
@@ -87,6 +95,7 @@ public class KeepController {
     @RequestMapping("/getTasks")
     public Result getTasks(){
         Integer myUserId = (Integer) request.getAttribute("myUserId");
+        return null;
     }
 
     /**
@@ -100,6 +109,7 @@ public class KeepController {
     public Result getTaskMessages(@RequestParam(value="date", required=true)String date,
                                   @RequestParam(value="taskId", required=true)Integer taskId){
         Integer myUserId = (Integer) request.getAttribute("myUserId");
+        return null;
     }
 
 }
