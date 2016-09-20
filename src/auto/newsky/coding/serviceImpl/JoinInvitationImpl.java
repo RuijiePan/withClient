@@ -38,6 +38,8 @@ public class JoinInvitationImpl implements IJoinInvitation{
     @Autowired
     private InvitationMapper invitationMapper;
 
+    @Autowired
+    private UserMapper userMapper;
     @Override
     public Result acceptInvitation(Integer userId, Integer applyUserId, Integer invitationId,boolean isAccept) {
         Result result = new Result();
@@ -67,7 +69,7 @@ public class JoinInvitationImpl implements IJoinInvitation{
                     Message userMessage = messageMapper.selectByExample(messageExample).get(0);*/
 
                     Message message = new Message(userId, applyUserId, invitationId, 3,
-                            DateUtil.getCurrentTime(), "您报名的" + invitation.getInvitContent() + "活动已经被批准了", false, false);
+                            DateUtil.getCurrentTime(), "您报名的" + invitation.getInvitTitle() + "活动已经被批准了", false, false);
                     messageMapper.insert(message);
                     result.setMsg("特批成功");
                 } else {
@@ -84,13 +86,11 @@ public class JoinInvitationImpl implements IJoinInvitation{
         return result;
     }
 
-    @Autowired
-    private UserMapper userMapper;
 
     @Override
     public boolean isJoin(Integer userId, Integer invitationId) {
         JoinInvitationExample joinInvitationExample = new JoinInvitationExample();
-        joinInvitationExample.or().andUserIdEqualTo(userId).andInvitIdEqualTo(invitationId);
+        joinInvitationExample.or().andUserIdEqualTo(userId).andInvitIdEqualTo(invitationId).andRelationIsDeleteEqualTo(false);
         List<JoinInvitation> joinInvitations =  userJoinInvatationMapper.selectByExample(joinInvitationExample);
         return joinInvitations.size()>0?true:false;
     }
@@ -113,5 +113,34 @@ public class JoinInvitationImpl implements IJoinInvitation{
     }
     public int join(JoinInvitation joinInvitation){
         return userJoinInvatationMapper.insert(joinInvitation);
+    }
+
+    public boolean quit(Integer myUserId, Integer invitationId) {
+        JoinInvitationExample joinexample = new JoinInvitationExample();
+        joinexample.or().andUserIdEqualTo(myUserId).andInvitIdEqualTo(invitationId).andRelationIsDeleteEqualTo(false);
+        List<JoinInvitation> joinList = userJoinInvatationMapper.selectByExample(joinexample);
+        if (joinList == null ||joinList.size() <= 0){
+            return false;
+        }
+        Integer relationId = joinList.get(0).getRelationId();
+        if (userJoinInvatationMapper.updateByPrimaryKeySelective(new JoinInvitation(relationId,myUserId,invitationId,true))>0){
+            return true;
+        }
+       // userJoinInvatationMapper.updateByExample();
+       return false;
+    }
+
+    public boolean quit(Integer relationId) {
+        if (userJoinInvatationMapper.updateByPrimaryKeySelective(new JoinInvitation(relationId,null,null,true))>0){
+            return true;
+        }
+        return false;
+    }
+
+    public List<JoinInvitation> getAllByInvitationId(Integer invitId) {
+        JoinInvitationExample joinexample = new JoinInvitationExample();
+        joinexample.or().andInvitIdEqualTo(invitId).andRelationIsDeleteEqualTo(false);
+        List<JoinInvitation> joinList = userJoinInvatationMapper.selectByExample(joinexample);
+        return joinList;
     }
 }

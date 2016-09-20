@@ -28,6 +28,8 @@ public class Invitation {
 
     private Integer invitId;
 
+
+
     private Integer userId;
 
     private Integer typeId;

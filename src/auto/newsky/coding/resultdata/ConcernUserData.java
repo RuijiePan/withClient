@@ -10,13 +10,17 @@ public class ConcernUserData {
      * isConcerned : fasle
      */
 
-    private String isConcerned;
+    private boolean isConcerned;
 
-    public String getIsConcerned() {
+    public ConcernUserData(boolean isConcerned) {
+        this.isConcerned = isConcerned;
+    }
+
+    public boolean isConcerned() {
         return isConcerned;
     }
 
-    public void setIsConcerned(String isConcerned) {
-        this.isConcerned = isConcerned;
+    public void setConcerned(boolean concerned) {
+        isConcerned = concerned;
     }
 }
