@@ -41,7 +41,7 @@ public class UserImpl implements IUser{
     }
 
     @Override
-    public User getUserByPrimaryKey(Integer userId) throws Exception {
+    public User getUserByPrimaryKey(Integer userId)  {
         return userMapper.selectByPrimaryKey(userId);
     }
 
@@ -68,7 +68,7 @@ public class UserImpl implements IUser{
 
         if (oldPassword.equals(newPassword)){
             result.setCode(409);
-            result.setMsg("ĞÂ¾ÉÃÜÂë²»ÄÜÏàÍ¬");
+            result.setMsg("ï¿½Â¾ï¿½ï¿½ï¿½ï¿½ë²»ï¿½ï¿½ï¿½ï¿½Í¬");
             return result;
         }
 
@@ -76,7 +76,7 @@ public class UserImpl implements IUser{
         user.setUserPassword(newPassword);
         if (userMapper.updateByPrimaryKey(user)==0){
             result.setCode(408);
-            result.setMsg("ÃÜÂëĞŞ¸ÄÊ§°Ü");
+            result.setMsg("ï¿½ï¿½ï¿½ï¿½ï¿½Ş¸ï¿½Ê§ï¿½ï¿½");
         }
         return result;
     }
@@ -88,4 +88,6 @@ public class UserImpl implements IUser{
 
         return null;
     }
+
+
 }

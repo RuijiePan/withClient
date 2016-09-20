@@ -2,7 +2,7 @@ package auto.newsky.coding.po;
 
 public class InvitationType {
     private Integer typeId;
-
+    public InvitationType() {}
     private String typeName;
 
     private Integer typeParent;

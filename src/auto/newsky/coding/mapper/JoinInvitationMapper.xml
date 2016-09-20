@@ -193,4 +193,24 @@
       relation_is_delete = #{relationIsDelete,jdbcType=BIT}
     where relation_id = #{relationId,jdbcType=INTEGER}
   </update>
+
+  <resultMap id="UserBaseResultMap" type="auto.newsky.coding.po.User" >
+    <id column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="user_nickname" property="userNickname" jdbcType="VARCHAR" />
+    <result column="user_password" property="userPassword" jdbcType="VARCHAR" />
+    <result column="user_studentID" property="userStudentid" jdbcType="VARCHAR" />
+    <result column="user_realname" property="userRealname" jdbcType="VARCHAR" />
+    <result column="user_sex" property="userSex" jdbcType="INTEGER" />
+    <result column="user_mobilephone" property="userMobilephone" jdbcType="VARCHAR" />
+    <result column="user_headurl" property="userHeadurl" jdbcType="VARCHAR" />
+    <result column="user_qq" property="userQq" jdbcType="VARCHAR" />
+    <result column="user_token" property="userToken" jdbcType="VARCHAR" />
+    <result column="user_is_delete" property="userIsDelete" jdbcType="BIT" />
+    <result column="user_class" property="userClass" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectJoinMembers" resultMap="UserBaseResultMap" parameterType="java.lang.Integer" >
+    select * from user_join_invitation as a,with_user as b
+    where a.user_id = b.user_id and a.invit_id = #{invitId}
+    and a.user_id != #{myUserId}
+  </select>
 </mapper>

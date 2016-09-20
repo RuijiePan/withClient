@@ -29,6 +29,17 @@ public interface InvitationMapper {
 
     int updateByPrimaryKey(Invitation record);
 
+    List<Invitation>  selectInvitationsUnType(@Param("lastInvitationId") Integer lastInvitationId,@Param("limit") Integer limit);
+
     Invitation selectByUidAndPrimaryKey(@Param("aimUserId")Integer aimUserId,
                                         @Param("invitId")Integer invitId);
+
+    List<Invitation> selectInvitationsByParentType(@Param("typeId")Integer typeId,@Param("lastInvitationId") Integer lastInvitationId, @Param("limit")Integer limit);
+
+    List<Invitation> selectInvitationsByType(@Param("typeId")Integer typeId, @Param("lastInvitationId")Integer lastInvitationId, @Param("limit")Integer limit);
+
+
+    List<Invitation> selectInvitationsByUserId(@Param("userId")Integer userId, @Param("lastInvitationId")Integer lastInvitationId, @Param("limit")Integer limit);
+
+    List<Invitation> selectInvitationsConcern(@Param("myUserId")Integer myUserId, @Param("lastInvitationId")Integer lastInvitationId, @Param("limit")Integer limit);
 }

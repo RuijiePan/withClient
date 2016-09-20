@@ -2,7 +2,9 @@ package auto.newsky.coding.po;
 
 public class Concern {
     private Integer conId;
+    public Concern() {
 
+    }
     private Integer conFromUserId;
 
     private Integer conToUserId;

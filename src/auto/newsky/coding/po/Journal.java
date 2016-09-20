@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Journal {
     private Integer jourId;
-
+    public Journal() {}
     private Integer taskId;
 
     private Date jourDate;

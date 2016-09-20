@@ -2,6 +2,7 @@ package auto.newsky.coding.mapper;
 
 import auto.newsky.coding.po.JoinInvitation;
 import auto.newsky.coding.po.JoinInvitationExample;
+import auto.newsky.coding.po.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -28,4 +29,6 @@ public interface JoinInvitationMapper {
     int updateByPrimaryKeySelective(JoinInvitation record);
 
     int updateByPrimaryKey(JoinInvitation record);
+
+    List<User> selectJoinMembers(@Param("invitId")Integer invitId,@Param("myUserId") Integer myUserId);//获取参与人，不包括自己
 }

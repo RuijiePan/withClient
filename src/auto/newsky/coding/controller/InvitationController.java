@@ -27,7 +27,7 @@ public class InvitationController {
     private HttpServletRequest request;
 
     /**
-     * http://localhost:8080/invitation/getInvitations?token=1&typeId=1&userId=1&lastInvitationId=1&limit=1&invitaionId=1
+     *
      * 获取邀约列表
      * @param typeId
      * @param aimUserId
@@ -44,14 +44,22 @@ public class InvitationController {
                                  @RequestParam(value="limit", required=false)Integer limit){
         Integer myUserId = (Integer) request.getAttribute("myUserId");
         Result result = null;
-        if (typeId==null && aimUserId==null){//获取未分类的邀约列表
+        if (typeId==null && aimUserId==null){
+            //获取未分类的邀约列表
+            //http://localhost:8080/invitation/getInvitations?token=1&lastInvitationId=0&limit=10
                 result = invitationService.getInvitationsUnType(myUserId,lastInvitationId,limit);
         } else if(typeId!=null && aimUserId==null){
-            result = invitationService.getInvitationsByTypeId(myUserId,typeId,lastInvitationId,limit);//获取某分类的邀约邀约列表
+            //获取某分类的邀约邀约列表
+            //http://localhost:8080/invitation/getInvitations?token=1&typeId=3&lastInvitationId=0&limit=10
+            result = invitationService.getInvitationsByTypeId(myUserId,typeId,lastInvitationId,limit);
         }else if (typeId==null&&aimUserId!=null){
-            if (aimUserId == -1){//获取我的关注邀约
+            if (aimUserId == -1){
+                //获取我的关注邀约
+                //http://localhost:8080/invitation/getInvitations?token=1&lastInvitationId=0&limit=10&userId=-1
                 result = invitationService.getInvitationsMyConcerned(myUserId,lastInvitationId,limit);
-            }else{//获取某人发出的邀约
+            }else{
+                //获取某人发出的邀约
+                //http://localhost:8080/invitation/getInvitations?token=1&lastInvitationId=0&limit=10&userId=2
                 result = invitationService.getInvitationsSBSend(myUserId,aimUserId,lastInvitationId,limit);
             }
         }

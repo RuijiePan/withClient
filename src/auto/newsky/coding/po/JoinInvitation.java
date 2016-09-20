@@ -1,6 +1,16 @@
 package auto.newsky.coding.po;
 
 public class JoinInvitation {
+    public JoinInvitation(Integer userId, Integer invitId, Boolean relationIsDelete) {
+        this.userId = userId;
+        this.invitId = invitId;
+        this.relationIsDelete = relationIsDelete;
+    }
+
+    public JoinInvitation() {
+
+    }
+
     private Integer relationId;
 
     private Integer userId;
@@ -39,5 +49,15 @@ public class JoinInvitation {
 
     public void setRelationIsDelete(Boolean relationIsDelete) {
         this.relationIsDelete = relationIsDelete;
+    }
+
+    @Override
+    public String toString() {
+        return "JoinInvitation{" +
+                "relationId=" + relationId +
+                ", userId=" + userId +
+                ", invitId=" + invitId +
+                ", relationIsDelete=" + relationIsDelete +
+                '}';
     }
 }

@@ -3,6 +3,29 @@ package auto.newsky.coding.po;
 import java.util.Date;
 
 public class Invitation {
+    public Invitation() {
+    }
+
+    @Override
+    public String toString() {
+        return "Invitation{" +
+                "invitId=" + invitId +
+                ", userId=" + userId +
+                ", typeId=" + typeId +
+                ", typeParentId=" + typeParentId +
+                ", invitPublicationTime=" + invitPublicationTime +
+                ", invitActivityTime=" + invitActivityTime +
+                ", invitPlace='" + invitPlace + '\'' +
+                ", invitNumberMax=" + invitNumberMax +
+                ", invitNumberCurr=" + invitNumberCurr +
+                ", invitSexRequire=" + invitSexRequire +
+                ", invitTitle='" + invitTitle + '\'' +
+                ", invitContent='" + invitContent + '\'' +
+                ", invitHidden=" + invitHidden +
+                ", invitIsDelete=" + invitIsDelete +
+                '}';
+    }
+
     private Integer invitId;
 
     private Integer userId;

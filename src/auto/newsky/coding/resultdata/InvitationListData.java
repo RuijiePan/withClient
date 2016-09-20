@@ -39,14 +39,26 @@ public class InvitationListData {
 
     public static class DataBean {
         private String originatorHeadUrl;
-        private String menbersUrl;
         private String invitationTime;
+
+        public Integer getSexRequire() {
+            return sexRequire;
+        }
+
+        public boolean isJoin() {
+            return isJoin;
+        }
+
+        public void setJoin(boolean join) {
+            isJoin = join;
+        }
+
         private String publishTime;
         private String originatorNickname;
-        private String iconUrl;
+        private Integer typeId;
         private int invitaionId;
         private int currentNumber;
-        private String sexRequire;
+        private Integer sexRequire;
         private String content;
         private String title;
         private int totalNumber;
@@ -70,13 +82,6 @@ public class InvitationListData {
             this.originatorHeadUrl = originatorHeadUrl;
         }
 
-        public String getMenbersUrl() {
-            return menbersUrl;
-        }
-
-        public void setMenbersUrl(String menbersUrl) {
-            this.menbersUrl = menbersUrl;
-        }
 
         public String getInvitationTime() {
             return invitationTime;
@@ -102,12 +107,12 @@ public class InvitationListData {
             this.originatorNickname = originatorNickname;
         }
 
-        public String getIconUrl() {
-            return iconUrl;
+        public Integer getTypeId() {
+            return typeId;
         }
 
-        public void setIconUrl(String iconUrl) {
-            this.iconUrl = iconUrl;
+        public void setTypeId(Integer typeId) {
+            this.typeId = typeId;
         }
 
         public int getInvitaionId() {
@@ -126,11 +131,8 @@ public class InvitationListData {
             this.currentNumber = currentNumber;
         }
 
-        public String getSexRequire() {
-            return sexRequire;
-        }
 
-        public void setSexRequire(String sexRequire) {
+        public void setSexRequire(Integer sexRequire) {
             this.sexRequire = sexRequire;
         }
 
@@ -183,33 +185,34 @@ public class InvitationListData {
         }
 
         public static class MembersBean {
-            private String sex;
-            private int phone;
-            private String userId;
+            private Integer sex;
+            private String phone;
+            private Integer userId;
             private String realName;
             private String headUrl;
 
-            public String getSex() {
+
+            public Integer getSex() {
                 return sex;
             }
 
-            public void setSex(String sex) {
+            public void setSex(Integer sex) {
                 this.sex = sex;
             }
 
-            public int getPhone() {
+            public String getPhone() {
                 return phone;
             }
 
-            public void setPhone(int phone) {
+            public void setPhone(String phone) {
                 this.phone = phone;
             }
 
-            public String getUserId() {
+            public Integer getUserId() {
                 return userId;
             }
 
-            public void setUserId(String userId) {
+            public void setUserId(Integer userId) {
                 this.userId = userId;
             }
 

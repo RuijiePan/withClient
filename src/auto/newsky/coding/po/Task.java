@@ -2,7 +2,7 @@ package auto.newsky.coding.po;
 
 public class Task {
     private Integer taskId;
-
+    public Task() {}
     private Integer userId;
 
     private String taskContent;

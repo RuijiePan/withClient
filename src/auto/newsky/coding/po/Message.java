@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Message {
     private Integer msgId;
-
+    public Message() {}
     private Integer fromUserId;
 
     private Integer toUserId;

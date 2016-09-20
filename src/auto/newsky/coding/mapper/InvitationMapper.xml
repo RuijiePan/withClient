@@ -357,4 +357,51 @@
       invit_is_delete = #{invitIsDelete,jdbcType=BIT}
     where invit_id = #{invitId,jdbcType=INTEGER}
   </update>
+  <select id="selectInvitationsUnType" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from with_invitation
+    where invit_id>#{lastInvitationId}
+    and invit_is_delete = false
+    order by invit_id  limit #{limit}
+  </select>
+  <select id="selectInvitationsByParentType" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from with_invitation
+    where invit_id>#{lastInvitationId}
+    and type_parent_id = #{typeId}
+    and invit_is_delete = false
+    order by invit_id  limit #{limit}
+  </select>
+  <select id="selectInvitationsByType" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from with_invitation
+    where invit_id>#{lastInvitationId}
+    and type_id = #{typeId}
+    and invit_is_delete = false
+    order by invit_id  limit #{limit}
+  </select>
+  <select id="selectInvitationsByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from with_invitation
+    where invit_id>#{lastInvitationId}
+    and user_id = #{userId}
+    and invit_is_delete = false
+    order by invit_id  limit #{limit}
+  </select>
+  <select id="selectInvitationsConcern" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from with_invitation
+    where invit_id>#{lastInvitationId}
+    and user_id in (
+    select  con_to_user_id from with_concern where con_from_user_id = #{myUserId}
+    )
+    and invit_is_delete = false
+    order by invit_id  limit #{limit}
+  </select>
+
 </mapper>

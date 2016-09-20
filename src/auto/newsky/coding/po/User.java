@@ -2,7 +2,7 @@ package auto.newsky.coding.po;
 
 public class User {
     private Integer userId;
-
+    public User() {}
     private String userNickname;
 
     private String userPassword;
