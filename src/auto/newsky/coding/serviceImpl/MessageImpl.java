@@ -1,16 +1,16 @@
 package auto.newsky.coding.serviceImpl;
 
+import auto.newsky.coding.mapper.InvitationMapper;
 import auto.newsky.coding.mapper.MessageMapper;
 import auto.newsky.coding.mapper.UserMapper;
-import auto.newsky.coding.po.Message;
-import auto.newsky.coding.po.MessageExample;
-import auto.newsky.coding.po.User;
-import auto.newsky.coding.po.UserExample;
+import auto.newsky.coding.po.*;
 import auto.newsky.coding.response.Result;
+import auto.newsky.coding.resultdata.MessageListData;
 import auto.newsky.coding.service.IMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +23,8 @@ public class MessageImpl  implements IMessage{
     private MessageMapper messageMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private InvitationMapper invitationMapper;
 
     @Override
     public Result deleteMessage(Integer messageId) {
@@ -48,8 +50,33 @@ public class MessageImpl  implements IMessage{
     public Result getMessages(Integer userId,Integer lastMessageId, Integer limit) {
 
         Result result = new Result();
-        List<Message> list = this.getUserMessage(userId);
-        return null;
+        List<Message> list = messageMapper.selectByIdAndLimit(userId,lastMessageId,limit);
+
+        List<MessageListData.DataBean> datalist = new ArrayList<MessageListData.DataBean>();
+
+        for (int i = 0; i < list.size() ; i++) {
+
+            Message message = list.get(i);
+            User applyUser = userMapper.selectByPrimaryKey(message.getFromUserId());
+            Invitation invitation = invitationMapper.selectByPrimaryKey(message.getInvitId());
+
+            MessageListData.DataBean dataBean = new MessageListData.DataBean(
+                    message.getMsgIsRead(),message.getInvitId(),invitation.getInvitNumberMax(),
+                    invitation.getInvitActivityTime().toString(),invitation.getInvitPublicationTime().toString(),
+                    invitation.getInvitNumberCurr(),message.getMsgType(),message.getMsgContent(),
+                    message.getFromUserId(),invitation.getInvitTitle(),applyUser.getUserRealname(),
+                    applyUser.getUserHeadurl(),message.getMsgId(),invitation.getInvitPlace());
+
+            datalist.add(dataBean);
+        }
+        result.setData(datalist);
+        return result;
+
+        /*boolean readed, int invationId, int invitationTotalNumber,
+        String invitationTime, String sendTime, int invitationCurrNumber,
+        int messageType, String content, int applyUserId,
+        String invitationTitle, String name, String headUrl,
+        int messageId, String invitationPlace*/
     }
 
     @Override

@@ -4,6 +4,7 @@ import auto.newsky.coding.po.User;
 import auto.newsky.coding.response.Result;
 import auto.newsky.coding.resultdata.LoginData;
 import auto.newsky.coding.serviceImpl.InvitationImpl;
+import auto.newsky.coding.serviceImpl.JoinInvitationImpl;
 import auto.newsky.coding.serviceImpl.MessageImpl;
 import auto.newsky.coding.serviceImpl.UserImpl;
 import auto.newsky.coding.util.UUIDUtil;
@@ -30,6 +31,8 @@ public class AboutMeController {
     private InvitationImpl invitationService;
     @Resource
     private MessageImpl messageService;
+    @Resource
+    private JoinInvitationImpl joinInviationService;
 
     @Autowired
     private HttpServletRequest request;
@@ -164,6 +167,7 @@ public class AboutMeController {
     }
 
     /**
+     * http://localhost:8080/with/user/getMessages?token=12345&lastMessageId=0&limit=10
      * 获取我的收到的信息列表
      * @param lastMessageId
      * @param limit
@@ -188,15 +192,22 @@ public class AboutMeController {
     public Result deleteMessage(@RequestParam(value="messageId", required=true)Integer messageId){
         return messageService.deleteMessage(messageId);
     }
+
     /**
+     * http://localhost:8080/with/user/acceptMessage?invitationId=1&applyUserId=2&token=12345&isAccept=true
      * 批准特批
-     * @param user
+     * @param invitationId
+     * @param applyUserId
+     * @param isAccept
      * @return
      */
     @ResponseBody
     @RequestMapping("/acceptMessage")
-    public Result acceptMessage(User user){
-        return new Result(user);
+    public Result acceptMessage(@RequestParam(value="invitationId", required=true)Integer invitationId,
+                                @RequestParam(value="applyUserId", required=true)Integer applyUserId,
+                                @RequestParam(value="isAccept", required=false)boolean isAccept){
+        Integer myUserId = (Integer) request.getAttribute("myUserId");
+        return joinInviationService.acceptInvitation(myUserId,applyUserId,invitationId,isAccept);
     }
 
     /**

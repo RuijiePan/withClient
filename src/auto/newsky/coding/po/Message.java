@@ -92,4 +92,15 @@ public class Message {
     public void setMsgIsDelete(Boolean msgIsDelete) {
         this.msgIsDelete = msgIsDelete;
     }
+
+    public Message( Integer fromUserId, Integer toUserId, Integer invitId, Integer msgType, Date msgSendTime, String msgContent, Boolean msgIsRead, Boolean msgIsDelete) {
+        this.fromUserId = fromUserId;
+        this.toUserId = toUserId;
+        this.invitId = invitId;
+        this.msgType = msgType;
+        this.msgSendTime = msgSendTime;
+        this.msgContent = msgContent;
+        this.msgIsRead = msgIsRead;
+        this.msgIsDelete = msgIsDelete;
+    }
 }

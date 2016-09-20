@@ -274,5 +274,12 @@
     where msg_id = #{msgId,jdbcType=INTEGER}
   </update>
 
+  <select id="selectByIdAndLimit" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from with_message
+    where msg_id > #{messageId} and to_user_id = #{userId} AND msg_is_delete = FALSE
+    ORDER BY msg_id limit #{limit}
+  </select>
 
 </mapper>

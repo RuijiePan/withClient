@@ -28,4 +28,8 @@ public interface MessageMapper {
     int updateByPrimaryKeySelective(Message record);
 
     int updateByPrimaryKey(Message record);
+
+    List<Message> selectByIdAndLimit(@Param("userId")Integer userId,
+                                     @Param("messageId")Integer messageId,
+                                     @Param("limit")Integer limit);
 }

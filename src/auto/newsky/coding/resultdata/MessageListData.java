@@ -163,5 +163,26 @@ public class MessageListData {
         public void setInvitationPlace(String invitationPlace) {
             this.invitationPlace = invitationPlace;
         }
+
+        public DataBean(boolean readed, int invationId, int invitationTotalNumber,
+                        String invitationTime, String sendTime, int invitationCurrNumber,
+                        int messageType, String content, int applyUserId,
+                        String invitationTitle, String name, String headUrl,
+                        int messageId, String invitationPlace) {
+            this.readed = readed;
+            this.invationId = invationId;
+            this.invitationTotalNumber = invitationTotalNumber;
+            this.invitationTime = invitationTime;
+            this.sendTime = sendTime;
+            this.invitationCurrNumber = invitationCurrNumber;
+            this.messageType = messageType;
+            this.content = content;
+            this.applyUserId = applyUserId;
+            this.invitationTitle = invitationTitle;
+            this.name = name;
+            this.headUrl = headUrl;
+            this.messageId = messageId;
+            this.invitationPlace = invitationPlace;
+        }
     }
 }
