@@ -5,8 +5,10 @@ import auto.newsky.coding.mapper.TaskMapper;
 import auto.newsky.coding.po.Task;
 import auto.newsky.coding.po.TaskExample;
 import auto.newsky.coding.response.Result;
+import auto.newsky.coding.resultdata.TaskInfo;
 import auto.newsky.coding.resultdata.TaskInfoData;
 import auto.newsky.coding.resultdata.TaskList;
+import auto.newsky.coding.resultdata.TaskListData;
 import auto.newsky.coding.service.ITask;
 import auto.newsky.coding.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +79,39 @@ public class TaskImpl implements ITask{
     public Result getTasks(Integer userId) {
         Result result = new Result();
 
-        return null;
+        TaskExample taskExample = new TaskExample();
+        taskExample.createCriteria().andUserIdEqualTo(userId)
+                .andTaskIsDeleteEqualTo(false);
+
+        List<Task> currentTaskList = taskMapper.selectByExample(taskExample);
+
+        TaskExample taskPreExample = new TaskExample();
+        taskPreExample.createCriteria().andUserIdEqualTo(userId)
+                .andTaskIsDeleteEqualTo(true);
+        List<Task> preTaskList = taskMapper.selectByExample(taskPreExample);
+
+        System.out.print(currentTaskList==null?"!!!!!!!!!!!!":"??????????????"+currentTaskList.size());
+        List<TaskList.CurrTasksBean> currTasksBeanList = new ArrayList<TaskList.CurrTasksBean>();
+        for (int i = 0;i<currentTaskList.size();i++){
+            Task task = currentTaskList.get(i);
+            TaskList.CurrTasksBean currTasksBean = new TaskList.CurrTasksBean(
+                    task.getTaskContent(),task.getTaskId(),task.getTaskTitle(),task.getTaskIconType()
+            );
+            currTasksBeanList.add(currTasksBean);
+        }
+
+        List<TaskList.PreTasksBean> preTasksBeanList = new ArrayList<TaskList.PreTasksBean>();
+        for (int i=0;i<preTaskList.size();i++){
+            Task task = preTaskList.get(i);
+            TaskList.PreTasksBean preTasksBean = new TaskList.PreTasksBean(
+                    task.getTaskContent(),task.getTaskId(),task.getTaskTitle(),task.getTaskIconType()
+            );
+            preTasksBeanList.add(preTasksBean);
+        }
+        TaskList taskList = new TaskList(currTasksBeanList,preTasksBeanList);
+
+        result.setData(taskList);
+        return result;
     }
 
     @Override

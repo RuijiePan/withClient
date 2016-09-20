@@ -53,6 +53,14 @@ public class TaskListData {
         }
 
         public static class CurrTasksBean {
+
+            public CurrTasksBean(String content, int taskId, String title, int task_icon_type) {
+                this.content = content;
+                this.taskId = taskId;
+                this.title = title;
+                this.task_icon_type = task_icon_type;
+            }
+
             private String content;
             private int taskId;
             private String title;
@@ -92,6 +100,14 @@ public class TaskListData {
         }
 
         public static class PreTasksBean {
+
+            public PreTasksBean(String content, int taskId, String title, int task_icon_type) {
+                this.content = content;
+                this.taskId = taskId;
+                this.title = title;
+                this.task_icon_type = task_icon_type;
+            }
+
             private String content;
             private int taskId;
             private String title;
