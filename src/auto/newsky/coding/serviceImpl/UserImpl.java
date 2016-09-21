@@ -109,6 +109,20 @@ public class UserImpl implements IUser{
         return result;
     }
 
+    @Override
+    public Result modifyUserInfo(Integer userId,String nickname, String qq) {
+        Result result = new Result();
+        User user = userMapper.selectByPrimaryKey(userId);
+        user.setUserNickname(nickname);
+        user.setUserQq(qq);
+
+        if (userMapper.updateByPrimaryKeySelective(user)==0){
+            result.setCode(429);
+            result.setMsg("编辑用户信息失败");
+        }
+        return result;
+    }
+
 
     public int requestData(String address ,String params){
 

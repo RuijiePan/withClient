@@ -24,6 +24,7 @@
 			<param-name>contextConfigLocation</param-name>
 			<param-value>classpath:spring/springmvc.xml</param-value>
 		</init-param>
+
 	</servlet>
 
 	<servlet-mapping>
@@ -75,4 +76,5 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
+
 </web-app>
