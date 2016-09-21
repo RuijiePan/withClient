@@ -212,5 +212,7 @@
     select * from user_join_invitation as a,with_user as b
     where a.user_id = b.user_id and a.invit_id = #{invitId}
     and a.user_id != #{myUserId}
+    and a.relation_is_delete = false
+    and b.user_is_delete = false
   </select>
 </mapper>

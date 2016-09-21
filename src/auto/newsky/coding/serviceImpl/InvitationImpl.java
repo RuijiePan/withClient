@@ -1,12 +1,10 @@
 package auto.newsky.coding.serviceImpl;
 
+import auto.newsky.coding.constant.Constant;
 import auto.newsky.coding.mapper.*;
 import auto.newsky.coding.po.*;
 import auto.newsky.coding.response.Result;
-import auto.newsky.coding.resultdata.ConcernUserData;
-import auto.newsky.coding.resultdata.ConcernUserListData;
-import auto.newsky.coding.resultdata.InvitationData;
-import auto.newsky.coding.resultdata.InvitationListData;
+import auto.newsky.coding.resultdata.*;
 import auto.newsky.coding.service.IInvitation;
 import auto.newsky.coding.util.DateConveter;
 import auto.newsky.coding.util.DateUtil;
@@ -107,8 +105,6 @@ public class InvitationImpl implements IInvitation{
         return result;
     }
 
-
-
     @Override
     public Result publishInvitation(Invitation invatation) {
         Result result = new Result();
@@ -129,8 +125,19 @@ public class InvitationImpl implements IInvitation{
     }
 
     @Override
-    public Result alterInvitation(Invitation invitation) {
+    public Result alterInvitation(Integer myUserId ,Invitation invitation) {
         Result result = new Result();
+
+        if (invitation == null || invitation.getInvitIsDelete() == true){//
+            result.setCode(454);
+            result.setMsg("不存在活动");
+            return result;
+        }
+        if (myUserId != invitation.getUserId()){
+            result.setCode(453);
+            result.setMsg("无权限");
+            return result;
+        }
         if(invatationMapper.updateByPrimaryKeySelective(invitation)>0){
             return result;
         }
@@ -158,9 +165,10 @@ public class InvitationImpl implements IInvitation{
             result.setMsg("自己的活动不需要参加");
             return result;
         }
+        User user = userService.getUserByPrimaryKey(myUserId);
         if(joinInvitationService.join(new JoinInvitation(myUserId,invitationId,false))>0){
-            Message message = new Message(myUserId, invitation.getUserId(), invitationId, 1,
-                    DateUtil.getCurrentTime(), "成功加入" + invitation.getInvitTitle() + "活动", false, false);
+            Message message = new Message(myUserId, invitation.getUserId(), invitationId, Constant.MESSAGE_TYPE_ADD,
+                    DateUtil.getCurrentTime(), user.getUserRealname()+"加入了" + invitation.getInvitTitle() + "活动", false, false);
             messageMapper.insert(message);
             return result;
         }
@@ -169,26 +177,36 @@ public class InvitationImpl implements IInvitation{
         return result;
     }
 
+
     @Override
-    public Result getInvitationsByUidAndPrimaryKey(Integer aimUserId, Integer invitId) {
-
+    public Result getUserInfo(Integer myuserId,Integer aimUserId, Integer invitationId) {
         Result result = new Result();
-        Invitation invitation = invatationMapper.selectByUidAndPrimaryKey(aimUserId, invitId);
-
-        if (invitation==null){
-            result.setData(null);
-            result.setCode(407);
-            result.setMsg("查找不到相对应的用户信息");
-        }else {
-            User user = userMapper.selectByPrimaryKey(invitation.getUserId());
-            if (user!=null) {
-                result.setData(user);
+        UserInfoData userInfoData =  null;
+        UserInfoData.DataBean dataBean = null;
+        //先判断目标用户和我都参加了同一个活动
+        if (joinInvitationService.isJoin(aimUserId,invitationId)&&joinInvitationService.isJoin(myuserId,invitationId)){
+            User user = userService.getUserByPrimaryKey(aimUserId);
+            if (user != null){
+                userInfoData = new UserInfoData();
+                dataBean = new UserInfoData.DataBean();
+                dataBean.setPhone(user.getUserMobilephone());
+                dataBean.setSex(user.getUserSex());
+                dataBean.setIsConcerned(concernService.isConcerned(myuserId,aimUserId));
+                dataBean.setStudentId(user.getUserStudentid());
+                dataBean.setName(user.getUserRealname());
+                dataBean.setHeadUrl(user.getUserHeadurl());
+                dataBean.setQq(user.getUserQq());
+                userInfoData.setData(dataBean);
             }else {
-                result.setData(null);
-                result.setCode(407);
-                result.setMsg("查找不到相对应的用户信息");
+                result.setMsg("找不到用户");
+                result.setCode(466);
             }
+        }else{
+            result.setMsg("无权限查改用户信息");
+            result.setCode(467);
         }
+        result.setData(userInfoData);
+
         return result;
     }
 
@@ -212,8 +230,9 @@ public class InvitationImpl implements IInvitation{
             result.setMsg("自己的活动不需要申请");
             return result;
         }
-        Message message = new Message(myUserId, invitation.getUserId(), invitationId, 0,
-                DateUtil.getCurrentTime(), "向房主申请加入" + invitation.getInvitTitle() + "活动", false, false);
+        User user = userMapper.selectByPrimaryKey(myUserId);
+        Message message = new Message(myUserId, invitation.getUserId(), invitationId, Constant.MESSAGE_TYPE_APPLY,
+                DateUtil.getCurrentTime(), user.getUserRealname()+"申请加入" + invitation.getInvitTitle() + "活动", false, false);
         messageMapper.insert(message);
 
         result.setCode(451);
@@ -246,7 +265,7 @@ public class InvitationImpl implements IInvitation{
         }
 
         User user = userMapper.selectByPrimaryKey(myUserId);
-        Message message = new Message(myUserId, invitation.getUserId(), invitationId, 0,
+        Message message = new Message(myUserId, invitation.getUserId(), invitationId, Constant.MESSAGE_TYPE_QUIT,
                 DateUtil.getCurrentTime(), user.getUserRealname()+"退出了" + invitation.getInvitTitle() + "活动", false, false);
         messageMapper.insert(message);
 
@@ -270,6 +289,7 @@ public class InvitationImpl implements IInvitation{
             return result;
         }
 
+        //把参与关系表 所有人的参与关系去除
         List<JoinInvitation> joinInvitations = joinInvitationService.getAllByInvitationId(invitation.getInvitId());
         if (joinInvitations != null || joinInvitations.size() >0){
             for (JoinInvitation joinInvitation:joinInvitations){
@@ -277,11 +297,12 @@ public class InvitationImpl implements IInvitation{
                     result.setMsg("解除活动关系失败");
                     return result;
                 }
-                Message message = new Message(myUserId, invitation.getUserId(), invitationId, 0,
+                Message message = new Message(myUserId, joinInvitation.getUserId(), invitationId, Constant.MESSAGE_TYPE_CANCEL,
                         DateUtil.getCurrentTime(), invitation.getInvitTitle() + "活动解散", false, false);
                 messageMapper.insert(message);
             }
         }
+        //该活动设置为删除
         invitation.setInvitIsDelete(true);
         invatationMapper.updateByPrimaryKeySelective(invitation);
         //User user = userMapper.selectByPrimaryKey(myUserId);
@@ -291,6 +312,7 @@ public class InvitationImpl implements IInvitation{
 
     @Override
     public Result getConcernedUsers(Integer myUserId, Integer concernedUserId, Integer limit) {
+
         Result result = new Result();
         ConcernUserListData concernUserListData = null;
         List<ConcernUserListData.DataBean > dataBeanList ;
@@ -324,7 +346,7 @@ public class InvitationImpl implements IInvitation{
             result.setMsg("自己不能关注自己");
             return result;
         }
-        ConcernUserData concernUserData = new ConcernUserData(false);
+        ConcernUserData concernUserData = new ConcernUserData();
         Concern concern = concernService.getConcerne(myUserId,concernedUserId);
         if (concern != null) {
             //Concern concern = concernService.getConcerneTrue(myUserId, concernedUserId);
@@ -396,5 +418,29 @@ public class InvitationImpl implements IInvitation{
         }
         invitationListData.setData(dataBeanList);
         return invitationListData;
+    }
+
+
+    @Override
+    public Result getInvitationsByUidAndPrimaryKey(Integer aimUserId, Integer invitId) {
+
+        Result result = new Result();
+        Invitation invitation = invatationMapper.selectByUidAndPrimaryKey(aimUserId, invitId);
+
+        if (invitation==null){
+            result.setData(null);
+            result.setCode(407);
+            result.setMsg("查找不到相对应的用户信息");
+        }else {
+            User user = userMapper.selectByPrimaryKey(invitation.getUserId());
+            if (user!=null) {
+                result.setData(user);
+            }else {
+                result.setData(null);
+                result.setCode(407);
+                result.setMsg("查找不到相对应的用户信息");
+            }
+        }
+        return result;
     }
 }

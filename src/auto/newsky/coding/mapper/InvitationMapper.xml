@@ -399,7 +399,7 @@
     from with_invitation
     where invit_id>#{lastInvitationId}
     and user_id in (
-    select  con_to_user_id from with_concern where con_from_user_id = #{myUserId}
+    select  con_to_user_id from with_concern where con_from_user_id = #{myUserId} and con_is_concern = true
     )
     and invit_is_delete = false
     order by invit_id  limit #{limit}
@@ -409,7 +409,7 @@
     select
     invit_id
     from with_invitation
-    where user_id = #{myUserId}
+    where user_id = #{myUserId} and invit_is_delete = false
     order by invit_id desc
     limit 1
   </select>

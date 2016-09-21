@@ -122,7 +122,7 @@ public class InvitationController {
             ,@RequestParam(value="hiden", required=false) Boolean hiden) throws Exception{
         Integer myUserId = (Integer) request.getAttribute("myUserId");
         Invitation invitation = new Invitation(myUserId,invitationId,invitationTime, place, totalNumber,  sexRequire, content,  hiden) ;
-        Result result = invitationService.alterInvitation(invitation);
+        Result result = invitationService.alterInvitation(myUserId,invitation);
         return  result;
     }
 
@@ -151,6 +151,7 @@ public class InvitationController {
     }
 
     /**
+     *
      * 删除指定邀约
      * @param invitationId
      * @return
@@ -185,6 +186,7 @@ public class InvitationController {
     }
 
     /**
+     * http://localhost:8080/invitation/concernUser?token=1&concernedUserId=3
      * 关注/取消关注某用户
      * @return
      * @throws Exception
@@ -207,22 +209,5 @@ public class InvitationController {
      * @return
      * @throws Exception
      */
-    @ResponseBody
-    @RequestMapping("/test")
-    public Result test(@RequestParam(value = "name",required = false) String name
-            ,@RequestParam(value = "id",required = false)Integer id
-            ,@RequestParam(value = "date",required = false) Date date) throws Exception{
-        //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        return new Result(date);
-        //return new Result(simpleDateFormat.format(simpleDateFormat.parse(date)));
-    }
-
-
-    @ResponseBody
-    @RequestMapping("/test2")
-    public Result test2(User user) throws Exception{
-        return new Result(user.getUserId());
-        //return new Result(simpleDateFormat.format(simpleDateFormat.parse(date)));
-    }
 }

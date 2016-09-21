@@ -21,19 +21,20 @@ public class Test {
 
         ApplicationContext ac = new org.springframework.context.support.ClassPathXmlApplicationContext("spring/applicationContext-dao.xml");
         UserMapper userMapper = (UserMapper)ac.getBean("userMapper");
+       // InvitationImpl invitation = (InvitationImpl)ac.getBean("invitationImpl");
        /* UserExample userExample = new UserExample();
         userExample.createCriteria().andUserTokenEqualTo("12345");
         List<User> withUsers =  mapper.selectByExample(userExample);
         for (User user : withUsers){
             System.out.println(user.toString());
         }*/
-        JoinInvitationMapper userJoinInvatationMapper = (JoinInvitationMapper)ac.getBean("joinInvitationMapper");
+        //JoinInvitationMapper userJoinInvatationMapper = (JoinInvitationMapper)ac.getBean("joinInvitationMapper");
         //userJoinInvatationMapper.updateByPrimaryKeySelective(new JoinInvitation(11,null,null,true));
 
-        JoinInvitationExample joinexample = new JoinInvitationExample();
+        /*JoinInvitationExample joinexample = new JoinInvitationExample();
         joinexample.or().andInvitIdEqualTo(15).andRelationIsDeleteEqualTo(false);
         List<JoinInvitation> joinList = userJoinInvatationMapper.selectByExample(joinexample);
-        System.out.println(joinList.toString());
+        System.out.println(joinList.toString());*/
        //InvitationMapper invitationMapper = (InvitationMapper) ac.getBean("invitationMapper");
         //System.out.println(invitationMapper.selectInvitationsUnType(0,10).toString());
         //UserMapper mapper = (UserMapper)ac.getBean("userMapper");
