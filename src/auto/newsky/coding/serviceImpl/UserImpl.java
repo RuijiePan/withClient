@@ -100,14 +100,17 @@ public class UserImpl implements IUser{
     public Result getVertificationCode(String phone,String code) {
 
         Result result = new Result();
-        String data = requestData("https://webapi.sms.mob.com/sms/verify",
+        int vertificationCode = requestData("https://webapi.sms.mob.com/sms/verify",
                 "appkey=fb3fa957786c&phone="+phone+"&zone=86&&code="+code);
-        result.setData(data);
+
+        result.setCode(parCode(vertificationCode));
+        result.setMsg(padString(vertificationCode));
+
         return result;
     }
 
 
-    public String requestData(String address ,String params){
+    public int requestData(String address ,String params){
 
         HttpURLConnection conn = null;
         try {
@@ -151,7 +154,7 @@ public class UserImpl implements IUser{
             //get result
             if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 String result = parsRtn(conn.getInputStream());
-                return result;
+                return Integer.parseInt(result.substring(10,13));
             } else {
                 System.out.println(conn.getResponseCode() + " "+ conn.getResponseMessage());
             }
@@ -161,7 +164,7 @@ public class UserImpl implements IUser{
             if (conn != null)
                 conn.disconnect();
         }
-        return null;
+        return 0;
     }
 
     private  String parsRtn(InputStream is) throws IOException {
@@ -179,5 +182,67 @@ public class UserImpl implements IUser{
             buffer.append(line);
         }
         return buffer.toString();
+    }
+
+    public int parCode(int code){
+        int Code = 0;
+        switch (code){
+            case 405:
+                Code =  420;
+                break;
+            case 406:
+                Code =  421;
+                break;
+            case 456:
+                Code =  422;
+                break;
+            case 457:
+                Code =  423;
+                break;
+            case 466:
+                Code =  424;
+                break;
+            case 467:
+                Code =  425;
+                break;
+            case 468:
+                Code =  426;
+                break;
+            case 474:
+                Code =  427;
+                break;
+        }
+        return Code;
+    }
+
+    private String padString(int code){
+        String data = null;
+        switch (code){
+            case 405:
+                data = "AppKey为空";
+                break;
+            case 406:
+                data = "AppKey无效";
+                break;
+            case 456:
+                data = "国家代码或手机号码为空";
+                break;
+            case 457:
+                data = "手机号码格式错误";
+                break;
+            case 466:
+                data = "请求校验的验证码为空";
+                break;
+            case 467:
+                data = "请求校验验证码频繁（5分钟内同一个appkey的同一个号码最多只能校验三次）";
+                break;
+            case 468:
+                data = "验证码错误";
+                break;
+            case 474:
+                data = "没有打开服务端验证开关";
+                break;
+        }
+        return data;
     }
 }

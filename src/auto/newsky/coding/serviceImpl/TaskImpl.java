@@ -90,7 +90,7 @@ public class TaskImpl implements ITask{
                 .andTaskIsDeleteEqualTo(true);
         List<Task> preTaskList = taskMapper.selectByExample(taskPreExample);
 
-        System.out.print(currentTaskList==null?"!!!!!!!!!!!!":"??????????????"+currentTaskList.size());
+        //System.out.print(currentTaskList==null?"!!!!!!!!!!!!":"??????????????"+currentTaskList.size());
         List<TaskList.CurrTasksBean> currTasksBeanList = new ArrayList<TaskList.CurrTasksBean>();
         for (int i = 0;i<currentTaskList.size();i++){
             Task task = currentTaskList.get(i);
