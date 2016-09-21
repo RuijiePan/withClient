@@ -90,7 +90,6 @@ public class TaskImpl implements ITask{
                 .andTaskIsDeleteEqualTo(true);
         List<Task> preTaskList = taskMapper.selectByExample(taskPreExample);
 
-        //System.out.print(currentTaskList==null?"!!!!!!!!!!!!":"??????????????"+currentTaskList.size());
         List<TaskList.CurrTasksBean> currTasksBeanList = new ArrayList<TaskList.CurrTasksBean>();
         for (int i = 0;i<currentTaskList.size();i++){
             Task task = currentTaskList.get(i);
@@ -121,11 +120,17 @@ public class TaskImpl implements ITask{
 
         Task task = taskMapper.selectByPrimaryKey(taskId);
 
+        if (task == null){
+            result.setMsg("不存在任务");
+            result.setCode(404);
+            return  result;
+        }
+
         TaskInfoData.TaskBean taskBean =
                 new TaskInfoData.TaskBean(taskId,task.getTaskContent(),task.getTaskTitle());
 
         List<TaskInfoData.CalendarBean> list =
-                journalService.getCalendarList(DateUtil.getFirstDay(date),DateUtil.getLastDay(date));
+                journalService.getCalendarList(taskId,DateUtil.getFirstDay(date),DateUtil.getLastDay(date));
 
         TaskInfoData taskInfoData = new TaskInfoData(taskBean,list);
 

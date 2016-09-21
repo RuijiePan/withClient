@@ -3,6 +3,7 @@ package auto.newsky.coding.controller;
 import auto.newsky.coding.po.User;
 import auto.newsky.coding.response.Result;
 import auto.newsky.coding.resultdata.LoginData;
+import auto.newsky.coding.resultdata.VertificationData;
 import auto.newsky.coding.serviceImpl.InvitationImpl;
 import auto.newsky.coding.serviceImpl.JoinInvitationImpl;
 import auto.newsky.coding.serviceImpl.MessageImpl;
@@ -22,6 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.Date;
 
+import static javafx.scene.input.KeyCode.V;
+
 /**
  * Created by prj on 2016/9/16.
  */
@@ -40,9 +43,11 @@ public class AboutMeController {
 
     @Autowired
     private HttpServletRequest request;
+
     /**
      * http://localhost:8080/with/user/login?token=1&phone=2&password=6
      * 登录
+     *
      * @param password
      * @param phone
      * @return
@@ -50,19 +55,32 @@ public class AboutMeController {
      */
     @ResponseBody
     @RequestMapping("/login")
-    public Result getInvitations(@RequestParam(value="password", required=true)String password,
-                                 @RequestParam(value="phone", required=true)String phone) throws Exception {
+    public Result getInvitations(@RequestParam(value = "password", required = true) String password,
+                                 @RequestParam(value = "phone", required = true) String phone) throws Exception {
         Integer myUserId = (Integer) request.getAttribute("myUserId");
         Result result = new Result();
-        User user = userService.getUserByPrimaryKey(myUserId);
-        if (user.getUserMobilephone().equals(phone)&&
-                user.getUserPassword().equals(password)){
-            LoginData.DataBean dataBean = new LoginData.DataBean(user.getUserSex(),user.getUserMobilephone(),
-                    8,user.getUserNickname(),user.getUserToken(),
-                    user.getUserHeadurl(),user.getUserStudentid(),user.getUserId(),
-                    user.getUserClass(),user.getUserRealname(),user.getUserQq());
+
+        User user = userService.getUserByPhone(phone);
+        if ( user == null) {
+            myUserId = user.getUserId();
+            result.setCode(405);
+            result.setData(null);
+            result.setMsg("不存在用户");
+            return result;
+        }
+        if (user.getUserMobilephone().equals(phone) &&
+                user.getUserPassword().equals(password)) {
+            user.setUserToken(UUIDUtil.createUUID());
+            LoginData.DataBean dataBean = new LoginData.DataBean(user.getUserSex(), user.getUserMobilephone(),
+                    messageService.getUnreadNumber(myUserId), user.getUserNickname(), user.getUserToken(),
+                    user.getUserHeadurl(), user.getUserStudentid(), user.getUserId(),
+                    user.getUserClass(), user.getUserRealname(), user.getUserQq());
             result.setData(new LoginData(dataBean));
-        }else {
+
+
+            userService.modify(user);
+
+        } else {
             result.setCode(405);
             result.setData(null);
             result.setMsg("账号或密码错误");
@@ -72,6 +90,7 @@ public class AboutMeController {
 
     /**
      * 注册验证
+     *
      * @param studentNumber
      * @param realName
      * @param sex
@@ -80,39 +99,53 @@ public class AboutMeController {
      */
     @ResponseBody
     @RequestMapping("/registerVertification")
-    public Result registerVertification(@RequestParam(value="studentNumber", required=true)String studentNumber,
-                                        @RequestParam(value="realName", required=true)String realName,
-                                        @RequestParam(value="sex", required=true)Integer sex) throws Exception{
+    public Result registerVertification(@RequestParam(value = "studentNumber", required = true) String studentNumber,
+                                        @RequestParam(value = "realName", required = true) String realName,
+                                        @RequestParam(value = "sex", required = true) Integer sex) throws Exception {
         Result result = new Result();
+        VertificationData vertificationData = new VertificationData();
+        result.setMsg("可以进行注册");
         result.setData(null);
         User user = userService.getUserByStudentID(studentNumber);
-        if (!(user.getUserRealname().equals(realName)&&
-                user.getUserSex().equals(sex))){
+        if (user == null) {//不存在学号
+            result.setCode(404);
+            result.setMsg("不存在学号");
+            return result;
+        }
+        if (!(user.getUserRealname().trim().equals(realName) &&
+                user.getUserSex() == sex)) {
             result.setCode(406);
             result.setMsg("用户信息不匹配");
+            return result;
         }
-        if (user.getUserPassword()!=null){
+        //有号码，并且没被删除，就是被绑定了
+        if (user.getUserMobilephone() != null && !user.getUserMobilephone().trim().equals("") && user.getUserIsDelete() != true) {
             result.setCode(410);
-            result.setMsg("该用户已存在");
+            result.setData(410);
+            result.setMsg("该用户已经被手机号" + user.getUserMobilephone() + "绑定");
+            vertificationData.setData(new VertificationData.DataBean(user.getUserMobilephone()));
         }
+        result.setData(vertificationData);
         return result;
     }
 
     /**
      * http://localhost:8080/with/user/getVertificationCode?token=12345&phone=18318744486&code=1232
      * 获取验证码
+     *
      * @param phone
      * @return
      */
     @ResponseBody
     @RequestMapping("/getVertificationCode")
-    public Result getVertificationCode(@RequestParam(value="phone", required=true)String phone,
-                                       @RequestParam(value="code", required=true)String code){
-        return userService.getVertificationCode(phone,code);
+    public Result getVertificationCode(@RequestParam(value = "phone", required = true) String phone,
+                                       @RequestParam(value = "code", required = true) String code) {
+        return userService.getVertificationCode(phone, code);
     }
 
     /**
      * http://localhost:8080/with/user/register?token=1&phone=2&vertificationCode=5&password=6&studentNumber=1
+     *
      * @param phone
      * @param vertificationCode
      * @param password
@@ -122,15 +155,14 @@ public class AboutMeController {
      */
     @ResponseBody
     @RequestMapping("/register")
-    public Result register(@RequestParam(value="phone", required=true)String phone,
-                           @RequestParam(value="vertificationCode", required=true)String vertificationCode,
-                           @RequestParam(value="password", required=true)String password,
-                           @RequestParam(value="studentNumber", required=true)String studentNumber) throws Exception {
+    public Result register(@RequestParam(value = "phone", required = true) String phone,
+                           @RequestParam(value = "vertificationCode", required = true) String vertificationCode,
+                           @RequestParam(value = "password", required = true) String password,
+                           @RequestParam(value = "studentNumber", required = true) String studentNumber) throws Exception {
 
         Result result = new Result();
-
-        Result vertificationResult = userService.getVertificationCode(phone,vertificationCode);
-        if (vertificationResult.getCode()==200) {
+        Result vertificationResult = userService.getVertificationCode(phone, vertificationCode);
+        if (vertificationResult.getCode() == 200) {
             User user = userService.getUserByStudentID(studentNumber);
             if (user != null) {
                 user.setUserMobilephone(phone);
@@ -141,7 +173,7 @@ public class AboutMeController {
                 result.setCode(428);
                 result.setMsg("该学号信息未录入数据库");
             }
-        }else {
+        } else {
             return vertificationResult;
         }
         return result;
@@ -149,6 +181,7 @@ public class AboutMeController {
 
     /**
      * 找回密码
+     *
      * @param phone
      * @param vertificationCode
      * @param passWord
@@ -157,18 +190,18 @@ public class AboutMeController {
      */
     @ResponseBody
     @RequestMapping("/findBackPassWord")
-    public Result findBackPassWord(@RequestParam(value="phone", required=true)String phone,
-                                   @RequestParam(value="vertificationCode", required=true)String vertificationCode,
-                                   @RequestParam(value="passWord", required=true)String passWord)throws Exception{
+    public Result findBackPassWord(@RequestParam(value = "phone", required = true) String phone,
+                                   @RequestParam(value = "vertificationCode", required = true) String vertificationCode,
+                                   @RequestParam(value = "passWord", required = true) String passWord) throws Exception {
         Integer myUserId = (Integer) request.getAttribute("myUserId");
         Result result = new Result();
 
-        Result vertificationResult = userService.getVertificationCode(phone,vertificationCode);
-        if (vertificationResult.getCode()==200) {
+        Result vertificationResult = userService.getVertificationCode(phone, vertificationCode);
+        if (vertificationResult.getCode() == 200) {
             User user = userService.getUserByPrimaryKey(myUserId);
             user.setUserPassword(passWord);
             userService.modify(user);
-        }else {
+        } else {
             return vertificationResult;
         }
         //userService.modifyPassword(myUserId,)
@@ -177,18 +210,19 @@ public class AboutMeController {
 
     /**
      * 上传用户头像
+     *
      * @param file
      * @return
      * @throws Exception
      */
     @ResponseBody
     @RequestMapping("/uploadHeadPic")
-    public Result uploadHeadPic(@RequestParam("file")MultipartFile file)throws Exception{
+    public Result uploadHeadPic(@RequestParam("file") MultipartFile file) throws Exception {
 
         Integer myUserId = (Integer) request.getAttribute("myUserId");
         Result result = new Result();
 
-        if (!file.isEmpty()){
+        if (!file.isEmpty()) {
             try {
                 // 文件保存路径
                 String filePath = request.getSession().getServletContext().getRealPath("/") + "upload/"
@@ -239,6 +273,7 @@ public class AboutMeController {
     /**
      * http://localhost:8080/with/user/getMessages?token=12345&lastMessageId=0&limit=10
      * 获取我的收到的信息列表
+     *
      * @param lastMessageId
      * @param limit
      * @return
@@ -246,26 +281,28 @@ public class AboutMeController {
      */
     @ResponseBody
     @RequestMapping("/getMessages")
-    public Result getMessages(@RequestParam(value="lastMessageId", required=false)Integer lastMessageId,
-                              @RequestParam(value="limit", required=false)Integer limit)throws Exception{
+    public Result getMessages(@RequestParam(value = "lastMessageId", required = false) Integer lastMessageId,
+                              @RequestParam(value = "limit", required = false) Integer limit) throws Exception {
         Integer myUserId = (Integer) request.getAttribute("myUserId");
-        return messageService.getMessages(myUserId,lastMessageId,limit);
+        return messageService.getMessages(myUserId, lastMessageId, limit);
     }
 
     /**
      * 删除消息
+     *
      * @param messageId
      * @return
      */
     @ResponseBody
     @RequestMapping("/deleteMessage")
-    public Result deleteMessage(@RequestParam(value="messageId", required=true)Integer messageId){
+    public Result deleteMessage(@RequestParam(value = "messageId", required = true) Integer messageId) {
         return messageService.deleteMessage(messageId);
     }
 
     /**
      * http://localhost:8080/with/user/acceptMessage?invitationId=1&applyUserId=2&token=12345&isAccept=true
      * 批准特批
+     *
      * @param invitationId
      * @param applyUserId
      * @param isAccept
@@ -273,16 +310,17 @@ public class AboutMeController {
      */
     @ResponseBody
     @RequestMapping("/acceptMessage")
-    public Result acceptMessage(@RequestParam(value="invitationId", required=true)Integer invitationId,
-                                @RequestParam(value="applyUserId", required=true)Integer applyUserId,
-                                @RequestParam(value="isAccept", required=false)boolean isAccept){
+    public Result acceptMessage(@RequestParam(value = "invitationId", required = true) Integer invitationId,
+                                @RequestParam(value = "applyUserId", required = true) Integer applyUserId,
+                                @RequestParam(value = "isAccept", required = false) boolean isAccept) {
         Integer myUserId = (Integer) request.getAttribute("myUserId");
-        return joinInviationService.acceptInvitation(myUserId,applyUserId,invitationId,isAccept);
+        return joinInviationService.acceptInvitation(myUserId, applyUserId, invitationId, isAccept);
     }
 
     /**
      * http://localhost:8080/with/user/getUserInfo?token=1&invitationId=1&aimUserId=1
      * 获取指定用户的信息
+     *
      * @param invitationId
      * @param aimUserId
      * @return
@@ -290,14 +328,15 @@ public class AboutMeController {
      */
     @ResponseBody
     @RequestMapping("/getUserInfo")
-    public Result getUserInfo(@RequestParam(value="invitationId", required=true)Integer invitationId,
-                              @RequestParam(value="aimUserId", required=true)Integer aimUserId) throws Exception{
+    public Result getUserInfo(@RequestParam(value = "invitationId", required = true) Integer invitationId,
+                              @RequestParam(value = "aimUserId", required = true) Integer aimUserId) throws Exception {
         Integer myUserId = (Integer) request.getAttribute("myUserId");
         return invitationService.getUserInfo(myUserId, aimUserId, invitationId);
     }
 
     /**
      * 密码修改
+     *
      * @param oldPassword
      * @param newPassword
      * @return
@@ -305,10 +344,10 @@ public class AboutMeController {
      */
     @ResponseBody
     @RequestMapping("/changPassword")
-    public Result changPassword(@RequestParam(value="oldPassword", required=true)String oldPassword,
-                                @RequestParam(value="newPassword", required=true)String newPassword)throws Exception{
+    public Result changPassword(@RequestParam(value = "oldPassword", required = true) String oldPassword,
+                                @RequestParam(value = "newPassword", required = true) String newPassword) throws Exception {
         Integer myUserId = (Integer) request.getAttribute("myUserId");
-        return userService.modifyPassword(myUserId,oldPassword,newPassword);
+        return userService.modifyPassword(myUserId, oldPassword, newPassword);
     }
 
 }

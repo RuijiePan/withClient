@@ -52,12 +52,19 @@ public class MessageImpl  implements IMessage{
         Result result = new Result();
         List<Message> list = messageMapper.selectByIdAndLimit(userId,lastMessageId,limit);
 
+        if (list==null || list.size()<=0){
+            result.setCode(404);
+            result.setMsg("无数据");
+            return result;
+        }
+
         List<MessageListData.DataBean> datalist = new ArrayList<MessageListData.DataBean>();
 
         for (int i = 0; i < list.size() ; i++) {
 
             Message message = list.get(i);
             User applyUser = userMapper.selectByPrimaryKey(message.getFromUserId());
+
             Invitation invitation = invitationMapper.selectByPrimaryKey(message.getInvitId());
 
             MessageListData.DataBean dataBean = new MessageListData.DataBean(
@@ -89,6 +96,16 @@ public class MessageImpl  implements IMessage{
 
         List<Message> list = messageMapper.selectByExample(messageExample);
 
+        if (list == null||list.size()<=0){
+            return null;
+        }
         return list;
+    }
+
+    @Override
+    public int getUnreadNumber(Integer myUserId) {
+        MessageExample messageExample = new MessageExample();
+        messageExample.createCriteria().andToUserIdEqualTo(myUserId).andMsgIsDeleteEqualTo(false);
+        return messageMapper.selectByExample(messageExample).size();
     }
 }

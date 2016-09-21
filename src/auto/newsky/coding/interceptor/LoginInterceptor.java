@@ -36,8 +36,15 @@ public class LoginInterceptor implements HandlerInterceptor {
 		String url = request.getRequestURI();
 		//判断url是否是公开 地址（实际使用时将公开 地址配置配置文件中）
 		//这里公开地址是登陆提交的地址
-
-		User user = userService.getUserByToken(request.getParameter("token"));
+		String token = request.getParameter("token");
+		if (token == null){
+			response.setCharacterEncoding("utf-8");
+			response.setContentType("application/json;charset=utf-8");
+			String errorJson = "{\"code\":400,\"msg\":\"无权限\"}";
+			response.getWriter().write(errorJson);//new Gson().toJson(new )
+			return false;
+		}
+		User user = userService.getUserByToken(token);
 		if (user == null){//token 不匹配，没登录
 			request.setAttribute("myUserId",-1);
 		}else{//登录了的直接进入

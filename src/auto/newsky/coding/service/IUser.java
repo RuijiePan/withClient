@@ -26,4 +26,6 @@ public interface IUser {
     Result findBackPassword(String newPassword,String phone,String vertificationCode)throws Exception;
 
     Result getVertificationCode(String phone,String code);
+
+    User getUserByPhone(String phone);
 }

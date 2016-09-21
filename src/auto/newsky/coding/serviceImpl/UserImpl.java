@@ -32,7 +32,7 @@ public class UserImpl implements IUser{
         UserExample userExample = new UserExample();
         userExample.createCriteria().andUserTokenEqualTo(token);
         List<User> withUsers =  userMapper.selectByExample(userExample);
-        if (withUsers == null){
+        if (withUsers == null ||withUsers.size()<=0){
             return null;
         }
         return (User) withUsers.get(0);
@@ -45,7 +45,7 @@ public class UserImpl implements IUser{
         userExample.createCriteria().andUserStudentidEqualTo(studentId);
         List<User> list = userMapper.selectByExample(userExample);
 
-        if (list!=null)
+        if (list!=null&&list.size()>0)//单单不为null不行
             return list.get(0);
         return null;
     }
@@ -68,7 +68,7 @@ public class UserImpl implements IUser{
 
     @Override
     public void modify(User user) throws Exception {
-        userMapper.updateByPrimaryKey(user);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 
     @Override
@@ -110,6 +110,17 @@ public class UserImpl implements IUser{
         result.setMsg(padString(vertificationCode));
 
         return result;
+    }
+
+    @Override
+    public User getUserByPhone(String phone) {
+        UserExample userExample = new UserExample();
+        userExample.or().andUserMobilephoneEqualTo(phone).andUserIsDeleteEqualTo(false);
+        List<User> userList = userMapper.selectByExample(userExample);
+        if (userList == null || userList.size()<=0){
+            return null;
+        }
+        return userList.get(0);
     }
 
 

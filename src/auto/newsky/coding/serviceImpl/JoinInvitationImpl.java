@@ -61,7 +61,7 @@ public class JoinInvitationImpl implements IJoinInvitation{
                     } else {
                         invitation.setInvitNumberCurr(invitation.getInvitNumberCurr() + 1);
                     }
-                    invitationMapper.updateByPrimaryKey(invitation);
+                    invitationMapper.updateByPrimaryKeySelective(invitation);
                     /*MessageExample messageExample = new MessageExample();
                     messageExample.createCriteria().andInvitIdEqualTo(invitationId)
                             .andFromUserIdEqualTo(userId)
@@ -109,6 +109,9 @@ public class JoinInvitationImpl implements IJoinInvitation{
         userExample.or().andUserIdIn(userIdList);
         List<User> userList = userMapper.selectByExample(userExample);*/
         List<User> userList = userJoinInvatationMapper.selectJoinMembers(invitId,myUserId);
+        if (userList == null || userList.size()<=0){
+            return null;
+        }
         return userList;
     }
     public int join(JoinInvitation joinInvitation){

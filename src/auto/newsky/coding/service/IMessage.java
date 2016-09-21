@@ -15,4 +15,7 @@ public interface IMessage {
     Result getMessages(Integer userId,Integer lastMessageId,Integer limit);
 
     List<Message> getUserMessage(Integer userId);
+
+
+    int getUnreadNumber(Integer myUserId);
 }
