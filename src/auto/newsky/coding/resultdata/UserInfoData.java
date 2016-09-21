@@ -28,7 +28,7 @@ public class UserInfoData {
     }
 
     public static class DataBean {
-        private long phone;
+        private String  phone;
         private int sex;
         private boolean isConcerned;
         private String studentId;
@@ -36,11 +36,19 @@ public class UserInfoData {
         private String headUrl;
         private String qq;
 
-        public long getPhone() {
+        public String getPhone() {
             return phone;
         }
 
-        public void setPhone(long phone) {
+        public boolean isConcerned() {
+            return isConcerned;
+        }
+
+        public void setConcerned(boolean concerned) {
+            isConcerned = concerned;
+        }
+
+        public void setPhone(String phone) {
             this.phone = phone;
         }
 

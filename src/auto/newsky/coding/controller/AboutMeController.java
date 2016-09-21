@@ -279,7 +279,8 @@ public class AboutMeController {
     @RequestMapping("/getUserInfo")
     public Result getUserInfo(@RequestParam(value="invitationId", required=true)Integer invitationId,
                               @RequestParam(value="aimUserId", required=true)Integer aimUserId) throws Exception{
-        return invitationService.getInvitationsByUidAndPrimaryKey(aimUserId,invitationId);
+        Integer myUserId = (Integer) request.getAttribute("myUserId");
+        return invitationService.getUserInfo(myUserId,aimUserId,invitationId);
     }
 
     /**

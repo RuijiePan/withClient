@@ -12,6 +12,11 @@ public class ConcernUserData {
 
     private boolean isConcerned;
 
+
+    public ConcernUserData() {
+
+    }
+
     public ConcernUserData(boolean isConcerned) {
         this.isConcerned = isConcerned;
     }

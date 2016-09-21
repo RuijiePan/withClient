@@ -18,7 +18,7 @@ public interface IInvitation {
 
     Result getInvitationsMyConcerned(Integer myUserId,int lastInvitationId,int limit);
 
-    Result alterInvitation(Invitation invitation);
+    Result alterInvitation(Integer myuserid ,Invitation invitation);
 
     Result participateInvitation(Integer myUserId, Integer invitationId);
 
@@ -36,4 +36,5 @@ public interface IInvitation {
 
     Result getInvitationsByUidAndPrimaryKey(Integer myUserId,Integer invitId);
 
+    Result getUserInfo(Integer myuserId,Integer aimUserId, Integer invitationId);
 }
