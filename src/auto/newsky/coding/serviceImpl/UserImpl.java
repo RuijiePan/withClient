@@ -32,6 +32,9 @@ public class UserImpl implements IUser{
         UserExample userExample = new UserExample();
         userExample.createCriteria().andUserTokenEqualTo(token);
         List<User> withUsers =  userMapper.selectByExample(userExample);
+        if (withUsers == null){
+            return null;
+        }
         return (User) withUsers.get(0);
     }
 

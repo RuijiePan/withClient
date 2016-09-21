@@ -37,9 +37,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 		//判断url是否是公开 地址（实际使用时将公开 地址配置配置文件中）
 		//这里公开地址是登陆提交的地址
 
-		//User user = userService.getUserByToken(request.getParameter("token"));
-		User user = new User();
-		user.setUserId(1);
+		User user = userService.getUserByToken(request.getParameter("token"));
 		if (user == null){//token 不匹配，没登录
 			request.setAttribute("myUserId",-1);
 		}else{//登录了的直接进入
