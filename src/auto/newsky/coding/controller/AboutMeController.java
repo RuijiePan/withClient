@@ -99,6 +99,7 @@ public class AboutMeController {
     }
 
     /**
+     * http://localhost:8080/with/user/getVertificationCode?token=12345&phone=18318744486&code=1232
      * 获取验证码
      * @param phone
      * @return
