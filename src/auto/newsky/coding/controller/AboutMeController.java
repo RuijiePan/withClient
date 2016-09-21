@@ -350,4 +350,19 @@ public class AboutMeController {
         return userService.modifyPassword(myUserId, oldPassword, newPassword);
     }
 
+    /**
+     *
+     * 编辑用户信息
+     * @param nickname
+     * @param qq
+     * @return
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping("/editUserInfo")
+    public Result editUserInfo(@RequestParam(value="nickname", required=true)String nickname,
+                               @RequestParam(value="qq", required=true)String qq)throws Exception{
+        Integer myUserId = (Integer) request.getAttribute("myUserId");
+        return userService.modifyUserInfo(myUserId,nickname,qq);
+    }
 }

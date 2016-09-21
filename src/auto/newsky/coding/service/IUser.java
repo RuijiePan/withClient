@@ -27,5 +27,7 @@ public interface IUser {
 
     Result getVertificationCode(String phone,String code);
 
+    Result modifyUserInfo(Integer userId,String nickname,String qq);
+
     User getUserByPhone(String phone);
 }
