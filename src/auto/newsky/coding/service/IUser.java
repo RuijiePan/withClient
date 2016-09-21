@@ -24,4 +24,6 @@ public interface IUser {
     Result modifyPassword(Integer myUserId, String oldPassword,String newPassword)throws Exception;
 
     Result findBackPassword(String newPassword,String phone,String vertificationCode)throws Exception;
+
+    Result getVertificationCode(String phone,String code);
 }

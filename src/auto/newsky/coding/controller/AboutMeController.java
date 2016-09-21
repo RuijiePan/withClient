@@ -97,15 +97,17 @@ public class AboutMeController {
         }
         return result;
     }
+
     /**
      * 获取验证码
-     * @param user
+     * @param phone
      * @return
      */
     @ResponseBody
     @RequestMapping("/getVertificationCode")
-    public Result getVertificationCode(User user){
-        return new Result(user);
+    public Result getVertificationCode(@RequestParam(value="phone", required=true)String phone,
+                                       @RequestParam(value="code", required=true)String code){
+        return userService.getVertificationCode(phone,code);
     }
 
     /**
