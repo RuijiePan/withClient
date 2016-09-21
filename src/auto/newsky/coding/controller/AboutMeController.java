@@ -128,17 +128,22 @@ public class AboutMeController {
                            @RequestParam(value="studentNumber", required=true)String studentNumber) throws Exception {
 
         Result result = new Result();
-        User user = userService.getUserByStudentID(studentNumber);
-        if (user!=null){
-            user.setUserMobilephone(phone);
-            user.setUserPassword(password);
-            user.setUserToken(UUIDUtil.createUUID());
-            userService.modify(user);
+
+        Result vertificationResult = userService.getVertificationCode(phone,vertificationCode);
+        if (vertificationResult.getCode()==200) {
+            User user = userService.getUserByStudentID(studentNumber);
+            if (user != null) {
+                user.setUserMobilephone(phone);
+                user.setUserPassword(password);
+                user.setUserToken(UUIDUtil.createUUID());
+                userService.modify(user);
+            } else {
+                result.setCode(428);
+                result.setMsg("该学号信息未录入数据库");
+            }
         }else {
-            result.setCode(404);
-            result.setMsg("验证码错误");
+            return vertificationResult;
         }
-        result.setData(null);
         return result;
     }
 
@@ -157,8 +162,15 @@ public class AboutMeController {
                                    @RequestParam(value="passWord", required=true)String passWord)throws Exception{
         Integer myUserId = (Integer) request.getAttribute("myUserId");
         Result result = new Result();
-        User user = userService.getUserByPrimaryKey(myUserId);
 
+        Result vertificationResult = userService.getVertificationCode(phone,vertificationCode);
+        if (vertificationResult.getCode()==200) {
+            User user = userService.getUserByPrimaryKey(myUserId);
+            user.setUserPassword(passWord);
+            userService.modify(user);
+        }else {
+            return vertificationResult;
+        }
         //userService.modifyPassword(myUserId,)
         return result;
     }
@@ -281,7 +293,7 @@ public class AboutMeController {
     public Result getUserInfo(@RequestParam(value="invitationId", required=true)Integer invitationId,
                               @RequestParam(value="aimUserId", required=true)Integer aimUserId) throws Exception{
         Integer myUserId = (Integer) request.getAttribute("myUserId");
-        return invitationService.getUserInfo(myUserId,aimUserId,invitationId);
+        return invitationService.getUserInfo(myUserId, aimUserId, invitationId);
     }
 
     /**
