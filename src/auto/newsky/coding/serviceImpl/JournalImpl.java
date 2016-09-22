@@ -84,7 +84,8 @@ public class JournalImpl implements IJournal{
         List<TaskInfoData.CalendarBean> list = new ArrayList<TaskInfoData.CalendarBean>();
 
         JournalExample journalExample = new JournalExample();
-        journalExample.createCriteria().andJourDateBetween(firstDay, lastDay).andJourIdEqualTo(taskId);
+        journalExample.createCriteria().andJourDateBetween(firstDay, lastDay)
+            .andTaskIdEqualTo(taskId);
         List<Journal> journalList = new ArrayList<Journal>();
         journalList = journalMapper.selectByExample(journalExample);
         if(journalList==null || journalList.size()<=0 ){
