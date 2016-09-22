@@ -17,5 +17,5 @@ public interface IJournal {
 
     Result editTaskMessage(Integer taskId,Date date,String remark);
 
-    List<TaskInfoData.CalendarBean> getCalendarList(Date firstDay,Date lastDay);
+    List<TaskInfoData.CalendarBean> getCalendarList(Integer taskId,Date firstDay,Date lastDay);
 }

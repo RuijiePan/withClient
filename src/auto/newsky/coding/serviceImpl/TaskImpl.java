@@ -125,7 +125,7 @@ public class TaskImpl implements ITask{
                 new TaskInfoData.TaskBean(taskId,task.getTaskContent(),task.getTaskTitle());
 
         List<TaskInfoData.CalendarBean> list =
-                journalService.getCalendarList(DateUtil.getFirstDay(date),DateUtil.getLastDay(date));
+                journalService.getCalendarList(taskId,DateUtil.getFirstDay(date),DateUtil.getLastDay(date));
 
         TaskInfoData taskInfoData = new TaskInfoData(taskBean,list);
 
