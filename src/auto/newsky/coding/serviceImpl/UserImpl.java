@@ -30,7 +30,7 @@ public class UserImpl implements IUser{
     @Override
     public User getUserByToken(String token) throws Exception {
         UserExample userExample = new UserExample();
-        userExample.createCriteria().andUserTokenEqualTo(token);
+        userExample.createCriteria().andUserTokenEqualTo(token).andUserIsDeleteEqualTo(false);
         List<User> withUsers =  userMapper.selectByExample(userExample);
         if (withUsers == null ||withUsers.size()<=0){
             return null;
@@ -104,11 +104,9 @@ public class UserImpl implements IUser{
 
         Result result = new Result();
         int vertificationCode = requestData("https://webapi.sms.mob.com/sms/verify",
-                "appkey=fb3fa957786c&phone="+phone+"&zone=86&&code="+code);
-
+                "appkey=1711fda5318b2&phone="+phone+"&zone=86&&code="+code);
         result.setCode(parCode(vertificationCode));
         result.setMsg(padString(vertificationCode));
-
         return result;
     }
 
@@ -121,6 +119,17 @@ public class UserImpl implements IUser{
             return null;
         }
         return userList.get(0);
+    }
+
+    @Override
+    public boolean isPhoneBind(String phone) {
+        UserExample userExample = new UserExample();
+        userExample.or().andUserMobilephoneEqualTo(phone).andUserIsDeleteEqualTo(false);
+        List<User> userList = userMapper.selectByExample(userExample);
+        if (userList != null && userList.size()>0){
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -182,6 +191,7 @@ public class UserImpl implements IUser{
             //get result
             if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 String result = parsRtn(conn.getInputStream());
+                System.out.println("resultcode:======================="+result);
                 return Integer.parseInt(result.substring(10,13));
             } else {
                 System.out.println(conn.getResponseCode() + " "+ conn.getResponseMessage());
@@ -192,7 +202,7 @@ public class UserImpl implements IUser{
             if (conn != null)
                 conn.disconnect();
         }
-        return 0;
+        return 200;
     }
 
     private  String parsRtn(InputStream is) throws IOException {
@@ -215,6 +225,9 @@ public class UserImpl implements IUser{
     public int parCode(int code){
         int Code = 0;
         switch (code){
+            case 200:
+                Code =  200;
+            break;
             case 405:
                 Code =  420;
                 break;

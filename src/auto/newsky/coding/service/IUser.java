@@ -30,4 +30,6 @@ public interface IUser {
     Result modifyUserInfo(Integer userId,String nickname,String qq);
 
     User getUserByPhone(String phone);
+
+    boolean isPhoneBind(String phone);
 }

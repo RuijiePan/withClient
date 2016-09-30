@@ -1,7 +1,7 @@
 package auto.newsky.coding.resultdata;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  * Created by prj on 2016/9/18.

@@ -3,6 +3,7 @@ package auto.newsky.coding.controller;
 import auto.newsky.coding.po.User;
 import auto.newsky.coding.response.Result;
 import auto.newsky.coding.resultdata.LoginData;
+import auto.newsky.coding.resultdata.RegisterData;
 import auto.newsky.coding.resultdata.VertificationData;
 import auto.newsky.coding.serviceImpl.InvitationImpl;
 import auto.newsky.coding.serviceImpl.JoinInvitationImpl;
@@ -11,6 +12,7 @@ import auto.newsky.coding.serviceImpl.UserImpl;
 import auto.newsky.coding.util.UUIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,8 +64,8 @@ public class AboutMeController {
 
         User user = userService.getUserByPhone(phone);
         if ( user == null) {
-            myUserId = user.getUserId();
-            result.setCode(405);
+            //myUserId = user.getUserId();
+            result.setCode(404);
             result.setData(null);
             result.setMsg("不存在用户");
             return result;
@@ -76,8 +78,7 @@ public class AboutMeController {
                     user.getUserHeadurl(), user.getUserStudentid(), user.getUserId(),
                     user.getUserClass(), user.getUserRealname(), user.getUserQq());
             result.setData(new LoginData(dataBean));
-
-
+            result.setMsg("登陆成功");
             userService.modify(user);
 
         } else {
@@ -103,8 +104,9 @@ public class AboutMeController {
                                         @RequestParam(value = "realName", required = true) String realName,
                                         @RequestParam(value = "sex", required = true) Integer sex) throws Exception {
         Result result = new Result();
-        VertificationData vertificationData = new VertificationData();
-        result.setMsg("可以进行注册");
+        //VertificationData vertificationData = new VertificationData();
+        VertificationData.DataBean bean = null;
+        result.setMsg("验证成功");
         result.setData(null);
         User user = userService.getUserByStudentID(studentNumber);
         if (user == null) {//不存在学号
@@ -121,11 +123,12 @@ public class AboutMeController {
         //有号码，并且没被删除，就是被绑定了
         if (user.getUserMobilephone() != null && !user.getUserMobilephone().trim().equals("") && user.getUserIsDelete() != true) {
             result.setCode(410);
-            result.setData(410);
             result.setMsg("该用户已经被手机号" + user.getUserMobilephone() + "绑定");
-            vertificationData.setData(new VertificationData.DataBean(user.getUserMobilephone()));
+            String resultPhone =  user.getUserMobilephone().substring(0,3)+"******"+user.getUserMobilephone().substring(9,11);
+            bean = new VertificationData.DataBean(resultPhone);
+            //vertificationData.setData(new VertificationData.DataBean(user.getUserMobilephone()));
         }
-        result.setData(vertificationData);
+        result.setData(bean);
         return result;
     }
 
@@ -162,20 +165,36 @@ public class AboutMeController {
 
         Result result = new Result();
         Result vertificationResult = userService.getVertificationCode(phone, vertificationCode);
+        User user = userService.getUserByPhone(phone);
+        if (vertificationResult.getCode()!=200){//返回验证码不正确
+            return vertificationResult;
+        }
+
+        if (user!=null ){//返回验证码正确，但是已经绑定了其他号码
+            String resultPhone =  user.getUserMobilephone().substring(0,3)+"******"+user.getUserMobilephone().substring(9,11);
+            result.setCode(428);
+            result.setData(new RegisterData(resultPhone));
+            result.setMsg("该号码已经绑定了其他账号");
+            return result;
+        }
         if (vertificationResult.getCode() == 200) {
-            User user = userService.getUserByStudentID(studentNumber);
+            user = userService.getUserByStudentID(studentNumber);
             if (user != null) {
                 user.setUserMobilephone(phone);
                 user.setUserPassword(password);
+                user.setUserNickname("xx同学");
+                user.setUserIsDelete(false);
+                result.setMsg("注册成功");
+                user.setUserHeadurl("http://img2.5sing.kgimg.com/force/T1LVYnBXKT1RXrhCrK_180_180.jpg");
                 user.setUserToken(UUIDUtil.createUUID());
                 userService.modify(user);
             } else {
                 result.setCode(428);
                 result.setMsg("该学号信息未录入数据库");
             }
-        } else {
-            return vertificationResult;
         }
+
+
         return result;
     }
 
@@ -229,7 +248,6 @@ public class AboutMeController {
                         + file.getOriginalFilename();
                 // 转存文件
                 file.transferTo(new File(filePath));
-
                 User uploadUser = userService.getUserByPrimaryKey(myUserId);
                 uploadUser.setUserHeadurl(filePath);
                 userService.modify(uploadUser);
@@ -299,7 +317,7 @@ public class AboutMeController {
         return messageService.deleteMessage(messageId);
     }
 
-    /**
+   /* *//**
      * http://localhost:8080/with/user/acceptMessage?invitationId=1&applyUserId=2&token=12345&isAccept=true
      * 批准特批
      *
@@ -307,7 +325,7 @@ public class AboutMeController {
      * @param applyUserId
      * @param isAccept
      * @return
-     */
+     *//*
     @ResponseBody
     @RequestMapping("/acceptMessage")
     public Result acceptMessage(@RequestParam(value = "invitationId", required = true) Integer invitationId,
@@ -315,6 +333,30 @@ public class AboutMeController {
                                 @RequestParam(value = "isAccept", required = false) boolean isAccept) {
         Integer myUserId = (Integer) request.getAttribute("myUserId");
         return joinInviationService.acceptInvitation(myUserId, applyUserId, invitationId, isAccept);
+    }*/
+
+    /**
+     *
+     * 同意邀约yes/拒绝邀约no
+     * @param aimId
+     * @return
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping("/acceptMessage")
+    public Result acceptMessage(@RequestParam(value="applyUserId", required=true)Integer aimId
+            ,@RequestParam(value="isAccept", required=true)Boolean isAccept
+            ,@RequestParam(value="messageId", required=true)Integer messageId
+            , @RequestParam(value="invitationId", required=true)Integer invitId) throws Exception{
+        Integer myUserId = (Integer) request.getAttribute("myUserId");
+        Result result = new Result();
+        if (isAccept){
+            result = invitationService.agreeInvitation(myUserId,aimId,invitId,messageId);
+        }else {
+            result = invitationService.rejectInvitation(myUserId,aimId,invitId,messageId);
+        }
+
+        return result;
     }
 
     /**

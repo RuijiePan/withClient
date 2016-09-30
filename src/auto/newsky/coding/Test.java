@@ -20,7 +20,7 @@ public class Test {
     public static void main(String[] args){
 
         ApplicationContext ac = new org.springframework.context.support.ClassPathXmlApplicationContext("spring/applicationContext-dao.xml");
-        UserMapper userMapper = (UserMapper)ac.getBean("userMapper");
+       // UserMapper userMapper = (UserMapper)ac.getBean("userMapper");
        // InvitationImpl invitation = (InvitationImpl)ac.getBean("invitationImpl");
        /* UserExample userExample = new UserExample();
         userExample.createCriteria().andUserTokenEqualTo("12345");
@@ -30,7 +30,8 @@ public class Test {
         }*/
         //JoinInvitationMapper userJoinInvatationMapper = (JoinInvitationMapper)ac.getBean("joinInvitationMapper");
         //userJoinInvatationMapper.updateByPrimaryKeySelective(new JoinInvitation(11,null,null,true));
-
+        String resultPhone =  "15622625081".substring(0,3)+"******"+"15622625081".substring(9,11);
+        System.out.println(resultPhone);
         /*JoinInvitationExample joinexample = new JoinInvitationExample();
         joinexample.or().andInvitIdEqualTo(15).andRelationIsDeleteEqualTo(false);
         List<JoinInvitation> joinList = userJoinInvatationMapper.selectByExample(joinexample);

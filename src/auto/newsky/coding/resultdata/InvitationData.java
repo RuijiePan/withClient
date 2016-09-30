@@ -1,6 +1,8 @@
 package auto.newsky.coding.resultdata;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+
+
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.util.List;
 

@@ -91,6 +91,7 @@ public class InvitationController {
                                     ,@RequestParam(value="sexRequire", required=true)   Integer sexRequire
                                     ,@RequestParam(value="type", required=true)         Integer typeId
                                     ,@RequestParam(value="hiden", required=true)        Boolean hiden) throws Exception{
+        System.out.println("content:"+content);
         Integer myUserId = (Integer) request.getAttribute("myUserId");
         Date invitPublicationTime = DateUtil.getCurrentTime();
         Invitation invitation = new Invitation(myUserId, invitPublicationTime, invitationTime, place,totalNumber, 0, sexRequire,title, content, typeId, hiden, false);
@@ -167,6 +168,7 @@ public class InvitationController {
         return result;
     }
 
+
     /**
      * http://localhost:8080/invitation/getConcernedUsers?token=1&concernedUserId=1&limit=2
      * 获取我关注的用户列表
@@ -210,4 +212,10 @@ public class InvitationController {
      * @throws Exception
      */
 
+    @ResponseBody
+    @RequestMapping("/test")
+    public Result test(@RequestParam(value = "concernedUserId",required = true) String name) throws Exception{
+        System.out.println("==================name============================:"+name);
+        return new Result(name);
+    }
 }

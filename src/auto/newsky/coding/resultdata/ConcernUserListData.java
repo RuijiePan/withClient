@@ -1,5 +1,7 @@
 package auto.newsky.coding.resultdata;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 import java.util.List;
 
 /**
@@ -27,36 +29,54 @@ public class ConcernUserListData {
 
         private int concernedUserId;
 
-        private boolean isConcerned;
+        private String headUrl;
+
+        private boolean concerned;
+
+
+        public boolean isConcerned() {
+            return concerned;
+        }
+
+        public void setConcerned(boolean concerned) {
+            this.concerned = concerned;
+        }
 
         private String name;
 
-        private String headUrl;
+        private String summary = "summary";
 
+        public int getConcernedUserId() {
+            return concernedUserId;
+        }
 
-        public void setConcernedUserId(int concernedUserId){
+        public void setConcernedUserId(int concernedUserId) {
             this.concernedUserId = concernedUserId;
         }
-        public int getConcernedUserId(){
-            return this.concernedUserId;
+
+        public String getHeadUrl() {
+            return headUrl;
         }
-        public void setIsConcerned(boolean isConcerned){
-            this.isConcerned = isConcerned;
-        }
-        public boolean getIsConcerned(){
-            return this.isConcerned;
-        }
-        public void setName(String name){
-            this.name = name;
-        }
-        public String getName(){
-            return this.name;
-        }
-        public void setHeadUrl(String headUrl){
+
+        public void setHeadUrl(String headUrl) {
             this.headUrl = headUrl;
         }
-        public String getHeadUrl(){
-            return this.headUrl;
+
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getSummary() {
+            return summary;
+        }
+
+        public void setSummary(String summary) {
+            this.summary = summary;
         }
     }
 }

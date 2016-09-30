@@ -37,4 +37,9 @@ public interface IInvitation {
     Result getInvitationsByUidAndPrimaryKey(Integer myUserId,Integer invitId);
 
     Result getUserInfo(Integer myuserId,Integer aimUserId, Integer invitationId);
+
+
+    Result agreeInvitation(Integer myUserId, Integer aimId, Integer invitId, Integer messageId);
+
+    Result rejectInvitation(Integer myUserId, Integer aimId, Integer invitId, Integer messageId);
 }
