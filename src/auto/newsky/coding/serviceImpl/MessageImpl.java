@@ -7,6 +7,7 @@ import auto.newsky.coding.po.*;
 import auto.newsky.coding.response.Result;
 import auto.newsky.coding.resultdata.MessageListData;
 import auto.newsky.coding.service.IMessage;
+import auto.newsky.coding.util.IpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -72,7 +73,7 @@ public class MessageImpl  implements IMessage{
                     invitation.getInvitActivityTime().toString(),invitation.getInvitPublicationTime().toString(),
                     invitation.getInvitNumberCurr(),message.getMsgType(),message.getMsgContent(),
                     message.getFromUserId(),invitation.getInvitTitle(),applyUser.getUserRealname(),
-                    applyUser.getUserHeadurl(),message.getMsgId(),invitation.getInvitPlace());
+                    IpUtil.getPicUrl(applyUser.getUserHeadurl()),message.getMsgId(),invitation.getInvitPlace());
 
             datalist.add(dataBean);
         }

@@ -8,6 +8,7 @@ import auto.newsky.coding.resultdata.*;
 import auto.newsky.coding.service.IInvitation;
 import auto.newsky.coding.util.DateConveter;
 import auto.newsky.coding.util.DateUtil;
+import auto.newsky.coding.util.IpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -216,7 +217,7 @@ public class InvitationImpl implements IInvitation{
                 dataBean.setIsConcerned(concernService.isConcerned(myuserId,aimUserId));
                 dataBean.setStudentId(user.getUserStudentid());
                 dataBean.setName(user.getUserRealname());
-                dataBean.setHeadUrl(user.getUserHeadurl());
+                dataBean.setHeadUrl(IpUtil.getPicUrl(user.getUserHeadurl()));
                 dataBean.setQq(user.getUserQq());
                 userInfoData.setData(dataBean);
             }else {
@@ -456,7 +457,7 @@ public class InvitationImpl implements IInvitation{
             dataBeanList = new ArrayList<ConcernUserListData.DataBean>();
             for (User user:userList){
                 dataBean = new ConcernUserListData.DataBean();
-                dataBean.setHeadUrl(user.getUserHeadurl());
+                dataBean.setHeadUrl(IpUtil.getPicUrl(user.getUserHeadurl()));
                 dataBean.setConcernedUserId(user.getUserId());
                 dataBean.setConcerned(true);
                 dataBean.setName(user.getUserNickname());
@@ -513,7 +514,7 @@ public class InvitationImpl implements IInvitation{
         for (Invitation invitation:invitations) {
             InvitationListData.DataBean dataBean = new InvitationListData.DataBean();
             User user = userService.getUserByPrimaryKey(invitation.getUserId());
-            dataBean.setOriginatorHeadUrl(user.getUserHeadurl());
+            dataBean.setOriginatorHeadUrl(IpUtil.getPicUrl(user.getUserHeadurl()));
             dataBean.setInvitationTime(DateConveter.dateToString(invitation.getInvitActivityTime()));
             dataBean.setPublishTime(DateConveter.dateToString(invitation.getInvitPublicationTime()));
             dataBean.setOriginatorNickname(user.getUserNickname());
@@ -531,7 +532,7 @@ public class InvitationImpl implements IInvitation{
             List<User>  users =   joinInvitationService.selectJoinMembers(invitation.getInvitId(),invitation.getUserId());
             //进行包装
             InvitationListData.DataBean.MembersBean membersBean = new InvitationListData.DataBean.MembersBean();
-            membersBean.setHeadUrl(user.getUserHeadurl());
+            membersBean.setHeadUrl(IpUtil.getPicUrl(user.getUserHeadurl()));
             membersBean.setRealName(user.getUserRealname());
             membersBean.setUserId(user.getUserId());
             membersBean.setPhone(user.getUserMobilephone());
@@ -540,7 +541,7 @@ public class InvitationImpl implements IInvitation{
             if(users!=null)
                 for (User user1:users){
                     membersBean = new InvitationListData.DataBean.MembersBean();
-                    membersBean.setHeadUrl(user1.getUserHeadurl());
+                    membersBean.setHeadUrl(IpUtil.getPicUrl(user1.getUserHeadurl()));
                     membersBean.setRealName(user1.getUserRealname());
                     membersBean.setUserId(user1.getUserId());
                     membersBean.setPhone(user1.getUserMobilephone());

@@ -11,6 +11,7 @@ import auto.newsky.coding.serviceImpl.MessageImpl;
 import auto.newsky.coding.serviceImpl.UserImpl;
 import auto.newsky.coding.util.ImageUtil;
 import auto.newsky.coding.util.ImgCompressUtil;
+import auto.newsky.coding.util.IpUtil;
 import auto.newsky.coding.util.UUIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -75,7 +76,7 @@ public class AboutMeController {
             user.setUserToken(UUIDUtil.createUUID());
             LoginData.DataBean dataBean = new LoginData.DataBean(user.getUserSex(), user.getUserMobilephone(),
                     messageService.getUnreadNumber(myUserId), user.getUserNickname(), user.getUserToken(),
-                    user.getUserHeadurl(), user.getUserStudentid(), user.getUserId(),
+                    IpUtil.getPicUrl(user.getUserHeadurl()), user.getUserStudentid(), user.getUserId(),
                     user.getUserClass(), user.getUserRealname(), user.getUserQq());
             result.setData(dataBean);
             result.setMsg("登陆成功");
@@ -255,7 +256,7 @@ public class AboutMeController {
                 String minFilePathS = file.getOriginalFilename().split("max.")[0];
                 String minFilePathE = file.getOriginalFilename().split("max.")[1];
                 String minFilePath = fileDest+minFilePathS+"min."+minFilePathE;
-                ImageUtil.resize(filePath,minFilePath,80,80);
+                ImageUtil.resize(filePath, minFilePath, 80, 80);
                 //ImgCompressUtil.ImgCompress(filePath,minFilePath,500,500);
 
                 User uploadUser = userService.getUserByPrimaryKey(myUserId);
