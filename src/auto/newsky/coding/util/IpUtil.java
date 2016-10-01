@@ -29,4 +29,9 @@ public class IpUtil {
     public static String getPicUrl(String url){
         return getServiceIp()+url;
     }
+
+    public static String getPicMinUrl(String url){
+        String[] headUrl = url.split("max.");
+        return getServiceIp()+headUrl[0]+"min."+headUrl[1];
+    }
 }

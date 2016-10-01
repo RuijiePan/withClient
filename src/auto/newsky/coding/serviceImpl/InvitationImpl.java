@@ -532,7 +532,7 @@ public class InvitationImpl implements IInvitation{
             List<User>  users =   joinInvitationService.selectJoinMembers(invitation.getInvitId(),invitation.getUserId());
             //进行包装
             InvitationListData.DataBean.MembersBean membersBean = new InvitationListData.DataBean.MembersBean();
-            membersBean.setHeadUrl(IpUtil.getPicUrl(user.getUserHeadurl()));
+            membersBean.setHeadUrl(IpUtil.getPicMinUrl(user.getUserHeadurl()));
             membersBean.setRealName(user.getUserRealname());
             membersBean.setUserId(user.getUserId());
             membersBean.setPhone(user.getUserMobilephone());
@@ -541,7 +541,7 @@ public class InvitationImpl implements IInvitation{
             if(users!=null)
                 for (User user1:users){
                     membersBean = new InvitationListData.DataBean.MembersBean();
-                    membersBean.setHeadUrl(IpUtil.getPicUrl(user1.getUserHeadurl()));
+                    membersBean.setHeadUrl(IpUtil.getPicMinUrl(user1.getUserHeadurl()));
                     membersBean.setRealName(user1.getUserRealname());
                     membersBean.setUserId(user1.getUserId());
                     membersBean.setPhone(user1.getUserMobilephone());
