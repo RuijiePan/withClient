@@ -43,7 +43,7 @@ public class Result {
         this.code = 200;
     }
     public Result() {
-        this.msg = "";
+        this.msg = "成功";
         this.code = 200;
     }
 }

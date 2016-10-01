@@ -186,9 +186,10 @@ public class InvitationImpl implements IInvitation{
             List<Invitation>  invitations = invitationMapper.selectByExample(invitationExample);
             if (invitations != null&& invitations.size() > 0){
                 Invitation invitationTemp = invitations.get(0);
+                //invitationTemp.setInvitId(null);
                 int num = invitationTemp.getInvitNumberCurr()+1 >= invitationTemp.getInvitNumberMax()?invitationTemp.getInvitNumberMax():invitationTemp.getInvitNumberCurr()+1;
                 invitationTemp.setInvitNumberCurr(num);
-                invitationMapper.insertSelective(invitationTemp);
+                invitationMapper.updateByPrimaryKey(invitationTemp);
             }
 
             return result;
@@ -269,9 +270,10 @@ public class InvitationImpl implements IInvitation{
             List<Invitation>  invitations = invitationMapper.selectByExample(invitationExample);
             if (invitations != null&& invitations.size() > 0){
                 Invitation invitationTemp = invitations.get(0);
+                //invitationTemp.setInvitId(null);
                 int num = invitationTemp.getInvitNumberCurr()+1 >= invitationTemp.getInvitNumberMax()?invitationTemp.getInvitNumberMax():invitationTemp.getInvitNumberCurr()+1;
                 invitationTemp.setInvitNumberCurr(num);
-                invitationMapper.insertSelective(invitationTemp);
+                invitationMapper.updateByPrimaryKey(invitationTemp);
             }
 
 
@@ -396,7 +398,7 @@ public class InvitationImpl implements IInvitation{
             Invitation invitationTemp = invitations.get(0);
             int num = invitationTemp.getInvitNumberCurr()-1 <= 0?0:invitationTemp.getInvitNumberCurr()-1;
             invitationTemp.setInvitNumberCurr(num);
-            invitationMapper.insertSelective(invitationTemp);
+            invitationMapper.updateByPrimaryKey(invitationTemp);
         }
 
         return result;
