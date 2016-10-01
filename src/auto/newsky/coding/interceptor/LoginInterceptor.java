@@ -76,7 +76,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 		//既没登录，访问的也不是公开接口，不许访问
 		response.setCharacterEncoding("utf-8");
 		response.setContentType("application/json;charset=utf-8");
-		String errorJson = "{\"code\":401,\"msg\":\"用户未登录\"}";
+		String errorJson = "{\"code\":499,\"msg\":\"用户未登录\"}";
 		response.getWriter().write(errorJson);//new Gson().toJson(new )
 		return false;
 	}

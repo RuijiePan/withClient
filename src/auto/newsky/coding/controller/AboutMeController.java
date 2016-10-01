@@ -57,7 +57,7 @@ public class AboutMeController {
      */
     @ResponseBody
     @RequestMapping("/login")
-    public Result getInvitations(@RequestParam(value = "password", required = true) String password,
+    public Result login(@RequestParam(value = "password", required = true) String password,
                                  @RequestParam(value = "phone", required = true) String phone) throws Exception {
         Integer myUserId = (Integer) request.getAttribute("myUserId");
         Result result = new Result();
@@ -77,7 +77,7 @@ public class AboutMeController {
                     messageService.getUnreadNumber(myUserId), user.getUserNickname(), user.getUserToken(),
                     user.getUserHeadurl(), user.getUserStudentid(), user.getUserId(),
                     user.getUserClass(), user.getUserRealname(), user.getUserQq());
-            result.setData(new LoginData(dataBean));
+            result.setData(dataBean);
             result.setMsg("登陆成功");
             userService.modify(user);
 
