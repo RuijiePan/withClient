@@ -69,6 +69,42 @@ public class ImgCompressUtil {
 
     }
 
+    public static String ImgCompress(String filePath, File file,
+                                     int w, int h, float JPEGcompression) {
+        filePath = "/upload/"+filePath;
+        if (!(file.exists() && file.canRead())) {
+            filePath = "/upload/404.jpg";
+        }else{
+            try {
+                BufferedImage bufferedImage =  ImageIO.read(file);
+
+                int new_w = w;
+                int new_h = h;
+
+                BufferedImage image_to_save = new BufferedImage(new_w, new_h,
+                        bufferedImage.getType());
+                image_to_save.getGraphics().drawImage(
+                        bufferedImage.getScaledInstance(new_w, new_h, Image.SCALE_SMOOTH), 0,
+                        0, null);
+                FileOutputStream fos = new FileOutputStream(filePath); // 输出到文件流
+
+                // 新的方法
+                int dpi = 300;//分辨率
+                saveAsJPEG(dpi, image_to_save, JPEGcompression, fos);
+                //关闭输出流
+                fos.close();
+                //返回压缩后的图片地址
+            } catch (IOException ex) {
+                //logger.log(Level.SEVERE, null, ex);
+                filePath = "/upload/404.jpg";
+            }
+        }
+
+        System.out.print(filePath+"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        return filePath;
+
+    }
+
     /**
      * 图片压缩主方法
      *

@@ -9,6 +9,8 @@ import auto.newsky.coding.serviceImpl.InvitationImpl;
 import auto.newsky.coding.serviceImpl.JoinInvitationImpl;
 import auto.newsky.coding.serviceImpl.MessageImpl;
 import auto.newsky.coding.serviceImpl.UserImpl;
+import auto.newsky.coding.util.ImageUtil;
+import auto.newsky.coding.util.ImgCompressUtil;
 import auto.newsky.coding.util.UUIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,8 +26,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.Date;
-
-import static javafx.scene.input.KeyCode.V;
 
 /**
  * Created by prj on 2016/9/16.
@@ -240,16 +240,26 @@ public class AboutMeController {
 
         Integer myUserId = (Integer) request.getAttribute("myUserId");
         Result result = new Result();
+       /* String filePath = request.getSession().getServletContext().getRealPath("/") + "upload/"
+                + file.getOriginalFilename();
+        System.out.print("hahaha!!!!!"+filePath);*/
 
         if (!file.isEmpty()) {
             try {
+                String fileDest = request.getSession().getServletContext().getRealPath("/") + "upload/";
                 // 文件保存路径
-                String filePath = request.getSession().getServletContext().getRealPath("/") + "upload/"
-                        + file.getOriginalFilename();
+                String filePath = fileDest + file.getOriginalFilename();
                 // 转存文件
                 file.transferTo(new File(filePath));
+
+                String minFilePathS = file.getOriginalFilename().split("max.")[0];
+                String minFilePathE = file.getOriginalFilename().split("max.")[1];
+                String minFilePath = fileDest+minFilePathS+"min."+minFilePathE;
+                ImageUtil.resize(filePath,minFilePath,80,80);
+                //ImgCompressUtil.ImgCompress(filePath,minFilePath,500,500);
+
                 User uploadUser = userService.getUserByPrimaryKey(myUserId);
-                uploadUser.setUserHeadurl(filePath);
+                uploadUser.setUserHeadurl("upload/" + file.getOriginalFilename());
                 userService.modify(uploadUser);
                 result.setMsg("上传头像成功");
 

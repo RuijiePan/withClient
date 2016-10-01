@@ -1,6 +1,5 @@
 package auto.newsky.coding.resultdata;
 
-import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.util.List;
 
