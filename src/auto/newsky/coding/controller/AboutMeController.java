@@ -418,6 +418,11 @@ public class AboutMeController {
         return userService.modifyUserInfo(myUserId, nickname, qq);
     }
 
+    /**
+     * 版本更新
+     * @return
+     * @throws Exception
+     */
     @ResponseBody
     @RequestMapping("/versionUpdate")
     public Result versionUpdate() throws Exception{
