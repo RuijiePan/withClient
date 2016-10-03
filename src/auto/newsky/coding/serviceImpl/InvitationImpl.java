@@ -204,31 +204,31 @@ public class InvitationImpl implements IInvitation{
     @Override
     public Result getUserInfo(Integer myuserId,Integer aimUserId, Integer invitationId) {
         Result result = new Result();
-        UserInfoData userInfoData =  null;
+
         UserInfoData.DataBean dataBean = null;
         //先判断目标用户和我都参加了同一个活动
         if (joinInvitationService.isJoin(aimUserId,invitationId)&&joinInvitationService.isJoin(myuserId,invitationId)){
             User user = userService.getUserByPrimaryKey(aimUserId);
             if (user != null){
-                userInfoData = new UserInfoData();
                 dataBean = new UserInfoData.DataBean();
                 dataBean.setPhone(user.getUserMobilephone());
                 dataBean.setSex(user.getUserSex());
-                dataBean.setIsConcerned(concernService.isConcerned(myuserId,aimUserId));
+                dataBean.setIsConcerned(concernService.isConcerned(myuserId, aimUserId));
                 dataBean.setStudentId(user.getUserStudentid());
                 dataBean.setName(user.getUserRealname());
                 dataBean.setHeadUrl(IpUtil.getPicUrl(user.getUserHeadurl()));
                 dataBean.setQq(user.getUserQq());
-                userInfoData.setData(dataBean);
+                result.setData(dataBean);
             }else {
                 result.setMsg("找不到用户");
                 result.setCode(466);
+                dataBean = new UserInfoData.DataBean("",0,false,"","","","");
+                result.setData(dataBean);
             }
         }else{
             result.setMsg("无权限查改用户信息");
             result.setCode(467);
         }
-        result.setData(userInfoData);
         return result;
     }
 

@@ -99,5 +99,17 @@ public class UserInfoData {
         public void setQq(String qq) {
             this.qq = qq;
         }
+
+        public DataBean(String phone, int sex, boolean isConcerned, String studentId, String name, String headUrl, String qq) {
+            this.phone = phone;
+            this.sex = sex;
+            this.isConcerned = isConcerned;
+            this.studentId = studentId;
+            this.name = name;
+            this.headUrl = headUrl;
+            this.qq = qq;
+        }
+
+        public DataBean(){}
     }
 }

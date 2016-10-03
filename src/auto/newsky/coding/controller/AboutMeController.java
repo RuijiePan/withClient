@@ -5,10 +5,7 @@ import auto.newsky.coding.response.Result;
 import auto.newsky.coding.resultdata.LoginData;
 import auto.newsky.coding.resultdata.RegisterData;
 import auto.newsky.coding.resultdata.VertificationData;
-import auto.newsky.coding.serviceImpl.InvitationImpl;
-import auto.newsky.coding.serviceImpl.JoinInvitationImpl;
-import auto.newsky.coding.serviceImpl.MessageImpl;
-import auto.newsky.coding.serviceImpl.UserImpl;
+import auto.newsky.coding.serviceImpl.*;
 import auto.newsky.coding.util.ImageUtil;
 import auto.newsky.coding.util.ImgCompressUtil;
 import auto.newsky.coding.util.IpUtil;
@@ -43,6 +40,8 @@ public class AboutMeController {
     private MessageImpl messageService;
     @Resource
     private JoinInvitationImpl joinInviationService;
+    @Resource
+    private VersionImpl versionService;
 
     @Autowired
     private HttpServletRequest request;
@@ -428,6 +427,17 @@ public class AboutMeController {
     public Result editUserInfo(@RequestParam(value="nickname", required=true)String nickname,
                                @RequestParam(value="qq", required=true)String qq)throws Exception{
         Integer myUserId = (Integer) request.getAttribute("myUserId");
-        return userService.modifyUserInfo(myUserId,nickname,qq);
+        return userService.modifyUserInfo(myUserId, nickname, qq);
+    }
+
+    /**
+     * 版本更新
+     * @return
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping("/versionUpdate")
+    public Result versionUpdate() throws Exception{
+        return versionService.getUpdateInfo();
     }
 }
