@@ -28,12 +28,19 @@ public class MessageImpl  implements IMessage{
     private InvitationMapper invitationMapper;
 
     @Override
-    public Result deleteMessage(Integer messageId) {
+    public Result deleteMessage(Integer myUserId,Integer messageId) {
 
         Result result = new Result();
-        result.setData(null);
+        MessageExample messageExample = new MessageExample();
+        messageExample.or().andToUserIdEqualTo(myUserId).andMsgIsDeleteEqualTo(false).andMsgIdEqualTo(messageId);
 
-        Message message = messageMapper.selectByPrimaryKey(messageId);
+         List<Message> messages = messageMapper.selectByExample(messageExample);
+        if (messages == null || messages.size()<=0){
+            result.setCode(412);
+            result.setMsg("该信息不存在");
+            return result;
+        }
+        Message message = messages.get(0);
         if (message!=null) {
             message.setMsgIsDelete(true);
             if (messageMapper.updateByPrimaryKey(message)==0){
@@ -108,5 +115,31 @@ public class MessageImpl  implements IMessage{
         MessageExample messageExample = new MessageExample();
         messageExample.createCriteria().andToUserIdEqualTo(myUserId).andMsgIsDeleteEqualTo(false);
         return messageMapper.selectByExample(messageExample).size();
+    }
+
+    @Override
+    public Result readMessage(Integer myUserId, Integer messageId) {
+        Result result = new Result();
+        MessageExample messageExample = new MessageExample();
+        messageExample.or().andToUserIdEqualTo(myUserId).andMsgIsDeleteEqualTo(false).andMsgIdEqualTo(messageId);
+
+        List<Message> messages = messageMapper.selectByExample(messageExample);
+        if (messages == null || messages.size()<=0){
+            result.setCode(412);
+            result.setMsg("该信息不存在");
+            return result;
+        }
+        Message message = messages.get(0);
+        if (message!=null) {
+            message.setMsgIsRead(true);
+            if (messageMapper.updateByPrimaryKey(message)==0){
+                result.setCode(411);
+                result.setMsg("已读信息失败");
+            }
+        }else {
+            result.setCode(412);
+            result.setMsg("该信息不存在");
+        }
+        return result;
     }
 }

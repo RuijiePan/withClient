@@ -325,7 +325,19 @@ public class AboutMeController {
     @ResponseBody
     @RequestMapping("/deleteMessage")
     public Result deleteMessage(@RequestParam(value = "messageId", required = true) Integer messageId) {
-        return messageService.deleteMessage(messageId);
+        Integer myUserId = (Integer) request.getAttribute("myUserId");
+        return messageService.deleteMessage(myUserId,messageId);
+    } /**
+     * 设置已读消息
+     *
+     * @param messageId
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/readMessage")
+    public Result readMessage(@RequestParam(value = "messageId", required = true) Integer messageId) {
+        Integer myUserId = (Integer) request.getAttribute("myUserId");
+        return messageService.readMessage(myUserId,messageId);
     }
 
    /* *//**

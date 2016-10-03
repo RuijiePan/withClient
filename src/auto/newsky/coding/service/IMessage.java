@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface IMessage {
 
-    Result deleteMessage(Integer messageId);
+    Result deleteMessage(Integer myUserId,Integer messageId);
 
     Result getMessages(Integer userId,Integer lastMessageId,Integer limit);
 
@@ -18,4 +18,6 @@ public interface IMessage {
 
 
     int getUnreadNumber(Integer myUserId);
+
+    Result readMessage(Integer myUserId, Integer messageId);
 }
