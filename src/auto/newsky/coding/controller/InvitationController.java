@@ -28,7 +28,7 @@ public class InvitationController {
     private HttpServletRequest request;
 
     /**
-     *
+     * http://localhost:8080/with/invitation/getInvitations?token=0c7CajFaekDrg8SUjoz&typeId=1&aimUserId=1&limit=1&lastInvitationId=0
      * 获取邀约列表
      * @param typeId
      * @param aimUserId
