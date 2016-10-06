@@ -10,6 +10,8 @@ import auto.newsky.coding.service.IMessage;
 import auto.newsky.coding.util.IpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,7 @@ public class MessageImpl  implements IMessage{
     private InvitationMapper invitationMapper;
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result deleteMessage(Integer myUserId,Integer messageId) {
 
         Result result = new Result();
@@ -55,6 +58,7 @@ public class MessageImpl  implements IMessage{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result getMessages(Integer userId,Integer lastMessageId, Integer limit) {
 
         Result result = new Result();
@@ -95,6 +99,7 @@ public class MessageImpl  implements IMessage{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public List<Message> getUserMessage(Integer userId) {
 
         MessageExample messageExample = new MessageExample();
@@ -111,6 +116,7 @@ public class MessageImpl  implements IMessage{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public int getUnreadNumber(Integer myUserId) {
         MessageExample messageExample = new MessageExample();
         messageExample.createCriteria().andToUserIdEqualTo(myUserId).andMsgIsDeleteEqualTo(false);
@@ -118,6 +124,7 @@ public class MessageImpl  implements IMessage{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result readMessage(Integer myUserId, Integer messageId) {
         Result result = new Result();
         MessageExample messageExample = new MessageExample();

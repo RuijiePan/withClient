@@ -44,4 +44,6 @@ public interface InvitationMapper {
     List<Invitation> selectInvitationsConcern(@Param("myUserId")Integer myUserId, @Param("lastInvitationId")Integer lastInvitationId, @Param("limit")Integer limit);
 
     Integer getUserLastInvitationId(@Param("myUserId")Integer myUserId);
+
+    List<Invitation> selectInvitationsPaticipateByMe(@Param("myUserId")Integer myUserId,@Param("lastInvitationId") Integer lastInvitationId,@Param("limit") Integer limit);
 }

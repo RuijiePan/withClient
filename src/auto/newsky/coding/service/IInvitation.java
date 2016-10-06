@@ -42,4 +42,6 @@ public interface IInvitation {
     Result agreeInvitation(Integer myUserId, Integer aimId, Integer invitId, Integer messageId);
 
     Result rejectInvitation(Integer myUserId, Integer aimId, Integer invitId, Integer messageId);
+
+    Result getInvitationsPaticipateByMe(Integer myUserId, Integer lastInvitationId, Integer limit);
 }

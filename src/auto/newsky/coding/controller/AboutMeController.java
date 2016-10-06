@@ -246,12 +246,13 @@ public class AboutMeController {
 
         if (!file.isEmpty()) {
             try {
-                String fileDest = request.getSession().getServletContext().getRealPath("/") + "upload/";
+                String fileDest = request.getSession().getServletContext().getRealPath("/") + "upload\\";
                 // 文件保存路径
                 String filePath = fileDest + file.getOriginalFilename();
                 // 转存文件
                 file.transferTo(new File(filePath));
 
+                System.out.println("filePath:"+filePath);
                 String minFilePathS = file.getOriginalFilename().split("max.")[0];
                 String minFilePathE = file.getOriginalFilename().split("max.")[1];
                 String minFilePath = fileDest+minFilePathS+"min."+minFilePathE;

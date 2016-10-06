@@ -11,6 +11,8 @@ import auto.newsky.coding.util.TimeUtils;
 import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,22 +28,35 @@ public class JournalImpl implements IJournal{
     private JournalMapper journalMapper;
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result signIn(Integer taskId) {
 
         Result result = new Result();
         Date date = DateUtil.getCurrentDate();
-        System.out.print(DateUtil.getCurrentDate().toString());
+        System.out.print("======================="+DateUtil.getCurrentDate().toString());
 
         JournalExample journalExample = new JournalExample();
         journalExample.createCriteria().andJourDateEqualTo(date)
-                .andTaskIdEqualTo(taskId)
+                .andTaskIdEqualTo(taskId).andJourPunchEqualTo(true)
                 .andJourIsDeleteEqualTo(false);
-
-        if (journalMapper.selectByExample(journalExample).size()==0) {
+        List<Journal> journals = journalMapper.selectByExample(journalExample);
+        if (journals==null ||journals.size()<=0) {
             Journal journal = new Journal(taskId, date, "", true, false);
-            if (journalMapper.insert(journal) == 0) {
-                result.setCode(416);
-                result.setMsg("签到失败");
+
+            JournalExample journalExample1 = new JournalExample();
+            journalExample1.createCriteria().andJourDateEqualTo(date)
+                    .andTaskIdEqualTo(taskId).andJourPunchEqualTo(false)
+                    .andJourIsDeleteEqualTo(false);
+            List<Journal> journals1 = journalMapper.selectByExample(journalExample1);
+            if (journals1!=null &&journals1.size()>0){
+                Journal journal1 = journals1.get(0);
+                journal1.setJourPunch(true);
+                journalMapper.updateByExampleSelective(journal1,journalExample1);
+            }else {
+                if (journalMapper.insert(journal) <= 0) {
+                    result.setCode(416);
+                    result.setMsg("签到失败");
+                }
             }
         }else {
             result.setCode(417);
@@ -51,6 +66,7 @@ public class JournalImpl implements IJournal{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result editTaskMessage(Integer taskId, Date date, String remark) {
 
         Result result = new Result();
@@ -79,6 +95,7 @@ public class JournalImpl implements IJournal{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public List<TaskInfoData.CalendarBean> getCalendarList(Integer taskId,Date firstDay, Date lastDay) {
 
         List<TaskInfoData.CalendarBean> list = new ArrayList<TaskInfoData.CalendarBean>();

@@ -18,6 +18,8 @@ import auto.newsky.coding.service.IJoinInvitation;
 import auto.newsky.coding.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -41,6 +43,7 @@ public class JoinInvitationImpl implements IJoinInvitation{
     @Autowired
     private UserMapper userMapper;
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result acceptInvitation(Integer userId, Integer applyUserId, Integer invitationId,boolean isAccept) {
         Result result = new Result();
 
@@ -88,14 +91,16 @@ public class JoinInvitationImpl implements IJoinInvitation{
 
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public boolean isJoin(Integer userId, Integer invitationId) {
         JoinInvitationExample joinInvitationExample = new JoinInvitationExample();
         joinInvitationExample.or().andUserIdEqualTo(userId).andInvitIdEqualTo(invitationId).andRelationIsDeleteEqualTo(false);
         List<JoinInvitation> joinInvitations =  userJoinInvatationMapper.selectByExample(joinInvitationExample);
-        return joinInvitations.size()>0?true:false;
+        return joinInvitations!=null&&joinInvitations.size()>0?true:false;
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public List<User> selectJoinMembers(Integer invitId,Integer myUserId) {
         /*JoinInvitationExample joinInvitationExample = new JoinInvitationExample();
         joinInvitationExample.or().andInvitIdEqualTo(invitId).andRelationIsDeleteEqualTo(false);
@@ -114,10 +119,13 @@ public class JoinInvitationImpl implements IJoinInvitation{
         }
         return userList;
     }
+
+    @Transactional(propagation= Propagation.REQUIRED)
     public int join(JoinInvitation joinInvitation){
         return userJoinInvatationMapper.insert(joinInvitation);
     }
 
+    @Transactional(propagation= Propagation.REQUIRED)
     public boolean quit(Integer myUserId, Integer invitationId) {
         JoinInvitationExample joinexample = new JoinInvitationExample();
         joinexample.or().andUserIdEqualTo(myUserId).andInvitIdEqualTo(invitationId).andRelationIsDeleteEqualTo(false);
@@ -133,6 +141,7 @@ public class JoinInvitationImpl implements IJoinInvitation{
        return false;
     }
 
+    @Transactional(propagation= Propagation.REQUIRED)
     public boolean quit(Integer relationId) {
         if (userJoinInvatationMapper.updateByPrimaryKeySelective(new JoinInvitation(relationId,null,null,true))>0){
             return true;
@@ -140,6 +149,7 @@ public class JoinInvitationImpl implements IJoinInvitation{
         return false;
     }
 
+    @Transactional(propagation= Propagation.REQUIRED)
     public List<JoinInvitation> getAllByInvitationId(Integer invitId) {
         JoinInvitationExample joinexample = new JoinInvitationExample();
         joinexample.or().andInvitIdEqualTo(invitId).andRelationIsDeleteEqualTo(false);

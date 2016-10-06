@@ -11,6 +11,8 @@ import auto.newsky.coding.util.DateUtil;
 import auto.newsky.coding.util.IpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,7 @@ public class InvitationImpl implements IInvitation{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result getInvitationsUnType(Integer myUserId, int lastInvitationId, int limit) {
         Result result = new Result();
         //获取未分类邀约
@@ -61,6 +64,7 @@ public class InvitationImpl implements IInvitation{
 
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result getInvitationsByTypeId(Integer myUserId, int typeId, int lastInvitationId, int limit) {
         Result result = new Result();
         List<Invitation> invitations = null;
@@ -82,6 +86,7 @@ public class InvitationImpl implements IInvitation{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result getInvitationsSBSend(Integer myUserId, int userId, int lastInvitationId, int limit) {
         Result result = new Result();
         //获取某人的邀约列表
@@ -99,6 +104,7 @@ public class InvitationImpl implements IInvitation{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result getInvitationsMyConcerned(Integer myUserId,  int lastInvitationId, int limit) {
         Result result = new Result();
         //获取我关注的的邀约列表
@@ -116,6 +122,7 @@ public class InvitationImpl implements IInvitation{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result publishInvitation(Invitation invatation) {
         Result result = new Result();
         if (invitationTypeService.isParentType(invatation.getTypeId())){
@@ -135,6 +142,7 @@ public class InvitationImpl implements IInvitation{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result alterInvitation(Integer myUserId ,Invitation invitation) {
         Result result = new Result();
 
@@ -157,6 +165,7 @@ public class InvitationImpl implements IInvitation{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result participateInvitation(Integer myUserId, Integer invitationId) {
         Result result = new Result();
         if(joinInvitationService.isJoin(myUserId,invitationId)){
@@ -202,6 +211,7 @@ public class InvitationImpl implements IInvitation{
 
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result getUserInfo(Integer myuserId,Integer aimUserId, Integer invitationId) {
         Result result = new Result();
 
@@ -212,6 +222,7 @@ public class InvitationImpl implements IInvitation{
             if (user != null){
                 dataBean = new UserInfoData.DataBean();
                 dataBean.setPhone(user.getUserMobilephone());
+                dataBean.setUserId(user.getUserId());
                 dataBean.setSex(user.getUserSex());
                 dataBean.setIsConcerned(concernService.isConcerned(myuserId, aimUserId));
                 dataBean.setStudentId(user.getUserStudentid());
@@ -233,9 +244,10 @@ public class InvitationImpl implements IInvitation{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result agreeInvitation(Integer myUserId, Integer aimId, Integer invitId,Integer messageId) {
         Result result = new Result();
-        if(joinInvitationService.isJoin(myUserId,invitId)){
+        if(joinInvitationService.isJoin(aimId,invitId)){
             result.setCode(452);
             result.setMsg("已经参加了");
             return result;
@@ -252,17 +264,18 @@ public class InvitationImpl implements IInvitation{
             return result;
         }
 
-        if(joinInvitationService.join(new JoinInvitation(myUserId,invitId,false))>0){
+        if(joinInvitationService.join(new JoinInvitation(aimId,invitId,false))>0){
             Message message = new Message(myUserId, invitation.getUserId(), invitId, Constant.MESSAGE_TYPE_AGREE,
                     DateUtil.getCurrentTime(), "同意了你加入" + invitation.getInvitTitle() + "活动", false, false);
             messageMapper.insert(message);
 
-            //已读处理
+            //已读处理并且删除
             MessageExample messageExample = new MessageExample();
-            messageExample.or().andMsgIdEqualTo(messageId).andMsgIsReadEqualTo(false);
+            messageExample.or().andMsgIdEqualTo(messageId);
             Message message1 = new Message();
             message1.setMsgId(messageId);
             message1.setMsgIsRead(true);
+            message1.setMsgIsDelete(true);
             messageMapper.updateByExampleSelective(message1,messageExample);
 
             //当前人数+1
@@ -276,8 +289,6 @@ public class InvitationImpl implements IInvitation{
                 invitationTemp.setInvitNumberCurr(num);
                 invitationMapper.updateByPrimaryKey(invitationTemp);
             }
-
-
             return result;
         }
         result.setCode(451);
@@ -286,9 +297,10 @@ public class InvitationImpl implements IInvitation{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result rejectInvitation(Integer myUserId, Integer aimId, Integer invitId,Integer messageId) {
         Result result = new Result();
-        if(joinInvitationService.isJoin(myUserId,invitId)){
+        if(joinInvitationService.isJoin(aimId,invitId)){
             result.setCode(452);
             result.setMsg("已经参加了");
             return result;
@@ -311,11 +323,13 @@ public class InvitationImpl implements IInvitation{
         if(messageMapper.insert(message)>0){
             //已读处理
             MessageExample messageExample = new MessageExample();
-            messageExample.or().andMsgIdEqualTo(messageId).andMsgIsReadEqualTo(false);
+            messageExample.or().andMsgIdEqualTo(messageId);
             Message message1 = new Message();
             message1.setMsgId(messageId);
             message1.setMsgIsRead(true);
+            message1.setMsgIsDelete(true);
             messageMapper.updateByExampleSelective(message1,messageExample);
+            result.setMsg("拒绝成功");
             return result;
         }
         result.setCode(451);
@@ -323,8 +337,26 @@ public class InvitationImpl implements IInvitation{
         return result;
     }
 
+    @Override
+    @Transactional(propagation= Propagation.REQUIRED)
+    public Result getInvitationsPaticipateByMe(Integer myUserId, Integer lastInvitationId, Integer limit) {
+        Result result = new Result();
+        //获取未分类邀约
+        List<Invitation> invitations = invatationMapper.selectInvitationsPaticipateByMe(myUserId,lastInvitationId,limit);
+        //InvitationListData invitationListData = packData(myUserId, invitations);
+        List<InvitationListData.DataBean> beenList = packData(myUserId, invitations);
+        if(invitations!=null && invitations.size()>0){
+            result.setData(beenList);
+            return result;
+        }
+        result.setCode(450);
+        result.setMsg("找不到数据");
+        return result;
+    }
+
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result applyInvitation(Integer myUserId, Integer invitationId) {
         Result result = new Result();
         if(joinInvitationService.isJoin(myUserId,invitationId)){
@@ -362,6 +394,7 @@ public class InvitationImpl implements IInvitation{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result quitInvitation(Integer myUserId, Integer invitationId) {
         Result result = new Result();
         if(!joinInvitationService.isJoin(myUserId,invitationId)){
@@ -406,6 +439,7 @@ public class InvitationImpl implements IInvitation{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result deleteInvitation(Integer myUserId, Integer invitationId) {
         //记得删掉参与
         Result result = new Result();
@@ -444,6 +478,7 @@ public class InvitationImpl implements IInvitation{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result getConcernedUsers(Integer myUserId, Integer concernedUserId, Integer limit) {
 
         Result result = new Result();
@@ -473,6 +508,7 @@ public class InvitationImpl implements IInvitation{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result concernUser(Integer myUserId, Integer concernedUserId) {
         Result result = new Result();
         if (myUserId == concernedUserId){
@@ -523,6 +559,7 @@ public class InvitationImpl implements IInvitation{
             dataBean.setSexRequire(invitation.getInvitSexRequire());
             dataBean.setContent(invitation.getInvitContent());
             dataBean.setTitle(invitation.getInvitTitle());
+            dataBean.setTypeId(invitation.getTypeId());
             dataBean.setTotalNumber(invitation.getInvitNumberMax());
             dataBean.setPlace(invitation.getInvitPlace());
             dataBean.setIsJoin(joinInvitationService.isJoin(myUserId,invitation.getInvitId()));
@@ -558,6 +595,7 @@ public class InvitationImpl implements IInvitation{
 
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result getInvitationsByUidAndPrimaryKey(Integer aimUserId, Integer invitId) {
 
         Result result = new Result();

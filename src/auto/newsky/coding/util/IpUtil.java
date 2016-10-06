@@ -17,10 +17,10 @@ public class IpUtil {
             return ip;
         try {
             addr = InetAddress.getLocalHost();
-            ip=addr.getHostAddress()+":8080/";//获得本机IP
+            ip= "http://"+addr.getHostAddress()+":8080/";//获得本机IP
         } catch (UnknownHostException e) {
             e.printStackTrace();
-            ip = "127.0.0.1:8080/";
+            ip = "http://"+"127.0.0.1:8080/";
         }
         return ip;
         // String address=addr.getHostName();//获得本机名称

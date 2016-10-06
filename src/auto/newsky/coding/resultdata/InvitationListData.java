@@ -38,7 +38,9 @@ public class InvitationListData {
     }
 
     public static class DataBean {
+
         private String content;
+        private int typeId;
 
         private int currentNumber;
 
@@ -65,6 +67,14 @@ public class InvitationListData {
         private String title;
 
         private int totalNumber;
+
+        public int getTypeId() {
+            return typeId;
+        }
+
+        public void setTypeId(int typeId) {
+            this.typeId = typeId;
+        }
 
         public void setContent(String content){
             this.content = content;

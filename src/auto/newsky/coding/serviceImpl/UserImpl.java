@@ -8,6 +8,8 @@ import auto.newsky.coding.response.Result;
 import auto.newsky.coding.service.IUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.net.ssl.*;
 import java.io.*;
@@ -72,6 +74,7 @@ public class UserImpl implements IUser{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result modifyPassword(Integer myUserId, String oldPassword, String newPassword) {
         Result result = new Result();
         result.setData(null);

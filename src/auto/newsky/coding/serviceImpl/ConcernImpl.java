@@ -7,6 +7,8 @@ import auto.newsky.coding.service.IConcern;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +23,7 @@ public class ConcernImpl implements IConcern {
 
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public boolean isConcerned(Integer myUserId, Integer concernedUserId) {
         ConcernExample concernExample = new ConcernExample();
         concernExample.or().andConFromUserIdEqualTo(myUserId).andConToUserIdEqualTo(concernedUserId).andConIsConcernEqualTo(true);
@@ -32,6 +35,7 @@ public class ConcernImpl implements IConcern {
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Concern getConcerneTrue(Integer myUserId, Integer concernedUserId) {
         List<Concern> concerns = concernMapper.getConcerneTrue(myUserId,concernedUserId);
         if (concerns!= null &&concerns.size()>0){
@@ -41,6 +45,7 @@ public class ConcernImpl implements IConcern {
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public boolean concerneUser(Concern concern) {
         System.out.println("========================"+concern.toString());
         ConcernExample concernExample = new ConcernExample();
@@ -53,6 +58,7 @@ public class ConcernImpl implements IConcern {
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public boolean cancelConcerneUser(Concern concern) {
         ConcernExample concernExample = new ConcernExample();
         concernExample.or().andConIdEqualTo(concern.getConId());
@@ -64,6 +70,7 @@ public class ConcernImpl implements IConcern {
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Concern getConcerne(Integer myUserId, Integer concernedUserId) {
         ConcernExample concernExample = new ConcernExample();
         concernExample.or().andConFromUserIdEqualTo(myUserId).andConToUserIdEqualTo(concernedUserId);
@@ -75,6 +82,7 @@ public class ConcernImpl implements IConcern {
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public boolean insertConcern(Integer myUserId, Integer concernedUserId) {
         if(concernMapper.insert(new Concern(myUserId,concernedUserId,true))>0){
             return true;

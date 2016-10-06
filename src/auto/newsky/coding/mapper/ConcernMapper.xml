@@ -213,9 +213,11 @@
   <select id="getConcernedUsers" resultMap="UserBaseResultMap" parameterType="java.lang.Integer" >
     select * from with_user where user_id in
     (SELECT con_to_user_id FROM with_concern where con_from_user_id = #{myUserId} and con_is_concern = true)
-    and user_id > #{concernedUserId}
+    and #{concernedUserId} >user_id
     and user_is_delete = false
+    order by user_id desc
     limit #{limit}
+
   </select>
   <select id="getConcerneTrue" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     SELECT

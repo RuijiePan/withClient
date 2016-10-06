@@ -13,6 +13,8 @@ import auto.newsky.coding.service.ITask;
 import auto.newsky.coding.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ public class TaskImpl implements ITask{
 
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result createTask(Integer userId, String title, String content, Integer iconIndex) {
 
         Result result = new Result();
@@ -56,6 +59,7 @@ public class TaskImpl implements ITask{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result deleteTask(Integer userId, Integer taskId) {
 
         Result result = new Result();
@@ -76,6 +80,7 @@ public class TaskImpl implements ITask{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result getTasks(Integer userId) {
         Result result = new Result();
 
@@ -84,6 +89,13 @@ public class TaskImpl implements ITask{
                 .andTaskIsDeleteEqualTo(false);
 
         List<Task> currentTaskList = taskMapper.selectByExample(taskExample);
+
+        if (currentTaskList==null || currentTaskList.size()<=0){
+            result.setMsg("不存在任务");
+            result.setCode(404);
+            return  result;
+        }
+
 
         TaskExample taskPreExample = new TaskExample();
         taskPreExample.createCriteria().andUserIdEqualTo(userId)
@@ -114,6 +126,7 @@ public class TaskImpl implements ITask{
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Result getTaskMessages(Integer userId, String date, Integer taskId) {
 
         Result result = new Result();

@@ -50,9 +50,15 @@ public class InvitationController {
             //http://localhost:8080/invitation/getInvitations?token=1&lastInvitationId=0&limit=10
                 result = invitationService.getInvitationsUnType(myUserId,lastInvitationId,limit);
         } else if(typeId!=null && aimUserId==null){
-            //获取某分类的邀约邀约列表
-            //http://localhost:8080/invitation/getInvitations?token=1&typeId=3&lastInvitationId=0&limit=10
-            result = invitationService.getInvitationsByTypeId(myUserId,typeId,lastInvitationId,limit);
+            if (typeId == -1){
+                //获取正在参与的活动
+                //http://localhost:8080/invitation/getInvitations?token=ycSN8KCeFy9wti9OJ4W&typeId=-1&limit=10&lastInvitationId=0
+                result = invitationService.getInvitationsPaticipateByMe(myUserId,lastInvitationId,limit);
+            }else{
+                //获取某分类的邀约邀约列表
+                //http://localhost:8080/invitation/getInvitations?token=1&typeId=3&lastInvitationId=0&limit=10
+                result = invitationService.getInvitationsByTypeId(myUserId,typeId,lastInvitationId,limit);
+            }
         }else if (typeId==null&&aimUserId!=null){
             if (aimUserId == -1){
                 //获取我的关注邀约
@@ -91,10 +97,12 @@ public class InvitationController {
                                     ,@RequestParam(value="sexRequire", required=true)   Integer sexRequire
                                     ,@RequestParam(value="type", required=true)         Integer typeId
                                     ,@RequestParam(value="hiden", required=true)        Boolean hiden) throws Exception{
-        System.out.println("content:"+content);
+
+
+        //System.out.println("content:"+new String(content.getBytes("ISO-8859-1"),"UTF-8"));
         Integer myUserId = (Integer) request.getAttribute("myUserId");
         Date invitPublicationTime = DateUtil.getCurrentTime();
-        Invitation invitation = new Invitation(myUserId, invitPublicationTime, invitationTime, place,totalNumber, 0, sexRequire,title, content, typeId, hiden, false);
+        Invitation invitation = new Invitation(myUserId, invitPublicationTime, invitationTime, place,totalNumber, 1, sexRequire,title, content, typeId, hiden, false);
         Result result = invitationService.publishInvitation(invitation);
         return result;
     }

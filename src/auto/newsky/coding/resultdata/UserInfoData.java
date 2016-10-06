@@ -30,11 +30,20 @@ public class UserInfoData {
     public static class DataBean {
         private String  phone;
         private int sex;
+        private int userId;
         private boolean isConcerned;
         private String studentId;
         private String name;
         private String headUrl;
         private String qq;
+
+        public int getUserId() {
+            return userId;
+        }
+
+        public void setUserId(int userId) {
+            this.userId = userId;
+        }
 
         public String getPhone() {
             return phone;
