@@ -34,6 +34,9 @@ public class LoginInterceptor implements HandlerInterceptor {
 			HttpServletResponse response, Object handler) throws Exception {
 		//获取请求的url
 		String url = request.getRequestURI();
+		if(url.contains("/upload")){
+			return true;
+		}
 		//判断url是否是公开 地址（实际使用时将公开 地址配置配置文件中）
 		//这里公开地址是登陆提交的地址
 		String token = request.getParameter("token");

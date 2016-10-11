@@ -3,6 +3,7 @@ package auto.newsky.coding.service;
 import auto.newsky.coding.po.Message;
 import auto.newsky.coding.response.Result;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ public interface IMessage {
 
     Result deleteMessage(Integer myUserId,Integer messageId);
 
-    Result getMessages(Integer userId,Integer lastMessageId,Integer limit);
+    Result getMessages(Integer userId,Integer lastMessageId,Integer limit,HttpServletRequest request);
 
     List<Message> getUserMessage(Integer userId);
 

@@ -75,7 +75,7 @@ public class AboutMeController {
             user.setUserToken(UUIDUtil.createUUID());
             LoginData.DataBean dataBean = new LoginData.DataBean(user.getUserSex(), user.getUserMobilephone(),
                     messageService.getUnreadNumber(myUserId), user.getUserNickname(), user.getUserToken(),
-                    IpUtil.getPicUrl(user.getUserHeadurl()), user.getUserStudentid(), user.getUserId(),
+                    IpUtil.getPicUrl(user.getUserHeadurl(),request), user.getUserStudentid(), user.getUserId(),
                     user.getUserClass(), user.getUserRealname(), user.getUserQq());
             result.setData(dataBean);
             result.setMsg("登陆成功");
@@ -235,8 +235,8 @@ public class AboutMeController {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping("/uploadHeadPic")
-    public Result uploadHeadPic(@RequestParam("file") MultipartFile file) throws Exception {
+    @RequestMapping("/upLoadHeadPic")
+    public Result uploadHeadPic(@RequestParam("file") MultipartFile file,HttpServletRequest request) throws Exception {
 
         Integer myUserId = (Integer) request.getAttribute("myUserId");
         Result result = new Result();
@@ -313,7 +313,7 @@ public class AboutMeController {
     public Result getMessages(@RequestParam(value = "lastMessageId", required = false) Integer lastMessageId,
                               @RequestParam(value = "limit", required = false) Integer limit) throws Exception {
         Integer myUserId = (Integer) request.getAttribute("myUserId");
-        return messageService.getMessages(myUserId, lastMessageId, limit);
+        return messageService.getMessages(myUserId, lastMessageId, limit,request);
     }
 
     /**
@@ -396,7 +396,7 @@ public class AboutMeController {
     public Result getUserInfo(@RequestParam(value = "invitationId", required = true) Integer invitationId,
                               @RequestParam(value = "aimUserId", required = true) Integer aimUserId) throws Exception {
         Integer myUserId = (Integer) request.getAttribute("myUserId");
-        return invitationService.getUserInfo(myUserId, aimUserId, invitationId);
+        return invitationService.getUserInfo(myUserId, aimUserId, invitationId,request);
     }
 
     /**

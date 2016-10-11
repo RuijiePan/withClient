@@ -48,26 +48,26 @@ public class InvitationController {
         if (typeId==null && aimUserId==null){
             //获取未分类的邀约列表
             //http://localhost:8080/invitation/getInvitations?token=1&lastInvitationId=0&limit=10
-                result = invitationService.getInvitationsUnType(myUserId,lastInvitationId,limit);
+                result = invitationService.getInvitationsUnType(myUserId,lastInvitationId,limit,request);
         } else if(typeId!=null && aimUserId==null){
             if (typeId == -1){
                 //获取正在参与的活动
                 //http://localhost:8080/invitation/getInvitations?token=ycSN8KCeFy9wti9OJ4W&typeId=-1&limit=10&lastInvitationId=0
-                result = invitationService.getInvitationsPaticipateByMe(myUserId,lastInvitationId,limit);
+                result = invitationService.getInvitationsPaticipateByMe(myUserId,lastInvitationId,limit,request);
             }else{
                 //获取某分类的邀约邀约列表
                 //http://localhost:8080/invitation/getInvitations?token=1&typeId=3&lastInvitationId=0&limit=10
-                result = invitationService.getInvitationsByTypeId(myUserId,typeId,lastInvitationId,limit);
+                result = invitationService.getInvitationsByTypeId(myUserId,typeId,lastInvitationId,limit,request);
             }
         }else if (typeId==null&&aimUserId!=null){
             if (aimUserId == -1){
                 //获取我的关注邀约
                 //http://localhost:8080/invitation/getInvitations?token=1&lastInvitationId=0&limit=10&userId=-1
-                result = invitationService.getInvitationsMyConcerned(myUserId,lastInvitationId,limit);
+                result = invitationService.getInvitationsMyConcerned(myUserId,lastInvitationId,limit,request);
             }else{
                 //获取某人发出的邀约
                 //http://localhost:8080/invitation/getInvitations?token=1&lastInvitationId=0&limit=10&userId=2
-                result = invitationService.getInvitationsSBSend(myUserId,aimUserId,lastInvitationId,limit);
+                result = invitationService.getInvitationsSBSend(myUserId,aimUserId,lastInvitationId,limit,request);
             }
         }
         return result;
@@ -191,7 +191,7 @@ public class InvitationController {
                                     ,@RequestParam(value="limit", required=false)Integer limit) throws Exception{
         Integer myUserId = (Integer) request.getAttribute("myUserId");
         Result result = null;
-        result = invitationService.getConcernedUsers(myUserId,lastConcernedUserId,limit);
+        result = invitationService.getConcernedUsers(myUserId,lastConcernedUserId,limit,request);
         return result;
     }
 

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,12 +48,12 @@ public class InvitationImpl implements IInvitation{
 
     @Override
     @Transactional(propagation= Propagation.REQUIRED)
-    public Result getInvitationsUnType(Integer myUserId, int lastInvitationId, int limit) {
+    public Result getInvitationsUnType(Integer myUserId, int lastInvitationId, int limit,HttpServletRequest request) {
         Result result = new Result();
         //获取未分类邀约
         List<Invitation> invitations = invatationMapper.selectInvitationsUnType(lastInvitationId,limit);
         //InvitationListData invitationListData = packData(myUserId, invitations);
-        List<InvitationListData.DataBean> beenList = packData(myUserId, invitations);
+        List<InvitationListData.DataBean> beenList = packData(myUserId, invitations,request);
         if(invitations.size()>0){
             result.setData(beenList);
             return result;
@@ -65,7 +66,7 @@ public class InvitationImpl implements IInvitation{
 
     @Override
     @Transactional(propagation= Propagation.REQUIRED)
-    public Result getInvitationsByTypeId(Integer myUserId, int typeId, int lastInvitationId, int limit) {
+    public Result getInvitationsByTypeId(Integer myUserId, int typeId, int lastInvitationId, int limit,HttpServletRequest request) {
         Result result = new Result();
         List<Invitation> invitations = null;
         if (invitationTypeService.isParentType(typeId)){//大类查询
@@ -75,7 +76,7 @@ public class InvitationImpl implements IInvitation{
         }
         //InvitationListData invitationListData = packData(myUserId, invitations);
 
-        List<InvitationListData.DataBean> beenList = packData(myUserId, invitations);
+        List<InvitationListData.DataBean> beenList = packData(myUserId, invitations,request);
         if(invitations.size()>0){
             result.setData(beenList);
             return result;
@@ -87,13 +88,13 @@ public class InvitationImpl implements IInvitation{
 
     @Override
     @Transactional(propagation= Propagation.REQUIRED)
-    public Result getInvitationsSBSend(Integer myUserId, int userId, int lastInvitationId, int limit) {
+    public Result getInvitationsSBSend(Integer myUserId, int userId, int lastInvitationId, int limit,HttpServletRequest request) {
         Result result = new Result();
         //获取某人的邀约列表
         List<Invitation> invitations = invatationMapper.selectInvitationsByUserId(userId,lastInvitationId,limit);
         //InvitationListData invitationListData = packData(myUserId, invitations);
 
-        List<InvitationListData.DataBean> beenList = packData(myUserId, invitations);
+        List<InvitationListData.DataBean> beenList = packData(myUserId, invitations,request);
         if(invitations.size()>0){
             result.setData(beenList);
             return result;
@@ -105,13 +106,13 @@ public class InvitationImpl implements IInvitation{
 
     @Override
     @Transactional(propagation= Propagation.REQUIRED)
-    public Result getInvitationsMyConcerned(Integer myUserId,  int lastInvitationId, int limit) {
+    public Result getInvitationsMyConcerned(Integer myUserId,  int lastInvitationId, int limit,HttpServletRequest request) {
         Result result = new Result();
         //获取我关注的的邀约列表
         List<Invitation> invitations = invatationMapper.selectInvitationsConcern(myUserId,lastInvitationId,limit);
         //InvitationListData invitationListData = packData(myUserId, invitations);
 
-        List<InvitationListData.DataBean> beenList = packData(myUserId, invitations);
+        List<InvitationListData.DataBean> beenList = packData(myUserId, invitations,request);
         if(invitations.size()>0){
             result.setData(beenList);
             return result;
@@ -146,7 +147,7 @@ public class InvitationImpl implements IInvitation{
     public Result alterInvitation(Integer myUserId ,Invitation invitation) {
         Result result = new Result();
 
-        if (invitation == null || invitation.getInvitIsDelete() == true){//
+        if (invitation == null ){//
             result.setCode(454);
             result.setMsg("不存在活动");
             return result;
@@ -212,7 +213,7 @@ public class InvitationImpl implements IInvitation{
 
     @Override
     @Transactional(propagation= Propagation.REQUIRED)
-    public Result getUserInfo(Integer myuserId,Integer aimUserId, Integer invitationId) {
+    public Result getUserInfo(Integer myuserId,Integer aimUserId, Integer invitationId,HttpServletRequest request) {
         Result result = new Result();
 
         UserInfoData.DataBean dataBean = null;
@@ -227,7 +228,7 @@ public class InvitationImpl implements IInvitation{
                 dataBean.setIsConcerned(concernService.isConcerned(myuserId, aimUserId));
                 dataBean.setStudentId(user.getUserStudentid());
                 dataBean.setName(user.getUserRealname());
-                dataBean.setHeadUrl(IpUtil.getPicUrl(user.getUserHeadurl()));
+                dataBean.setHeadUrl(IpUtil.getPicUrl(user.getUserHeadurl(),request));
                 dataBean.setQq(user.getUserQq());
                 result.setData(dataBean);
             }else {
@@ -339,12 +340,12 @@ public class InvitationImpl implements IInvitation{
 
     @Override
     @Transactional(propagation= Propagation.REQUIRED)
-    public Result getInvitationsPaticipateByMe(Integer myUserId, Integer lastInvitationId, Integer limit) {
+    public Result getInvitationsPaticipateByMe(Integer myUserId, Integer lastInvitationId, Integer limit,HttpServletRequest request) {
         Result result = new Result();
         //获取未分类邀约
         List<Invitation> invitations = invatationMapper.selectInvitationsPaticipateByMe(myUserId,lastInvitationId,limit);
         //InvitationListData invitationListData = packData(myUserId, invitations);
-        List<InvitationListData.DataBean> beenList = packData(myUserId, invitations);
+        List<InvitationListData.DataBean> beenList = packData(myUserId, invitations,request);
         if(invitations!=null && invitations.size()>0){
             result.setData(beenList);
             return result;
@@ -479,7 +480,7 @@ public class InvitationImpl implements IInvitation{
 
     @Override
     @Transactional(propagation= Propagation.REQUIRED)
-    public Result getConcernedUsers(Integer myUserId, Integer concernedUserId, Integer limit) {
+    public Result getConcernedUsers(Integer myUserId, Integer concernedUserId, Integer limit,HttpServletRequest request) {
 
         Result result = new Result();
        // ConcernUserListData concernUserListData = null;
@@ -492,7 +493,7 @@ public class InvitationImpl implements IInvitation{
             dataBeanList = new ArrayList<ConcernUserListData.DataBean>();
             for (User user:userList){
                 dataBean = new ConcernUserListData.DataBean();
-                dataBean.setHeadUrl(IpUtil.getPicUrl(user.getUserHeadurl()));
+                dataBean.setHeadUrl(IpUtil.getPicUrl(user.getUserHeadurl(),request));
                 dataBean.setConcernedUserId(user.getUserId());
                 dataBean.setConcerned(true);
                 dataBean.setName(user.getUserNickname());
@@ -543,14 +544,14 @@ public class InvitationImpl implements IInvitation{
     }
 
 
-    private List<InvitationListData.DataBean> packData(Integer myUserId, List<Invitation> invitations) {
+    private List<InvitationListData.DataBean> packData(Integer myUserId, List<Invitation> invitations,HttpServletRequest request) {
         InvitationListData invitationListData = new InvitationListData();
         //进行包装
         List<InvitationListData.DataBean> dataBeanList = new ArrayList<InvitationListData.DataBean>();
         for (Invitation invitation:invitations) {
             InvitationListData.DataBean dataBean = new InvitationListData.DataBean();
             User user = userService.getUserByPrimaryKey(invitation.getUserId());
-            dataBean.setOriginatorHeadUrl(IpUtil.getPicUrl(user.getUserHeadurl()));
+            dataBean.setOriginatorHeadUrl(IpUtil.getPicUrl(user.getUserHeadurl(),request));
             dataBean.setInvitationTime(DateConveter.dateToString(invitation.getInvitActivityTime()));
             dataBean.setPublishTime(DateConveter.dateToString(invitation.getInvitPublicationTime()));
             dataBean.setOriginatorNickname(user.getUserNickname());
@@ -569,7 +570,7 @@ public class InvitationImpl implements IInvitation{
             List<User>  users =   joinInvitationService.selectJoinMembers(invitation.getInvitId(),invitation.getUserId());
             //进行包装
             InvitationListData.DataBean.MembersBean membersBean = new InvitationListData.DataBean.MembersBean();
-            membersBean.setHeadUrl(IpUtil.getPicMinUrl(user.getUserHeadurl()));
+            membersBean.setHeadUrl(IpUtil.getPicMinUrl(user.getUserHeadurl(),request));
             membersBean.setRealName(user.getUserRealname());
             membersBean.setUserId(user.getUserId());
             membersBean.setPhone(user.getUserMobilephone());
@@ -578,7 +579,7 @@ public class InvitationImpl implements IInvitation{
             if(users!=null)
                 for (User user1:users){
                     membersBean = new InvitationListData.DataBean.MembersBean();
-                    membersBean.setHeadUrl(IpUtil.getPicMinUrl(user1.getUserHeadurl()));
+                    membersBean.setHeadUrl(IpUtil.getPicMinUrl(user1.getUserHeadurl(),request));
                     membersBean.setRealName(user1.getUserRealname());
                     membersBean.setUserId(user1.getUserId());
                     membersBean.setPhone(user1.getUserMobilephone());

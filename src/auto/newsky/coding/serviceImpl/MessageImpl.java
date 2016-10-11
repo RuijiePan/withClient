@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class MessageImpl  implements IMessage{
 
     @Override
     @Transactional(propagation= Propagation.REQUIRED)
-    public Result getMessages(Integer userId,Integer lastMessageId, Integer limit) {
+    public Result getMessages(Integer userId,Integer lastMessageId, Integer limit,HttpServletRequest request) {
 
         Result result = new Result();
         List<Message> list = messageMapper.selectByIdAndLimit(userId,lastMessageId,limit);
@@ -84,7 +85,7 @@ public class MessageImpl  implements IMessage{
                     invitation.getInvitActivityTime().toString(),invitation.getInvitPublicationTime().toString(),
                     invitation.getInvitNumberCurr(),message.getMsgType(),message.getMsgContent(),
                     message.getFromUserId(),invitation.getInvitTitle(),applyUser.getUserRealname(),
-                    IpUtil.getPicUrl(applyUser.getUserHeadurl()),message.getMsgId(),invitation.getInvitPlace());
+                    IpUtil.getPicUrl(applyUser.getUserHeadurl(),request),message.getMsgId(),invitation.getInvitPlace());
 
             datalist.add(dataBean);
         }
